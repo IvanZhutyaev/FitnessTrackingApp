@@ -1,4 +1,9 @@
-﻿namespace FitnessTrackingApp
+﻿using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+
+
+namespace FitnessTrackingApp
 {
     public partial class MainPage : ContentPage
     {
@@ -8,13 +13,41 @@
             InitializeComponent();
         }
 
-        // Открыть окно регистрации
+        private async void RegisterSubmitButton_Clicked(object sender, EventArgs e)
+        {
+            var username = LoginEntry.Text;
+            var password = PasswordEntry.Text;
+
+            var httpClient = new HttpClient();
+            var request = new { Username = username, Password = password };
+
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync("http://localhost:5024/register", request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    await DisplayAlert("Регистрация", "Пользователь успешно зарегистрирован!", "OK");
+                    RegisterPopup.IsVisible = false;
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Ошибка", errorMessage, "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Произошла ошибка: {ex.Message}", "OK");
+            }
+
+        }
         private void RegisterButton_Clicked(object sender, EventArgs e)
         {
             RegisterPopup.IsVisible = true;
         }
 
-        // Закрыть окно регистрации
+
         private void CloseRegisterPopup_Clicked(object sender, EventArgs e)
         {
             RegisterPopup.IsVisible = false;

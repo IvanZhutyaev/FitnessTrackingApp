@@ -540,14 +540,16 @@
                            BackgroundColor="#F0F4FA"
                            TextColor="#0C1B33"
                            HeightRequest="44"/>
-                    <Button Text="Зарегистрироваться"
+                    <Button x:Name ="RegisterSubmitButton"
+                            Clicked="RegisterSubmitButton_Clicked"
+                            Text="Зарегистрироваться"
                             BackgroundColor="#00C9FF"
                             TextColor="#0C1B33"
                             CornerRadius="10"
                             HorizontalOptions="Center"
                             WidthRequest="180"
                             Margin="0,10,0,0"
-                            IsEnabled="False"/>
+                            />
                     <Button Text="Закрыть"
                             BackgroundColor="#E0E0E0"
                             TextColor="#0C1B33"
@@ -555,7 +557,8 @@
                             Clicked="CloseRegisterPopup_Clicked"
                             HorizontalOptions="Center"
                             WidthRequest="120"
-                            Margin="0,0,0,0"/>
+                            Margin="0,0,0,0"
+                            />
                 </VerticalStackLayout>
             </Frame>
         </ContentView>
