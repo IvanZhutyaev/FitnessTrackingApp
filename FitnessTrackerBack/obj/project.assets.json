@@ -80,11 +80,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/temamodder/RiderProjects/FitenssAuthApi/FitenssAuthApi.csproj",
-      "projectName": "FitenssAuthApi",
-      "projectPath": "/Users/temamodder/RiderProjects/FitenssAuthApi/FitenssAuthApi.csproj",
+      "projectUniqueName": "/Users/temamodder/RiderProjects/FitnessTrackerBack/FitnessTrackerBack.csproj",
+      "projectName": "FitnessTrackerBack",
+      "projectPath": "/Users/temamodder/RiderProjects/FitnessTrackerBack/FitnessTrackerBack.csproj",
       "packagesPath": "/Users/temamodder/.nuget/packages/",
-      "outputPath": "/Users/temamodder/RiderProjects/FitenssAuthApi/obj/",
+      "outputPath": "/Users/temamodder/RiderProjects/FitnessTrackerBack/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/temamodder/.nuget/NuGet/NuGet.Config"

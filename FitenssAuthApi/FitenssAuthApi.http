@@ -1,6 +1,0 @@
-@FitenssAuthApi_HostAddress = http://localhost:5182
-
-GET {{FitenssAuthApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
