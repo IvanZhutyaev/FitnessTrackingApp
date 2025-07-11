@@ -13,7 +13,7 @@ namespace FitnessTrackingApp
             InitializeComponent();
         }
 
-        private async void RegisterSubmitButton_Clicked(object sender, EventArgs e)
+        private async void LoginSubmitButton_Clicked(object sender, EventArgs e)
         {
             var username = LoginEntry.Text;
             var password = PasswordEntry.Text;
@@ -23,11 +23,11 @@ namespace FitnessTrackingApp
 
             try
             {
-                var response = await httpClient.PostAsJsonAsync("http://localhost:5024/register", request);
+                var response = await httpClient.PostAsJsonAsync("http://localhost:5024/login", request);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    await DisplayAlert("Регистрация", "Пользователь успешно зарегистрирован!", "OK");
+                    await DisplayAlert("Вход в систему", "Вы успешно вошли в аккаунт!", "OK");
                     RegisterPopup.IsVisible = false;
                 }
                 else
@@ -42,11 +42,16 @@ namespace FitnessTrackingApp
             }
 
         }
-        private void RegisterButton_Clicked(object sender, EventArgs e)
+        private void RegisterSubmitButton_Clicked(object sender, EventArgs e)
         {
             RegisterPopup.IsVisible = true;
         }
 
+        private void RegisterButton_Clicked(object sender, EventArgs e)
+        {
+            RegisterPopup.IsVisible = true;
+            
+        }
 
         private void CloseRegisterPopup_Clicked(object sender, EventArgs e)
         {
@@ -73,5 +78,12 @@ namespace FitnessTrackingApp
         {
             DisplayAlert("Аналитика", "Функция показа отчетов", "OK");
         }
+
+        private void SwitchAuthModeButton_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("Переключение режима", "Функция переключения между регистрацией и входом", "OK");
+        }
+
+        
     }
 }

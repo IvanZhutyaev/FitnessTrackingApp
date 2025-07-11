@@ -26,14 +26,25 @@ if (app.Environment.IsDevelopment())
 
 
 
+app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+        return Results.BadRequest("Username and password are required");
+    
+    var exists = await db.Users.AnyAsync((User user)=> user.Username == request.Username && user.Password == request.Password);
+    if (!exists)
+        
+        return Results.BadRequest("Invalid username or password");
 
+    return Results.Ok("Login successful");
+});
 
 app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
         return Results.BadRequest("Username and password are required");
 
-    var exists = await db.Users.AnyAsync((User user)=> user.Username == request.Username);
+    var exists = await db.Users.AnyAsync((User user)=> user.Username == request.Username && user.Password == request.Password);
     if (exists)
         return Results.BadRequest("User already exists");
 
@@ -48,6 +59,11 @@ app.Run();
 public class User
 {
     public int Id { get; set; }
+    public string Username { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+}
+public class LoginRequest
+{
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
 }
