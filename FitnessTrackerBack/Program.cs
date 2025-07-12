@@ -24,7 +24,46 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();  -- Я закоментил для локального тестирования :) 
 
+app.MapGet("/activities/{userId}", async (int userId, AppDbContextdb db) =>
+{
+    var activities = await db.Activities
+        .Where((Activity a) => a.UserId == userId)
+        .OrderByDescending((Activity a) => a.Date)
+        .ToListAsync();
+    return Result.Ok(activities);  
+});
 
+app.MapPost("/activities", async (Activity activity, AppDbContext db) =>
+{
+
+    db.Activities.Add(activity);
+    await db.SaveChangesAsync();
+    return Results.Created($"/activities/{activity.Id}", activity);
+
+});
+
+app.MapGet("/activities/stats/{userId}", async (int userId, AppDbContext db) =>
+{
+
+
+    var today = DateTime.UtcNow.Date;
+    var weekAgo = today.AddDays(-7);
+
+    var stats = await db.Activities
+        .Where((Activity a) => a.UserId == userId && a.Date >= weekAgo)
+        .GroupBy((Activity a) => a.Date.Date)
+        .Select((Activity g) => new
+        {
+
+            Date = g.Key,
+            Steps = g.Sum((Activity a) => a.Distance),
+            Calories = g.Sum((Activity a) => a.Calories)
+
+        })
+        .OrderBy((Activity s) => s.Date)
+        .ToListAsync();
+    return Results.Ok(stats);
+});
 
 app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 {
@@ -74,10 +113,25 @@ public class RegisterRequest
     public string Password { get; set; } = string.Empty;
 }
 
+public class Activity
+{
+
+
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public DateTime Date { get; set; } = DateTime.UtcNow;
+    public int Steps { get; set; }
+    public double Distance { get; set; }
+    public int Calories { get; set; }
+
+
+}
+
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     public DbSet<User> Users => Set<User>();
+    public DbSet<Activity> Activities => Set<Activity>();
 }
 
 
