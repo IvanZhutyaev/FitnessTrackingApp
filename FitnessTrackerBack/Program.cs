@@ -29,29 +29,29 @@ if (app.Environment.IsDevelopment())
 app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
-        return Results.BadRequest("Username and password are required");
+        return Results.BadRequest("Поьзовательское имя и пароль обязательны для заполнения");
     
     var exists = await db.Users.AnyAsync((User user)=> user.Username == request.Username && user.Password == request.Password);
     if (!exists)
         
-        return Results.BadRequest("Invalid username or password");
+        return Results.BadRequest("Неверный логин или пароль");
 
-    return Results.Ok("Login successful");
+    return Results.Ok("Пользователь успешно вошел в систему");
 });
 
 app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
-        return Results.BadRequest("Username and password are required");
+        return Results.BadRequest("Пользовательское имя и пароль обязательны для заполнения");
 
     var exists = await db.Users.AnyAsync((User user)=> user.Username == request.Username && user.Password == request.Password);
     if (exists)
-        return Results.BadRequest("User already exists");
+        return Results.BadRequest("Пользователь с таким именем уже существует");
 
     var user = new User { Username = request.Username, Password = request.Password };
     db.Users.Add(user);
     await db.SaveChangesAsync();
-    return Results.Ok("User registered successfully");
+    return Results.Ok("Пользователь успешно зарегистрирован");
 });
 
 app.Run();

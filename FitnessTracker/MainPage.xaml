@@ -8,8 +8,8 @@
 
     <Grid>
         
-        <Button x:Name="RegisterButton"
-                Text="Войти"
+        <Button x:Name="LoginButton"
+                Text="Вход"
                 FontSize="14"
                 BackgroundColor="#00C9FF"
                 TextColor="#0C1B33"
@@ -18,7 +18,7 @@
                 HorizontalOptions="End"
                 VerticalOptions="Start"
                 Margin="0,30,20,0"
-                Clicked="RegisterButton_Clicked"
+                Clicked="LoginButton_Clicked"
                 WidthRequest="120"
                 HeightRequest="40"
                 ZIndex="10"/>
@@ -506,7 +506,7 @@
         </ScrollView>
         
         
-        <ContentView x:Name="RegisterPopup"
+        <ContentView x:Name="LoginPopup"
                      IsVisible="False"
                      BackgroundColor="#80000000"
                      VerticalOptions="FillAndExpand"
@@ -521,7 +521,7 @@
                    HeightRequest="340"
                    HasShadow="True">
                 <VerticalStackLayout Spacing="20">
-                    <Label x:Name="RegisterPopupTitle"
+                    <Label x:Name="LoginPopupTitle"
                            Text="Вход в систему"
                            FontSize="22"
                            FontAttributes="Bold"
@@ -541,7 +541,6 @@
                            BackgroundColor="#F0F4FA"
                            TextColor="#0C1B33"
                            HeightRequest="44"/>
-                    
                     <Button x:Name="LoginSubmitButton"
                             Clicked="LoginSubmitButton_Clicked"
                             Text="Войти"
