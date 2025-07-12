@@ -21,7 +21,9 @@
                 Clicked="LoginButton_Clicked"
                 WidthRequest="120"
                 HeightRequest="40"
+                IsEnabled="True"
                 ZIndex="10"/>
+        
         <ScrollView>
             <VerticalStackLayout Spacing="0">
 

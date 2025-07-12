@@ -63,6 +63,14 @@ namespace FitnessTrackingApp
                 if (response.IsSuccessStatusCode)
                 {
                     await DisplayAlert("Регистрация", "Пользователь успешно зарегистрирован!", "OK");
+                    UpdateAuthUI(request.Username, true); // Обноление интерфейса после успешной регистрации
+
+                    //сохранение статуса входа в устройстве 
+
+                    //Preferences.Set("IsLoggedIn", true);
+                    //Preferences.Set("Username", request.Username);
+
+
                     //RegisterPopup.IsVisible = false; -- расскоментировать при реализации регистрации
                 }
                 else
@@ -101,7 +109,30 @@ namespace FitnessTrackingApp
             DisplayAlert("Смена режима", "Функция смены режима авторизации", "OK");
         }
 
+        private void UpdateAuthUI(string? username, bool isLoggedIn)
+        {
 
+
+            if (isLoggedIn && !string.IsNullOrEmpty(username))
+            {
+                // Меняем кнопку на "имя пользователя"
+                LoginButton.Text = username;
+                LoginButton.BackgroundColor = Colors.Transparent; // Делаем прозрачной
+                LoginButton.TextColor = Colors.White; // Белый текст
+                LoginButton.IsEnabled = false; // Делаем неактивной
+                LoginButton.Clicked -= LoginButton_Clicked; // Убираем обработчик входа
+            }
+            else
+            {
+                // Возвращаем кнопку в исходное состояние
+                LoginButton.Text = "Вход";
+                LoginButton.BackgroundColor = Color.FromArgb("#00C9FF");
+                LoginButton.TextColor = Color.FromArgb("#0C1B33");
+                LoginButton.IsEnabled = true;
+                LoginButton.Clicked += LoginButton_Clicked; // Возвращаем обработчик
+            }
+            
+        }
 
 
 
