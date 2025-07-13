@@ -93,6 +93,32 @@ app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
     await db.SaveChangesAsync();
     return Results.Ok(new { Success = true, Message = "Пользователь успешно зарегистрирован" });
 });
+// Получение статистики пользователя
+// Получение статистики пользователя
+app.MapGet("/user/stats", async (string username, AppDbContext db) =>
+{
+    // Сначала находим пользователя
+    var user = await db.Users
+        .Include(u => u.Activities)  // Подгружаем активности
+        .FirstOrDefaultAsync(u => u.Username == username);
+
+    if (user == null)
+        return Results.NotFound("Пользователь не найден");
+
+    // Если у пользователя нет активностей
+    if (!user.Activities.Any())
+        return Results.Ok(new { AvgSteps = 0, AvgDistance = 0.0, AvgCalories = 0 });
+
+    // Рассчитываем средние значения
+    var stats = new
+    {
+        AvgSteps = user.Activities.Average(a => a.Steps),
+        AvgDistance = user.Activities.Average(a => a.Distance),
+        AvgCalories = user.Activities.Average(a => a.Calories)
+    };
+
+    return Results.Ok(stats);
+});
 
 // Запуск приложения
 app.Run();
@@ -105,8 +131,8 @@ public class User
     public int Id { get; set; }
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public ICollection<Activity> Activities { get; set; } = new List<Activity>();  // Коллекция активностей
 }
-
 // Запрос на авторизацию
 public class LoginRequest
 {
@@ -126,6 +152,7 @@ public class Activity
 {
     public int Id { get; set; }
     public int UserId { get; set; }
+    public User User { get; set; }  // Навигационное свойство
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public int Steps { get; set; }
     public double Distance { get; set; }

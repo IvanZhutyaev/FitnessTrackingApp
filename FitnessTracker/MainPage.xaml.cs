@@ -10,6 +10,8 @@ namespace FitnessTrackingApp
         private bool _isLoginMode = true;
         private readonly HttpClient _httpClient = new HttpClient();
         private const string ApiBaseUrl = "http://localhost:5024";
+        private string _currentUsername = string.Empty;
+        private string _currentPassword = string.Empty;
 
         public MainPage()
         {
@@ -18,9 +20,41 @@ namespace FitnessTrackingApp
 
         private void LoginButton_Clicked(object sender, EventArgs e)
         {
-            ResetAuthFields();
-            SwitchToLoginMode();
-            AuthPopup.IsVisible = true;
+            if (string.IsNullOrEmpty(_currentUsername))
+            {
+                // Если не авторизованы - показываем окно входа
+                ResetAuthFields();
+                SwitchToLoginMode();
+                AuthPopup.IsVisible = true;
+            }
+            else
+            {
+                // Если авторизованы - показываем ЛК
+                LoadAccountData();
+                AccountPopup.IsVisible = true;
+            }
+        }
+
+        private async void LoadAccountData()
+        {
+            AccountUsernameLabel.Text = $"Имя: {_currentUsername}";
+            AccountStatsLabel.Text = "Загрузка статистики...";
+
+            try
+            {
+                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/user/stats?username={_currentUsername}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var stats = await response.Content.ReadFromJsonAsync<UserStats>();
+                    AccountStatsLabel.Text = $"Шаги: {stats?.AvgSteps ?? 0}/день\n" +
+                                          $"Дистанция: {stats?.AvgDistance ?? 0:F1} км/день\n" +
+                                          $"Калории: {stats?.AvgCalories ?? 0}/день";
+                }
+            }
+            catch
+            {
+                AccountStatsLabel.Text = "Не удалось загрузить статистику";
+            }
         }
 
         private void CloseAuthPopup_Clicked(object sender, EventArgs e)
@@ -57,7 +91,7 @@ namespace FitnessTrackingApp
             AuthActionButton.Text = "Войти";
             ConfirmPasswordEntry.IsVisible = false;
             SwitchAuthModeButton.Text = "Нет аккаунта? Зарегистрируйтесь!";
-            (AuthPopup.Content as Frame).HeightRequest = 430;
+            (AuthPopup.Content as Frame).HeightRequest = 380;
         }
 
         private void SwitchToRegisterMode()
@@ -67,7 +101,7 @@ namespace FitnessTrackingApp
             AuthActionButton.Text = "Зарегистрироваться";
             ConfirmPasswordEntry.IsVisible = true;
             SwitchAuthModeButton.Text = "Уже есть аккаунт? Войти";
-            (AuthPopup.Content as Frame).HeightRequest = 480;
+            (AuthPopup.Content as Frame).HeightRequest = 430;
         }
 
         private async void AuthActionButton_Clicked(object sender, EventArgs e)
@@ -121,7 +155,9 @@ namespace FitnessTrackingApp
                 var result = await response.Content.ReadFromJsonAsync<AuthResult>();
                 if (result?.Success == true)
                 {
-                    UpdateUIAfterLogin(username);
+                    _currentUsername = username;
+                    _currentPassword = password;
+                    UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
                 }
@@ -146,15 +182,8 @@ namespace FitnessTrackingApp
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<AuthResult>();
-                if (result?.Success == true)
-                {
-                    await DisplayAlert("Успех", result.Message ?? "Регистрация завершена успешно!", "OK");
-                    SwitchToLoginMode();
-                }
-                else
-                {
-                    await DisplayAlert("Ошибка", result?.Message ?? "Ошибка регистрации", "OK");
-                }
+                await DisplayAlert("Успех", result?.Message ?? "Регистрация завершена успешно!", "OK");
+                SwitchToLoginMode();
             }
             else
             {
@@ -163,14 +192,23 @@ namespace FitnessTrackingApp
             }
         }
 
-        private void UpdateUIAfterLogin(string username)
+        private void UpdateUIAfterLogin()
         {
-            LoginButton.Text = username;
+            LoginButton.Text = _currentUsername;
             LoginButton.BackgroundColor = Colors.Transparent;
             LoginButton.TextColor = Colors.White;
         }
 
-        // Остальные методы
+        private void LogoutButton_Clicked(object sender, EventArgs e)
+        {
+            _currentUsername = string.Empty;
+            _currentPassword = string.Empty;
+            LoginButton.Text = "Вход";
+            LoginButton.BackgroundColor = Color.FromArgb("#00C9FF");
+            LoginButton.TextColor = Color.FromArgb("#0C1B33");
+            AccountPopup.IsVisible = false;
+        }
+
         private void OnWorkoutButtonClicked(object sender, EventArgs e) => DisplayAlert("Тренировка", "Функция добавления тренировки", "OK");
         private void OnNutritionButtonClicked(object sender, EventArgs e) => DisplayAlert("Питание", "Функция добавления приема пищи", "OK");
         private void OnReminderButtonClicked(object sender, EventArgs e) => DisplayAlert("Напоминание", "Функция добавления напоминания", "OK");
@@ -181,5 +219,12 @@ namespace FitnessTrackingApp
     {
         public bool Success { get; set; }
         public string? Message { get; set; }
+    }
+
+    public class UserStats
+    {
+        public double AvgSteps { get; set; }
+        public double AvgDistance { get; set; }
+        public double AvgCalories { get; set; }
     }
 }
