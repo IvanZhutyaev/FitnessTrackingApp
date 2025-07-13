@@ -62,4 +62,13 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 	</ItemGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-ios'">
+    	<!--><RuntimeIdentifier>ios-arm64</RuntimeIdentifier> --> <!-- Для реального устройства -->
+    	<RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
+    	<CodesignProvision>Automatic</CodesignProvision>
+    	<DevelopmentTeam>7LQD9SFQCM</DevelopmentTeam>
+    	<ProvisioningType>Automatic</ProvisioningType>
+	</PropertyGroup>	
+
+
 </Project>

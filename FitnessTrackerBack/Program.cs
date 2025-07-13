@@ -93,7 +93,7 @@ app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
     await db.SaveChangesAsync();
     return Results.Ok(new { Success = true, Message = "Пользователь успешно зарегистрирован" });
 });
-// Получение статистики пользователя
+
 // Получение статистики пользователя
 app.MapGet("/user/stats", async (string username, AppDbContext db) =>
 {

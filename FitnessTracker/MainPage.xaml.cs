@@ -214,7 +214,12 @@ namespace FitnessTrackingApp
             AccountPopup.IsVisible = false;
         }
 
-        private void OnWorkoutButtonClicked(object sender, EventArgs e) => DisplayAlert("Тренировка", "Функция добавления тренировки", "OK");
+        private void OnWorkoutButtonClicked(object sender, EventArgs e)
+        {
+            
+            
+
+        }
         private void OnNutritionButtonClicked(object sender, EventArgs e) => DisplayAlert("Питание", "Функция добавления приема пищи", "OK");
         private void OnReminderButtonClicked(object sender, EventArgs e) => DisplayAlert("Напоминание", "Функция добавления напоминания", "OK");
         private void OnReportButtonClicked(object sender, EventArgs e) => DisplayAlert("Аналитика", "Функция показа отчетов", "OK");
