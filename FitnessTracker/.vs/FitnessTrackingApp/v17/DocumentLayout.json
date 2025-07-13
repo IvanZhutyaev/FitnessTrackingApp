@@ -7,11 +7,11 @@
       "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -25,7 +25,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs",
               "RelativeDocumentMoniker": "..\\FitnessTrackerBack\\Program.cs",
@@ -33,18 +33,17 @@
               "RelativeToolTip": "..\\FitnessTrackerBack\\Program.cs",
               "ViewState": "AgIAAFYAAAAAAAAAAAAYwHgAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-13T16:57:04.313Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-13T16:57:04.313Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "MainPage.xaml.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MainPage.xaml.cs",
               "RelativeDocumentMoniker": "MainPage.xaml.cs",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MainPage.xaml.cs",
               "RelativeToolTip": "MainPage.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAswOoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-11T05:38:45.409Z",
               "EditorCaption": ""
@@ -57,7 +56,7 @@
               "RelativeDocumentMoniker": "MainPage.xaml",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MainPage.xaml",
               "RelativeToolTip": "MainPage.xaml",
-              "ViewState": "AgIAAGACAAAAAAAAAAAswIECAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAHECAAAAAAAAAAAMwH4CAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-07-11T05:35:08.951Z",
               "EditorCaption": ""

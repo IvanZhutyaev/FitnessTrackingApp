@@ -11,7 +11,6 @@ namespace FitnessTrackingApp
         private readonly HttpClient _httpClient = new HttpClient();
         private const string ApiBaseUrl = "http://localhost:5024";
         private string _currentUsername = string.Empty;
-        private string _currentPassword = string.Empty;
 
         public MainPage()
         {
@@ -22,14 +21,12 @@ namespace FitnessTrackingApp
         {
             if (string.IsNullOrEmpty(_currentUsername))
             {
-                // Если не авторизованы - показываем окно входа
                 ResetAuthFields();
                 SwitchToLoginMode();
                 AuthPopup.IsVisible = true;
             }
             else
             {
-                // Если авторизованы - показываем ЛК
                 LoadAccountData();
                 AccountPopup.IsVisible = true;
             }
@@ -91,7 +88,7 @@ namespace FitnessTrackingApp
             AuthActionButton.Text = "Войти";
             ConfirmPasswordEntry.IsVisible = false;
             SwitchAuthModeButton.Text = "Нет аккаунта? Зарегистрируйтесь!";
-            (AuthPopup.Content as Frame).HeightRequest = 380;
+            (AuthPopup.Content as Frame).HeightRequest = 450;
         }
 
         private void SwitchToRegisterMode()
@@ -101,7 +98,7 @@ namespace FitnessTrackingApp
             AuthActionButton.Text = "Зарегистрироваться";
             ConfirmPasswordEntry.IsVisible = true;
             SwitchAuthModeButton.Text = "Уже есть аккаунт? Войти";
-            (AuthPopup.Content as Frame).HeightRequest = 430;
+            (AuthPopup.Content as Frame).HeightRequest = 500;
         }
 
         private async void AuthActionButton_Clicked(object sender, EventArgs e)
@@ -156,7 +153,6 @@ namespace FitnessTrackingApp
                 if (result?.Success == true)
                 {
                     _currentUsername = username;
-                    _currentPassword = password;
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
@@ -195,17 +191,26 @@ namespace FitnessTrackingApp
         private void UpdateUIAfterLogin()
         {
             LoginButton.Text = _currentUsername;
-            LoginButton.BackgroundColor = Colors.Transparent;
+            LoginButton.FontSize = 16;
+            LoginButton.FontAttributes = FontAttributes.Bold;
+            LoginButton.BackgroundColor = Color.FromArgb("#1A3A6F");
             LoginButton.TextColor = Colors.White;
+            LoginButton.CornerRadius = 20;
+            LoginButton.Padding = new Thickness(15, 8);
+            LoginButton.WidthRequest = 150;
         }
 
         private void LogoutButton_Clicked(object sender, EventArgs e)
         {
             _currentUsername = string.Empty;
-            _currentPassword = string.Empty;
             LoginButton.Text = "Вход";
+            LoginButton.FontSize = 14;
+            LoginButton.FontAttributes = FontAttributes.None;
             LoginButton.BackgroundColor = Color.FromArgb("#00C9FF");
             LoginButton.TextColor = Color.FromArgb("#0C1B33");
+            LoginButton.CornerRadius = 15;
+            LoginButton.Padding = new Thickness(10, 5);
+            LoginButton.WidthRequest = 120;
             AccountPopup.IsVisible = false;
         }
 

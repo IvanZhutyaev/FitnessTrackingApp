@@ -6,7 +6,7 @@
              NavigationPage.HasNavigationBar="False">
 
     <Grid>
-        <!-- Кнопка входа в правом верхнем углу -->
+        <!-- Кнопка входа/имя пользователя -->
         <Button x:Name="LoginButton"
                 Text="Вход"
                 FontSize="14"
@@ -25,18 +25,17 @@
 
         <ScrollView>
             <VerticalStackLayout Spacing="0">
-
                 <!-- Шапка -->
                 <Grid HeightRequest="350" BackgroundColor="#1A3A6F">
                     <Image Source="fitness_bg.jpg" Aspect="AspectFill" Opacity="0.2"/>
                     <VerticalStackLayout VerticalOptions="Center" Padding="30" Spacing="15">
                         <Label Text="FITNESS TRACKER" 
-                           FontSize="28"
-                           TextColor="White"
-                           FontAttributes="Bold"/>
+                               FontSize="28"
+                               TextColor="White"
+                               FontAttributes="Bold"/>
                         <Label Text="Ваш персональный тренер и диетолог"
-                           FontSize="18"
-                           TextColor="#A0E7FF"/>
+                               FontSize="18"
+                               TextColor="#A0E7FF"/>
                         <BoxView HeightRequest="3" WidthRequest="100" Color="#00C9FF" HorizontalOptions="Start"/>
                     </VerticalStackLayout>
                 </Grid>
@@ -507,7 +506,7 @@
                 </Frame>
             </VerticalStackLayout>
         </ScrollView>
-        <!-- Модальное окно для входа/регистрации -->
+        <!-- Модальное окно входа/регистрации -->
         <ContentView x:Name="AuthPopup"
                      IsVisible="False"
                      BackgroundColor="#80000000"
@@ -520,10 +519,9 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    WidthRequest="350"
-                   HeightRequest="430"
+                   HeightRequest="500"
                    HasShadow="True">
                 <VerticalStackLayout Spacing="15">
-                    <!-- Кнопка "Назад" вверху -->
                     <Button Text="← Назад"
                             BackgroundColor="Transparent"
                             TextColor="#0C1B33"
@@ -586,57 +584,58 @@
                 </VerticalStackLayout>
             </Frame>
         </ContentView>
+
         <!-- Модальное окно личного кабинета -->
         <ContentView x:Name="AccountPopup"
-             IsVisible="False"
-             BackgroundColor="#80000000"
-             VerticalOptions="Fill"
-             HorizontalOptions="Fill"
-             ZIndex="100">
+                     IsVisible="False"
+                     BackgroundColor="#80000000"
+                     VerticalOptions="Fill"
+                     HorizontalOptions="Fill"
+                     ZIndex="100">
             <Frame BackgroundColor="White"
-           CornerRadius="20"
-           Padding="25"
-           HorizontalOptions="Center"
-           VerticalOptions="Center"
-           WidthRequest="350"
-           HeightRequest="300"
-           HasShadow="True">
+                   CornerRadius="20"
+                   Padding="25"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   WidthRequest="350"
+                   HeightRequest="500"
+                   HasShadow="True">
                 <VerticalStackLayout Spacing="15">
                     <Label Text="Личный кабинет"
-                   FontSize="22"
-                   FontAttributes="Bold"
-                   TextColor="#0C1B33"
-                   HorizontalOptions="Center"/>
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="#0C1B33"
+                           HorizontalOptions="Center"/>
 
                     <Frame BackgroundColor="#F0F4FA"
-                   CornerRadius="10"
-                   Padding="15">
+                           CornerRadius="10"
+                           Padding="15">
                         <VerticalStackLayout Spacing="10">
                             <Label x:Name="AccountUsernameLabel"
-                           Text="Имя: "
-                           FontSize="16"
-                           TextColor="#0C1B33"/>
+                                   Text="Имя: "
+                                   FontSize="16"
+                                   TextColor="#0C1B33"/>
 
                             <Label Text="Средняя активность:"
-                           FontSize="16"
-                           TextColor="#0C1B33"
-                           Margin="0,10,0,0"/>
+                                   FontSize="16"
+                                   TextColor="#0C1B33"
+                                   Margin="0,10,0,0"/>
 
                             <Label x:Name="AccountStatsLabel"
-                           Text="Загрузка..."
-                           FontSize="14"
-                           TextColor="#5D8CC0"/>
+                                   Text="Загрузка..."
+                                   FontSize="14"
+                                   TextColor="#5D8CC0"/>
                         </VerticalStackLayout>
                     </Frame>
 
                     <Button Text="Выйти"
-                    BackgroundColor="#FF5252"
-                    TextColor="White"
-                    CornerRadius="10"
-                    HorizontalOptions="Fill"
-                    HeightRequest="50"
-                    Margin="0,20,0,0"
-                    Clicked="LogoutButton_Clicked"/>
+                            BackgroundColor="#FF5252"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HorizontalOptions="Fill"
+                            HeightRequest="50"
+                            Margin="0,20,0,0"
+                            Clicked="LogoutButton_Clicked"/>
                 </VerticalStackLayout>
             </Frame>
         </ContentView>
