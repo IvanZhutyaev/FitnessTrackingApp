@@ -89,7 +89,7 @@ namespace FitnessTrackingApp
         {
             //RegisterPopup.IsVisible = false; -- Закрыть окно регистрации, если оно открыто
             LoginPopup.IsVisible = true;
-            
+
         }
 
 
@@ -131,7 +131,7 @@ namespace FitnessTrackingApp
                 LoginButton.IsEnabled = true;
                 LoginButton.Clicked += LoginButton_Clicked; // Возвращаем обработчик
             }
-            
+
         }
 
 
@@ -160,6 +160,6 @@ namespace FitnessTrackingApp
             DisplayAlert("Аналитика", "Функция показа отчетов", "OK");
         }
 
-        
+
     }
 }

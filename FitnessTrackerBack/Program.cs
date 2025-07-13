@@ -8,7 +8,7 @@ builder.Services.AddSwaggerGen();
 
 // Настройка подключения к базе данных PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password="12345";
+    ?? "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=12345";
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 

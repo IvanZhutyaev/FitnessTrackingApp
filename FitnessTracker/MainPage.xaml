@@ -7,7 +7,7 @@
              NavigationPage.HasNavigationBar="False">
 
     <Grid>
-        
+
         <Button x:Name="LoginButton"
                 Text="Вход"
                 FontSize="14"
@@ -23,43 +23,43 @@
                 HeightRequest="40"
                 IsEnabled="True"
                 ZIndex="10"/>
-        
+
         <ScrollView>
             <VerticalStackLayout Spacing="0">
 
-            <!-- Шапка -->
-            <Grid HeightRequest="350" BackgroundColor="#1A3A6F">
-                <Image Source="fitness_bg.jpg" Aspect="AspectFill" Opacity="0.2"/>
-                <VerticalStackLayout VerticalOptions="Center" Padding="30" Spacing="15">
-                    <Label Text="FITNESS TRACKER" 
+                <!-- Шапка -->
+                <Grid HeightRequest="350" BackgroundColor="#1A3A6F">
+                    <Image Source="fitness_bg.jpg" Aspect="AspectFill" Opacity="0.2"/>
+                    <VerticalStackLayout VerticalOptions="Center" Padding="30" Spacing="15">
+                        <Label Text="FITNESS TRACKER" 
                            FontSize="28"
                            TextColor="White"
                            FontAttributes="Bold"/>
-                    <Label Text="Ваш персональный тренер и диетолог"
+                        <Label Text="Ваш персональный тренер и диетолог"
                            FontSize="18"
                            TextColor="#A0E7FF"/>
-                    <BoxView HeightRequest="3" WidthRequest="100" Color="#00C9FF" HorizontalOptions="Start"/>
-                </VerticalStackLayout>
-            </Grid>
+                        <BoxView HeightRequest="3" WidthRequest="100" Color="#00C9FF" HorizontalOptions="Start"/>
+                    </VerticalStackLayout>
+                </Grid>
 
-            <!-- Окошко 1: Учет тренировок -->
-            <Frame Margin="20,40,20,0" 
+                <!-- Окошко 1: Учет тренировок -->
+                <Frame Margin="20,40,20,0" 
                    CornerRadius="20"
                    BackgroundColor="#152642"
                    BorderColor="#2A4D80"
                    Padding="0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <BoxView Grid.Row="0" 
+                        <BoxView Grid.Row="0" 
                              HeightRequest="50"
                              BackgroundColor="#00C9FF"
                              CornerRadius="20,20,0,0"/>
 
-                    <Label Grid.Row="0"
+                        <Label Grid.Row="0"
                            Text="💪 УЧЕТ ТРЕНИРОВОК"
                            FontSize="18"
                            FontAttributes="Bold"
@@ -67,74 +67,74 @@
                            VerticalOptions="Center"
                            HorizontalOptions="Center"/>
 
-                    <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="15">
-                        <Label Text="Записывайте упражнения и отслеживайте прогресс"
+                        <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="15">
+                            <Label Text="Записывайте упражнения и отслеживайте прогресс"
                                TextColor="#A0E7FF"
                                FontSize="16"/>
 
-                        <Grid ColumnSpacing="15" Margin="0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                <Label Text="Упражнение" TextColor="#5D8CC0" FontSize="14"/>
-                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label Text="Жим штанги" TextColor="White"/>
-                                </Frame>
-                            </VerticalStackLayout>
-
-                            <Grid Grid.Column="1" RowSpacing="5" ColumnSpacing="5">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                            <Grid ColumnSpacing="15" Margin="0,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Label Text="Подходы" Grid.Row="0" Grid.Column="0" TextColor="#5D8CC0" FontSize="14"/>
-                                <Label Text="Повторы" Grid.Row="0" Grid.Column="1" TextColor="#5D8CC0" FontSize="14"/>
+                                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                    <Label Text="Упражнение" TextColor="#5D8CC0" FontSize="14"/>
+                                    <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                        <Label Text="Жим штанги" TextColor="White"/>
+                                    </Frame>
+                                </VerticalStackLayout>
 
-                                <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label Text="4" TextColor="White" HorizontalOptions="Center"/>
-                                </Frame>
-                                <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label Text="12" TextColor="White" HorizontalOptions="Center"/>
-                                </Frame>
+                                <Grid Grid.Column="1" RowSpacing="5" ColumnSpacing="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="Подходы" Grid.Row="0" Grid.Column="0" TextColor="#5D8CC0" FontSize="14"/>
+                                    <Label Text="Повторы" Grid.Row="0" Grid.Column="1" TextColor="#5D8CC0" FontSize="14"/>
+
+                                    <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                        <Label Text="4" TextColor="White" HorizontalOptions="Center"/>
+                                    </Frame>
+                                    <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                        <Label Text="12" TextColor="White" HorizontalOptions="Center"/>
+                                    </Frame>
+                                </Grid>
                             </Grid>
-                        </Grid>
 
-                        <Button Text="Добавить упражнение"
+                            <Button Text="Добавить упражнение"
                                 BackgroundColor="#00C9FF"
                                 TextColor="#0C1B33"
                                 FontAttributes="Bold"
                                 CornerRadius="10"
                                 Margin="0,20,0,10"/>
-                    </VerticalStackLayout>
-                </Grid>
-            </Frame>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
 
-            <!-- Окошко 2: Трекер активности -->
-            <Frame Margin="20,40,20,0" 
+                <!-- Окошко 2: Трекер активности -->
+                <Frame Margin="20,40,20,0" 
                    CornerRadius="20"
                    BackgroundColor="#152642"
                    BorderColor="#2A4D80"
                    Padding="0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <BoxView Grid.Row="0" 
+                        <BoxView Grid.Row="0" 
                              HeightRequest="50"
                              BackgroundColor="#00E676"
                              CornerRadius="20,20,0,0"/>
 
-                    <Label Grid.Row="0"
+                        <Label Grid.Row="0"
                            Text="🚶‍♂️ ТРЕКЕР АКТИВНОСТИ"
                            FontSize="18"
                            FontAttributes="Bold"
@@ -142,69 +142,69 @@
                            VerticalOptions="Center"
                            HorizontalOptions="Center"/>
 
-                    <Grid Grid.Row="1" Padding="20" RowSpacing="15" ColumnSpacing="20">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Row="1" Padding="20" RowSpacing="15" ColumnSpacing="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <!-- Шаги -->
-                        <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
-                            <Label Text="Шаги" TextColor="#5D8CC0" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                                <Label Text="8,245" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
+                            <!-- Шаги -->
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
+                                <Label Text="Шаги" TextColor="#5D8CC0" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                                    <Label Text="8,245" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
 
-                        <!-- Дистанция -->
-                        <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
-                            <Label Text="Дистанция" TextColor="#5D8CC0" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                                <Label Text="5.8 км" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
+                            <!-- Дистанция -->
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
+                                <Label Text="Дистанция" TextColor="#5D8CC0" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                                    <Label Text="5.8 км" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
 
-                        <!-- Калории -->
-                        <VerticalStackLayout Grid.Row="0" Grid.Column="2" Spacing="5">
-                            <Label Text="Калории" TextColor="#5D8CC0" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                                <Label Text="420" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
+                            <!-- Калории -->
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="2" Spacing="5">
+                                <Label Text="Калории" TextColor="#5D8CC0" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                                    <Label Text="420" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
 
-                        <!-- Прогресс -->
-                        <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="3" Spacing="10" Margin="0,20">
-                            <Label Text="Прогресс за неделю" TextColor="#5D8CC0"/>
-                            <ProgressBar Progress="0.65" BackgroundColor="#1A3A6F" ProgressColor="#00E676" HeightRequest="8"/>
-                            <Label Text="65% от цели" TextColor="#A0E7FF" HorizontalOptions="End"/>
-                        </VerticalStackLayout>
+                            <!-- Прогресс -->
+                            <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="3" Spacing="10" Margin="0,20">
+                                <Label Text="Прогресс за неделю" TextColor="#5D8CC0"/>
+                                <ProgressBar Progress="0.65" BackgroundColor="#1A3A6F" ProgressColor="#00E676" HeightRequest="8"/>
+                                <Label Text="65% от цели" TextColor="#A0E7FF" HorizontalOptions="End"/>
+                            </VerticalStackLayout>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Frame>
+                </Frame>
 
-            <!-- Окошко 3: Контроль питания -->
-            <Frame Margin="20,40,20,0" 
+                <!-- Окошко 3: Контроль питания -->
+                <Frame Margin="20,40,20,0" 
                    CornerRadius="20"
                    BackgroundColor="#152642"
                    BorderColor="#2A4D80"
                    Padding="0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <BoxView Grid.Row="0" 
+                        <BoxView Grid.Row="0" 
                              HeightRequest="50"
                              BackgroundColor="#FF9800"
                              CornerRadius="20,20,0,0"/>
 
-                    <Label Grid.Row="0"
+                        <Label Grid.Row="0"
                            Text="🍎 КОНТРОЛЬ ПИТАНИЯ"
                            FontSize="18"
                            FontAttributes="Bold"
@@ -212,74 +212,74 @@
                            VerticalOptions="Center"
                            HorizontalOptions="Center"/>
 
-                    <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="15">
-                        <Label Text="Дневная норма КБЖУ" TextColor="#A0E7FF" FontSize="16"/>
+                        <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="15">
+                            <Label Text="Дневная норма КБЖУ" TextColor="#A0E7FF" FontSize="16"/>
 
-                        <Grid ColumnSpacing="15" Margin="0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid ColumnSpacing="15" Margin="0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                <Label Text="Калории" TextColor="#5D8CC0" FontSize="14" HorizontalOptions="Center"/>
-                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label Text="1850" TextColor="White" HorizontalOptions="Center"/>
-                                </Frame>
-                            </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                    <Label Text="Калории" TextColor="#5D8CC0" FontSize="14" HorizontalOptions="Center"/>
+                                    <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                        <Label Text="1850" TextColor="White" HorizontalOptions="Center"/>
+                                    </Frame>
+                                </VerticalStackLayout>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="5">
-                                <Label Text="Белки" TextColor="#5D8CC0" FontSize="14" HorizontalOptions="Center"/>
-                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label Text="120г" TextColor="White" HorizontalOptions="Center"/>
-                                </Frame>
-                            </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Белки" TextColor="#5D8CC0" FontSize="14" HorizontalOptions="Center"/>
+                                    <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                        <Label Text="120г" TextColor="White" HorizontalOptions="Center"/>
+                                    </Frame>
+                                </VerticalStackLayout>
 
-                            <VerticalStackLayout Grid.Column="2" Spacing="5">
-                                <Label Text="Жиры" TextColor="#5D8CC0" FontSize="14" HorizontalOptions="Center"/>
-                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label Text="60г" TextColor="White" HorizontalOptions="Center"/>
-                                </Frame>
-                            </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="2" Spacing="5">
+                                    <Label Text="Жиры" TextColor="#5D8CC0" FontSize="14" HorizontalOptions="Center"/>
+                                    <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                        <Label Text="60г" TextColor="White" HorizontalOptions="Center"/>
+                                    </Frame>
+                                </VerticalStackLayout>
 
-                            <VerticalStackLayout Grid.Column="3" Spacing="5">
-                                <Label Text="Углеводы" TextColor="#5D8CC0" FontSize="14" HorizontalOptions="Center"/>
-                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label Text="210г" TextColor="White" HorizontalOptions="Center"/>
-                                </Frame>
-                            </VerticalStackLayout>
-                        </Grid>
+                                <VerticalStackLayout Grid.Column="3" Spacing="5">
+                                    <Label Text="Углеводы" TextColor="#5D8CC0" FontSize="14" HorizontalOptions="Center"/>
+                                    <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                        <Label Text="210г" TextColor="White" HorizontalOptions="Center"/>
+                                    </Frame>
+                                </VerticalStackLayout>
+                            </Grid>
 
-                        <Button Text="Добавить прием пищи"
+                            <Button Text="Добавить прием пищи"
                                 BackgroundColor="#FF9800"
                                 TextColor="#0C1B33"
                                 FontAttributes="Bold"
                                 CornerRadius="10"
                                 Margin="0,20,0,10"/>
-                    </VerticalStackLayout>
-                </Grid>
-            </Frame>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
 
-            <!-- Окошко 4: Напоминания -->
-            <Frame Margin="20,40,20,0" 
+                <!-- Окошко 4: Напоминания -->
+                <Frame Margin="20,40,20,0" 
                    CornerRadius="20"
                    BackgroundColor="#152642"
                    BorderColor="#2A4D80"
                    Padding="0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <BoxView Grid.Row="0" 
+                        <BoxView Grid.Row="0" 
                              HeightRequest="50"
                              BackgroundColor="#FF5252"
                              CornerRadius="20,20,0,0"/>
 
-                    <Label Grid.Row="0"
+                        <Label Grid.Row="0"
                            Text="⏰ НАПОМИНАНИЯ"
                            FontSize="18"
                            FontAttributes="Bold"
@@ -287,95 +287,95 @@
                            VerticalOptions="Center"
                            HorizontalOptions="Center"/>
 
-                    <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="15">
-                        <Grid ColumnSpacing="15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
+                        <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="15">
+                            <Grid ColumnSpacing="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Frame Grid.Column="0"
+                                <Frame Grid.Column="0"
                                    CornerRadius="10"
                                    BackgroundColor="#1A3A6F"
                                    Padding="10"
                                    HeightRequest="60">
-                                <Label Text="08:30" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
+                                    <Label Text="08:30" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="5">
-                                <Label Text="Прием пищи" TextColor="White" FontAttributes="Bold"/>
-                                <Label Text="Завтрак" TextColor="#5D8CC0"/>
-                            </VerticalStackLayout>
-                        </Grid>
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Прием пищи" TextColor="White" FontAttributes="Bold"/>
+                                    <Label Text="Завтрак" TextColor="#5D8CC0"/>
+                                </VerticalStackLayout>
+                            </Grid>
 
-                        <Grid ColumnSpacing="15" Margin="0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid ColumnSpacing="15" Margin="0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Frame Grid.Column="0"
+                                <Frame Grid.Column="0"
                                    CornerRadius="10"
                                    BackgroundColor="#1A3A6F"
                                    Padding="10"
                                    HeightRequest="60">
-                                <Label Text="12:00" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
+                                    <Label Text="12:00" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="5">
-                                <Label Text="Тренировка" TextColor="White" FontAttributes="Bold"/>
-                                <Label Text="Силовая тренировка" TextColor="#5D8CC0"/>
-                            </VerticalStackLayout>
-                        </Grid>
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Тренировка" TextColor="White" FontAttributes="Bold"/>
+                                    <Label Text="Силовая тренировка" TextColor="#5D8CC0"/>
+                                </VerticalStackLayout>
+                            </Grid>
 
-                        <Grid ColumnSpacing="15" Margin="0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="2*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid ColumnSpacing="15" Margin="0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Frame Grid.Column="0"
+                                <Frame Grid.Column="0"
                                    CornerRadius="10"
                                    BackgroundColor="#1A3A6F"
                                    Padding="10"
                                    HeightRequest="60">
-                                <Label Text="15:00" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
+                                    <Label Text="15:00" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="5">
-                                <Label Text="Вода" TextColor="White" FontAttributes="Bold"/>
-                                <Label Text="Стакан воды" TextColor="#5D8CC0"/>
-                            </VerticalStackLayout>
-                        </Grid>
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Вода" TextColor="White" FontAttributes="Bold"/>
+                                    <Label Text="Стакан воды" TextColor="#5D8CC0"/>
+                                </VerticalStackLayout>
+                            </Grid>
 
-                        <Button Text="Добавить напоминание"
+                            <Button Text="Добавить напоминание"
                                 BackgroundColor="#FF5252"
                                 TextColor="#0C1B33"
                                 FontAttributes="Bold"
                                 CornerRadius="10"
                                 Margin="0,20,0,10"/>
-                    </VerticalStackLayout>
-                </Grid>
-            </Frame>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
 
-            <!-- Окошко 5: Мотивация -->
-            <Frame Margin="20,40,20,0" 
+                <!-- Окошко 5: Мотивация -->
+                <Frame Margin="20,40,20,0" 
                    CornerRadius="20"
                    BackgroundColor="#152642"
                    BorderColor="#2A4D80"
                    Padding="0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <BoxView Grid.Row="0" 
+                        <BoxView Grid.Row="0" 
                              HeightRequest="50"
                              BackgroundColor="#FFEB3B"
                              CornerRadius="20,20,0,0"/>
 
-                    <Label Grid.Row="0"
+                        <Label Grid.Row="0"
                            Text="🏆 МОТИВАЦИЯ"
                            FontSize="18"
                            FontAttributes="Bold"
@@ -383,78 +383,78 @@
                            VerticalOptions="Center"
                            HorizontalOptions="Center"/>
 
-                    <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="20">
-                        <Label Text="Ваши достижения" TextColor="#A0E7FF" FontSize="16"/>
+                        <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="20">
+                            <Label Text="Ваши достижения" TextColor="#A0E7FF" FontSize="16"/>
 
-                        <Grid ColumnSpacing="15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid ColumnSpacing="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Frame Grid.Column="0"
+                                <Frame Grid.Column="0"
                                    CornerRadius="15"
                                    BackgroundColor="#1A3A6F"
                                    Padding="15">
-                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
-                                    <Label Text="7" FontSize="24" TextColor="#FFEB3B" HorizontalOptions="Center"/>
-                                    <Label Text="дней подряд" TextColor="#5D8CC0" FontSize="12"/>
-                                </VerticalStackLayout>
-                            </Frame>
+                                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                        <Label Text="7" FontSize="24" TextColor="#FFEB3B" HorizontalOptions="Center"/>
+                                        <Label Text="дней подряд" TextColor="#5D8CC0" FontSize="12"/>
+                                    </VerticalStackLayout>
+                                </Frame>
 
-                            <Frame Grid.Column="1"
+                                <Frame Grid.Column="1"
                                    CornerRadius="15"
                                    BackgroundColor="#1A3A6F"
                                    Padding="15">
-                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
-                                    <Label Text="12" FontSize="24" TextColor="#FFEB3B" HorizontalOptions="Center"/>
-                                    <Label Text="тренировок" TextColor="#5D8CC0" FontSize="12"/>
-                                </VerticalStackLayout>
-                            </Frame>
+                                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                        <Label Text="12" FontSize="24" TextColor="#FFEB3B" HorizontalOptions="Center"/>
+                                        <Label Text="тренировок" TextColor="#5D8CC0" FontSize="12"/>
+                                    </VerticalStackLayout>
+                                </Frame>
 
-                            <Frame Grid.Column="2"
+                                <Frame Grid.Column="2"
                                    CornerRadius="15"
                                    BackgroundColor="#1A3A6F"
                                    Padding="15">
-                                <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
-                                    <Label Text="85%" FontSize="24" TextColor="#FFEB3B" HorizontalOptions="Center"/>
-                                    <Label Text="целей" TextColor="#5D8CC0" FontSize="12"/>
+                                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                        <Label Text="85%" FontSize="24" TextColor="#FFEB3B" HorizontalOptions="Center"/>
+                                        <Label Text="целей" TextColor="#5D8CC0" FontSize="12"/>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </Grid>
+
+                            <Label Text="Текущий челлендж" TextColor="#A0E7FF" FontSize="16" Margin="0,10"/>
+
+                            <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                                <VerticalStackLayout Spacing="10">
+                                    <Label Text="10 000 шагов в день" TextColor="White" FontAttributes="Bold"/>
+                                    <ProgressBar Progress="0.75" BackgroundColor="#0C1B33" ProgressColor="#FFEB3B" HeightRequest="8"/>
+                                    <Label Text="3 из 7 дней выполнено" TextColor="#5D8CC0" FontSize="14"/>
                                 </VerticalStackLayout>
                             </Frame>
-                        </Grid>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
 
-                        <Label Text="Текущий челлендж" TextColor="#A0E7FF" FontSize="16" Margin="0,10"/>
-
-                        <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                            <VerticalStackLayout Spacing="10">
-                                <Label Text="10 000 шагов в день" TextColor="White" FontAttributes="Bold"/>
-                                <ProgressBar Progress="0.75" BackgroundColor="#0C1B33" ProgressColor="#FFEB3B" HeightRequest="8"/>
-                                <Label Text="3 из 7 дней выполнено" TextColor="#5D8CC0" FontSize="14"/>
-                            </VerticalStackLayout>
-                        </Frame>
-                    </VerticalStackLayout>
-                </Grid>
-            </Frame>
-
-            <!-- Окошко 6: Аналитика -->
-            <Frame Margin="20,40,20,40" 
+                <!-- Окошко 6: Аналитика -->
+                <Frame Margin="20,40,20,40" 
                    CornerRadius="20"
                    BackgroundColor="#152642"
                    BorderColor="#2A4D80"
                    Padding="0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <BoxView Grid.Row="0" 
+                        <BoxView Grid.Row="0" 
                              HeightRequest="50"
                              BackgroundColor="#9C27B0"
                              CornerRadius="20,20,0,0"/>
 
-                    <Label Grid.Row="0"
+                        <Label Grid.Row="0"
                            Text="📊 АНАЛИТИКА"
                            FontSize="18"
                            FontAttributes="Bold"
@@ -462,52 +462,52 @@
                            VerticalOptions="Center"
                            HorizontalOptions="Center"/>
 
-                    <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="20">
-                        <Label Text="Ваш прогресс за месяц" TextColor="#A0E7FF" FontSize="16"/>
+                        <VerticalStackLayout Grid.Row="1" Padding="20" Spacing="20">
+                            <Label Text="Ваш прогресс за месяц" TextColor="#A0E7FF" FontSize="16"/>
 
-                        <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15" HeightRequest="200">
-                            <Label Text="График прогресса" 
+                            <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15" HeightRequest="200">
+                                <Label Text="График прогресса" 
                                    TextColor="#5D8CC0" 
                                    VerticalOptions="Center" 
                                    HorizontalOptions="Center"/>
-                        </Frame>
+                            </Frame>
 
-                        <Grid ColumnSpacing="15" Margin="0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <Grid ColumnSpacing="15" Margin="0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                <Label Text="Тренд веса" TextColor="#5D8CC0" HorizontalOptions="Center"/>
-                                <Frame CornerRadius="10" BackgroundColor="#2A4D80" Padding="10">
-                                    <Label Text="-2.4 кг" TextColor="#00E676" FontAttributes="Bold" HorizontalOptions="Center"/>
-                                </Frame>
-                            </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                    <Label Text="Тренд веса" TextColor="#5D8CC0" HorizontalOptions="Center"/>
+                                    <Frame CornerRadius="10" BackgroundColor="#2A4D80" Padding="10">
+                                        <Label Text="-2.4 кг" TextColor="#00E676" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    </Frame>
+                                </VerticalStackLayout>
 
-                            <VerticalStackLayout Grid.Column="1" Spacing="5">
-                                <Label Text="Средняя активность" TextColor="#5D8CC0" HorizontalOptions="Center"/>
-                                <Frame CornerRadius="10" BackgroundColor="#2A4D80" Padding="10">
-                                    <Label Text="+18%" TextColor="#00E676" FontAttributes="Bold" HorizontalOptions="Center"/>
-                                </Frame>
-                            </VerticalStackLayout>
-                        </Grid>
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Средняя активность" TextColor="#5D8CC0" HorizontalOptions="Center"/>
+                                    <Frame CornerRadius="10" BackgroundColor="#2A4D80" Padding="10">
+                                        <Label Text="+18%" TextColor="#00E676" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    </Frame>
+                                </VerticalStackLayout>
+                            </Grid>
 
-                        <Button Text="Показать полный отчет"
+                            <Button Text="Показать полный отчет"
                                 BackgroundColor="#9C27B0"
                                 TextColor="White"
                                 FontAttributes="Bold"
                                 CornerRadius="10"
                                 Margin="0,20,0,10"/>
-                    </VerticalStackLayout>
-                </Grid>
-            </Frame>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
 
 
-        </VerticalStackLayout>
+            </VerticalStackLayout>
         </ScrollView>
-        
-        
+
+
         <ContentView x:Name="LoginPopup"
                      IsVisible="False"
                      BackgroundColor="#80000000"
