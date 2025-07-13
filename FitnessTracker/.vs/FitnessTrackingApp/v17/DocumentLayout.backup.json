@@ -26,9 +26,9 @@
               "Title": "MainPage.xaml.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MainPage.xaml.cs",
               "RelativeDocumentMoniker": "MainPage.xaml.cs",
-              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MainPage.xaml.cs",
-              "RelativeToolTip": "MainPage.xaml.cs",
-              "ViewState": "AgIAAIAAAAAAAAAAAAAswKQAAAABAAAAAAAAAA==",
+              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MainPage.xaml.cs*",
+              "RelativeToolTip": "MainPage.xaml.cs*",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAnwFQAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-11T05:38:45.409Z",
               "EditorCaption": ""
@@ -43,7 +43,8 @@
               "RelativeToolTip": "MainPage.xaml",
               "ViewState": "AgIAACkCAAAAAAAAAAAcwEsCAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-07-11T05:35:08.951Z"
+              "WhenOpened": "2025-07-11T05:35:08.951Z",
+              "EditorCaption": ""
             }
           ]
         }
