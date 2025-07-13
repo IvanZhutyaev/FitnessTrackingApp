@@ -75,7 +75,7 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
     if (!exists)
         return Results.BadRequest("Неверный логин или пароль");
 
-    return Results.Ok("Пользователь успешно вошел в систему");
+    return Results.Ok(new { Success = true, Message = "Пользователь успешно вошел в систему" });
 });
 
 // Регистрация нового пользователя
@@ -91,7 +91,7 @@ app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
     var user = new User { Username = request.Username, Password = request.Password };
     db.Users.Add(user);
     await db.SaveChangesAsync();
-    return Results.Ok("Пользователь успешно зарегистрирован");
+    return Results.Ok(new { Success = true, Message = "Пользователь успешно зарегистрирован" });
 });
 
 // Запуск приложения

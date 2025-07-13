@@ -507,23 +507,31 @@
                 </Frame>
             </VerticalStackLayout>
         </ScrollView>
-
         <!-- Модальное окно для входа/регистрации -->
         <ContentView x:Name="AuthPopup"
                      IsVisible="False"
                      BackgroundColor="#80000000"
-                     VerticalOptions="FillAndExpand"
-                     HorizontalOptions="FillAndExpand"
+                     VerticalOptions="Fill"
+                     HorizontalOptions="Fill"
                      ZIndex="100">
             <Frame BackgroundColor="White"
                    CornerRadius="20"
-                   Padding="30"
+                   Padding="25"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
-                   WidthRequest="340"
-                   HeightRequest="340"
+                   WidthRequest="350"
+                   HeightRequest="430"
                    HasShadow="True">
-                <VerticalStackLayout Spacing="20">
+                <VerticalStackLayout Spacing="15">
+                    <!-- Кнопка "Назад" вверху -->
+                    <Button Text="← Назад"
+                            BackgroundColor="Transparent"
+                            TextColor="#0C1B33"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Start"
+                            Clicked="CloseAuthPopup_Clicked"
+                            Margin="-10,-10,-10,10"/>
+
                     <Label x:Name="AuthPopupTitle"
                            Text="Вход в систему"
                            FontSize="22"
@@ -537,7 +545,7 @@
                            BackgroundColor="#F0F4FA"
                            TextColor="#0C1B33"
                            Margin="0,10,0,0"
-                           HeightRequest="44"/>
+                           HeightRequest="50"/>
 
                     <Entry x:Name="PasswordEntry"
                            Placeholder="Пароль"
@@ -545,7 +553,7 @@
                            FontSize="16"
                            BackgroundColor="#F0F4FA"
                            TextColor="#0C1B33"
-                           HeightRequest="44"/>
+                           HeightRequest="50"/>
 
                     <Entry x:Name="ConfirmPasswordEntry"
                            Placeholder="Повторите пароль"
@@ -553,7 +561,7 @@
                            FontSize="16"
                            BackgroundColor="#F0F4FA"
                            TextColor="#0C1B33"
-                           HeightRequest="44"
+                           HeightRequest="50"
                            IsVisible="False"/>
 
                     <Button x:Name="AuthActionButton"
@@ -563,24 +571,18 @@
                             TextColor="#0C1B33"
                             CornerRadius="10"
                             HorizontalOptions="Fill"
-                            HeightRequest="44"
-                            Margin="0,10,0,0"/>
+                            HeightRequest="50"
+                            Margin="0,20,0,0"/>
 
                     <Button x:Name="SwitchAuthModeButton"
-                            Clicked="SwitchAuthModeButton_Clicked"
-                            Text="Нет аккаунта? Зарегистрироваться"
+                            Text="Нет аккаунта? Зарегистрируйтесь!"
                             BackgroundColor="Transparent"
-                            TextColor="#00C9FF"
-                            FontAttributes="Bold"
-                            HorizontalOptions="Center"/>
-
-                    <Button Text="Закрыть"
-                            BackgroundColor="#E0E0E0"
                             TextColor="#0C1B33"
-                            CornerRadius="10"
-                            Clicked="CloseAuthPopup_Clicked"
-                            HorizontalOptions="Fill"
-                            HeightRequest="44"/>
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            Margin="0,10,0,0"
+                            Clicked="SwitchAuthModeButton_Clicked"
+                            Padding="0"/>
                 </VerticalStackLayout>
             </Frame>
         </ContentView>

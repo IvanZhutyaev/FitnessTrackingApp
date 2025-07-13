@@ -8,6 +8,8 @@ namespace FitnessTrackingApp
     public partial class MainPage : ContentPage
     {
         private bool _isLoginMode = true;
+        private readonly HttpClient _httpClient = new HttpClient();
+        private const string ApiBaseUrl = "http://localhost:5024";
 
         public MainPage()
         {
@@ -16,25 +18,8 @@ namespace FitnessTrackingApp
 
         private void LoginButton_Clicked(object sender, EventArgs e)
         {
-            // Сбрасываем поля при открытии
-            UsernameEntry.Text = string.Empty;
-            PasswordEntry.Text = string.Empty;
-            ConfirmPasswordEntry.Text = string.Empty;
-
-            // Устанавливаем режим входа
-            _isLoginMode = true;
-            AuthPopupTitle.Text = "Вход в систему";
-            AuthActionButton.Text = "Войти";
-            ConfirmPasswordEntry.IsVisible = false;
-            SwitchAuthModeButton.Text = "Нет аккаунта? Зарегистрироваться";
-
-            // Устанавливаем высоту окна
-            if (AuthPopup.Content is Frame frame)
-            {
-                frame.HeightRequest = 340;
-            }
-
-            // Показываем модальное окно
+            ResetAuthFields();
+            SwitchToLoginMode();
             AuthPopup.IsVisible = true;
         }
 
@@ -46,40 +31,48 @@ namespace FitnessTrackingApp
         private void SwitchAuthModeButton_Clicked(object sender, EventArgs e)
         {
             _isLoginMode = !_isLoginMode;
+            ResetAuthFields();
 
             if (_isLoginMode)
             {
-                // Переключаемся в режим входа
-                AuthPopupTitle.Text = "Вход в систему";
-                AuthActionButton.Text = "Войти";
-                ConfirmPasswordEntry.IsVisible = false;
-                SwitchAuthModeButton.Text = "Нет аккаунта? Зарегистрироваться";
-
-                // Уменьшаем высоту окна
-                if (AuthPopup.Content is Frame frame)
-                {
-                    frame.HeightRequest = 340;
-                }
+                SwitchToLoginMode();
             }
             else
             {
-                // Переключаемся в режим регистрации
-                AuthPopupTitle.Text = "Регистрация";
-                AuthActionButton.Text = "Зарегистрироваться";
-                ConfirmPasswordEntry.IsVisible = true;
-                SwitchAuthModeButton.Text = "Уже есть аккаунт? Войти";
-
-                // Увеличиваем высоту окна
-                if (AuthPopup.Content is Frame frame)
-                {
-                    frame.HeightRequest = 400;
-                }
+                SwitchToRegisterMode();
             }
+        }
+
+        private void ResetAuthFields()
+        {
+            UsernameEntry.Text = string.Empty;
+            PasswordEntry.Text = string.Empty;
+            ConfirmPasswordEntry.Text = string.Empty;
+        }
+
+        private void SwitchToLoginMode()
+        {
+            _isLoginMode = true;
+            AuthPopupTitle.Text = "Вход в систему";
+            AuthActionButton.Text = "Войти";
+            ConfirmPasswordEntry.IsVisible = false;
+            SwitchAuthModeButton.Text = "Нет аккаунта? Зарегистрируйтесь!";
+            (AuthPopup.Content as Frame).HeightRequest = 430;
+        }
+
+        private void SwitchToRegisterMode()
+        {
+            _isLoginMode = false;
+            AuthPopupTitle.Text = "Регистрация";
+            AuthActionButton.Text = "Зарегистрироваться";
+            ConfirmPasswordEntry.IsVisible = true;
+            SwitchAuthModeButton.Text = "Уже есть аккаунт? Войти";
+            (AuthPopup.Content as Frame).HeightRequest = 480;
         }
 
         private async void AuthActionButton_Clicked(object sender, EventArgs e)
         {
-            var username = UsernameEntry.Text;
+            var username = UsernameEntry.Text.Trim();
             var password = PasswordEntry.Text;
 
             if (string.IsNullOrWhiteSpace(username))
@@ -100,57 +93,93 @@ namespace FitnessTrackingApp
                 return;
             }
 
-            // Здесь должна быть реальная логика аутентификации
-            // В данном примере просто имитируем успешный вход/регистрацию
-            if (_isLoginMode)
+            try
             {
-                // Имитация входа
-                await Task.Delay(500);
-                await DisplayAlert("Успех", "Вход выполнен успешно!", "OK");
-                LoginButton.Text = username;
-                LoginButton.BackgroundColor = Colors.Transparent;
-                LoginButton.TextColor = Colors.White;
-                AuthPopup.IsVisible = false;
+                if (_isLoginMode)
+                {
+                    await LoginUser(username, password);
+                }
+                else
+                {
+                    await RegisterUser(username, password);
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Произошла ошибка: {ex.Message}", "OK");
+            }
+        }
+
+        private async Task LoginUser(string username, string password)
+        {
+            var response = await _httpClient.PostAsJsonAsync(
+                $"{ApiBaseUrl}/login",
+                new { Username = username, Password = password });
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<AuthResult>();
+                if (result?.Success == true)
+                {
+                    UpdateUIAfterLogin(username);
+                    await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
+                    AuthPopup.IsVisible = false;
+                }
+                else
+                {
+                    await DisplayAlert("Ошибка", result?.Message ?? "Неверные учетные данные", "OK");
+                }
             }
             else
             {
-                // Имитация регистрации
-                await Task.Delay(500);
-                await DisplayAlert("Успех", "Регистрация завершена успешно!", "OK");
-
-                // Переключаемся в режим входа после успешной регистрации
-                _isLoginMode = true;
-                AuthPopupTitle.Text = "Вход в систему";
-                AuthActionButton.Text = "Войти";
-                ConfirmPasswordEntry.IsVisible = false;
-                SwitchAuthModeButton.Text = "Нет аккаунта? Зарегистрироваться";
-
-                if (AuthPopup.Content is Frame frame)
-                {
-                    frame.HeightRequest = 340;
-                }
+                var error = await response.Content.ReadAsStringAsync();
+                await DisplayAlert("Ошибка", error ?? "Неверные учетные данные", "OK");
             }
         }
 
-        // Обработчики кнопок функционала приложения
-        private void OnWorkoutButtonClicked(object sender, EventArgs e)
+        private async Task RegisterUser(string username, string password)
         {
-            DisplayAlert("Тренировка", "Функция добавления тренировки", "OK");
+            var response = await _httpClient.PostAsJsonAsync(
+                $"{ApiBaseUrl}/register",
+                new { Username = username, Password = password });
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<AuthResult>();
+                if (result?.Success == true)
+                {
+                    await DisplayAlert("Успех", result.Message ?? "Регистрация завершена успешно!", "OK");
+                    SwitchToLoginMode();
+                }
+                else
+                {
+                    await DisplayAlert("Ошибка", result?.Message ?? "Ошибка регистрации", "OK");
+                }
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await DisplayAlert("Ошибка", error ?? "Ошибка регистрации", "OK");
+            }
         }
 
-        private void OnNutritionButtonClicked(object sender, EventArgs e)
+        private void UpdateUIAfterLogin(string username)
         {
-            DisplayAlert("Питание", "Функция добавления приема пищи", "OK");
+            LoginButton.Text = username;
+            LoginButton.BackgroundColor = Colors.Transparent;
+            LoginButton.TextColor = Colors.White;
         }
 
-        private void OnReminderButtonClicked(object sender, EventArgs e)
-        {
-            DisplayAlert("Напоминание", "Функция добавления напоминания", "OK");
-        }
+        // Остальные методы
+        private void OnWorkoutButtonClicked(object sender, EventArgs e) => DisplayAlert("Тренировка", "Функция добавления тренировки", "OK");
+        private void OnNutritionButtonClicked(object sender, EventArgs e) => DisplayAlert("Питание", "Функция добавления приема пищи", "OK");
+        private void OnReminderButtonClicked(object sender, EventArgs e) => DisplayAlert("Напоминание", "Функция добавления напоминания", "OK");
+        private void OnReportButtonClicked(object sender, EventArgs e) => DisplayAlert("Аналитика", "Функция показа отчетов", "OK");
+    }
 
-        private void OnReportButtonClicked(object sender, EventArgs e)
-        {
-            DisplayAlert("Аналитика", "Функция показа отчетов", "OK");
-        }
+    public class AuthResult
+    {
+        public bool Success { get; set; }
+        public string? Message { get; set; }
     }
 }
