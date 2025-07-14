@@ -39,9 +39,9 @@ app.MapGet("/activities/{userId}", async (int userId, AppDbContext db) =>
 // Добавление новой активности
 app.MapPost("/exercises", async (Exersizes exersizes, AppDbContext db) =>
 {
-    db.Exersizes.Add(activity);
+    db.Exersizes.Add(exersizes);
     await db.SaveChangesAsync();
-    return Results.Created($"/activities/{activity.Id}", activity);
+    return Results.Created($"/exersizes/{exersizes.Id}", exersizes);
 });
 
 // Получение статистики за последнюю неделю

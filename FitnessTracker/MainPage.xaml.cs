@@ -217,7 +217,7 @@ namespace FitnessTrackingApp
         private void OnWorkoutButtonClicked(object sender, EventArgs e)
         {
             
-            
+            DisplayAlert("Тренировка", "Функция добавления тренировки", "OK");
 
         }
         private void OnNutritionButtonClicked(object sender, EventArgs e) => DisplayAlert("Питание", "Функция добавления приема пищи", "OK");
