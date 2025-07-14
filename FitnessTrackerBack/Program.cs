@@ -37,9 +37,9 @@ app.MapGet("/activities/{userId}", async (int userId, AppDbContext db) =>
 });
 
 // Добавление новой активности
-app.MapPost("/activities", async (Activity activity, AppDbContext db) =>
+app.MapPost("/exercises", async (Exersizes exersizes, AppDbContext db) =>
 {
-    db.Activities.Add(activity);
+    db.Exersizes.Add(activity);
     await db.SaveChangesAsync();
     return Results.Created($"/activities/{activity.Id}", activity);
 });
@@ -120,6 +120,16 @@ app.MapGet("/user/stats", async (string username, AppDbContext db) =>
     return Results.Ok(stats);
 });
 
+//Получение списка упражнений пользователя
+app.MapGet("exersizes/{userId}", async (int userId, AppDbContext db) =>
+{
+    var exercises = await db.Exersizes
+        .Where(e => e.UserId == userId)
+        .OrderByDescending(e => e.Date)
+        .ToListAsync();
+    return Results.Ok(exercises);
+});
+
 // Запуск приложения
 app.Run();
 
@@ -159,10 +169,23 @@ public class Activity
     public int Calories { get; set; }
 }
 
+public class Exersizes
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public int Duration { get; set; } // Продолжительность в секундах
+    public int CaloriesBurned { get; set; } // Сожженные калории
+    public DateTime Date { get; set; } = DateTime.UtcNow;
+
+}
+
 // Контекст базы данных
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     public DbSet<User> Users => Set<User>();
     public DbSet<Activity> Activities => Set<Activity>();
+    public DbSet<Exersizes> Exersizes => Set<Exersizes>();
 }
