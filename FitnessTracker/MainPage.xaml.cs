@@ -219,10 +219,13 @@ namespace FitnessTrackingApp
         private async void OnProfileTapped(object sender, EventArgs e)
         {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             
             DisplayAlert("Тренировка", "Функция добавления тренировки", "OK");
 
 =======
+=======
+>>>>>>> Stashed changes
             await DisplayAlert("Профиль", "Переход на страницу профиля", "OK");
             // Реальная навигация: await Navigation.PushAsync(new ProfilePage());
         }
@@ -261,6 +264,9 @@ namespace FitnessTrackingApp
         {
             await DisplayAlert("Настройки", "Переход на страницу настроек", "OK");
             // Реальная навигация: await Navigation.PushAsync(new SettingsPage());
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         }
     }
