@@ -1,8 +1,10 @@
-﻿using System;
+﻿using FitnessTrackingApp.Pages;
+using Microsoft.Maui.Controls;
+using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
+using FitnessTrackingApp.Pages;
 
 namespace FitnessTrackingApp
 {
@@ -219,43 +221,43 @@ namespace FitnessTrackingApp
         private async void OnProfileTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Профиль", "Переход на страницу профиля", "OK");
-            // Реальная навигация: await Navigation.PushAsync(new ProfilePage());
+            await Navigation.PushAsync(new ProfilePage());
         }
 
         private async void OnWorkoutsTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Тренировки", "Переход на страницу тренировок", "OK");
-            // Реальная навигация: await Navigation.PushAsync(new WorkoutsPage());
+            await Navigation.PushAsync(new Pages.WorkoutsPage());
         }
 
         private async void OnActivityTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Активность", "Переход на страницу активности", "OK");
-            // Реальная навигация: await Navigation.PushAsync(new ActivityPage());
+            await Navigation.PushAsync(new Pages.ActivityPage());
         }
 
         private async void OnNutritionTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Питание", "Переход на страницу питания", "OK");
-            // Реальная навигация: await Navigation.PushAsync(new NutritionPage());
+            await Navigation.PushAsync(new Pages.NutritionPage());
         }
 
         private async void OnProgressTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Прогресс", "Переход на страницу прогресса", "OK");
-            // Реальная навигация: await Navigation.PushAsync(new ProgressPage());
+            await Navigation.PushAsync(new Pages.ProgressPage());
         }
 
         private async void OnNotificationsTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Уведомления", "Переход на страницу уведомлений", "OK");
-            // Реальная навигация: await Navigation.PushAsync(new NotificationsPage());
+            await Navigation.PushAsync(new Pages.NotificationsPage());
         }
 
         private async void OnSettingsTapped(object sender, EventArgs e)
         {
             await DisplayAlert("Настройки", "Переход на страницу настроек", "OK");
-            // Реальная навигация: await Navigation.PushAsync(new SettingsPage());
+            await Navigation.PushAsync(new Pages.SettingsPage());
         }
     }
 

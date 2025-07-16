@@ -39,11 +39,16 @@
                                            Padding="10"
                                            Margin="0,5">
                                         <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10">
-                                            <Image Source="{Binding Image}"
-                                                   Aspect="AspectFill"
+                                            <Frame Padding="0"
+                                                   CornerRadius="5"
                                                    HeightRequest="60"
                                                    WidthRequest="60"
-                                                   CornerRadius="5"/>
+                                                   IsClippedToBounds="True">
+                                                   <Image Source="{Binding Image}"
+                                                       Aspect="AspectFill"
+                                                       HeightRequest="60"
+                                                       WidthRequest="60"/>
+                                            </Frame>
 
                                             <VerticalStackLayout Grid.Column="1">
                                                 <Label Text="{Binding Name}"
