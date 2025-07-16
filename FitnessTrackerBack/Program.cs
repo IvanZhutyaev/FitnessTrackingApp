@@ -37,11 +37,11 @@ app.MapGet("/activities/{userId}", async (int userId, AppDbContext db) =>
 });
 
 // Добавление новой активности
-app.MapPost("/exercises", async (Exersizes exersizes, AppDbContext db) =>
+app.MapPost("/exercises", async (Exercise exercise, AppDbContext db) =>
 {
-    db.Exersizes.Add(exersizes);
+    db.Exercises.Add(exercise);
     await db.SaveChangesAsync();
-    return Results.Created($"/exersizes/{exersizes.Id}", exersizes);
+    return Results.Created($"/exercises/{exercise.Id}", exercise);
 });
 
 // Получение статистики за последнюю неделю
@@ -120,14 +120,40 @@ app.MapGet("/user/stats", async (string username, AppDbContext db) =>
     return Results.Ok(stats);
 });
 
-//Получение списка упражнений пользователя
-app.MapGet("exersizes/{userId}", async (int userId, AppDbContext db) =>
+
+// Получение пользователя по username
+app.MapGet("/users/{username}", async (string username, AppDbContext db) =>
 {
-    var exercises = await db.Exersizes
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+    if (user == null)
+        return Results.NotFound("Пользователь не найден");
+    return Results.Ok(user);
+});
+
+//Получение списка упражнений пользователя
+app.MapGet("/exercises/{userId}", async (int userId, AppDbContext db) =>
+{
+    var exercises = await db.Exercises
         .Where(e => e.UserId == userId)
         .OrderByDescending(e => e.Date)
         .ToListAsync();
     return Results.Ok(exercises);
+});
+
+app.MapPost("/user/changeinfo", async (ChangeInfoRequest request, AppDbContext db) =>
+{
+    // Находим пользователя по Id
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
+    if (user == null)
+        return Results.NotFound("Пользователь не найден");
+
+    // Обновляем данные
+    user.Age = request.Age;
+    user.Weight = request.Weight;
+    user.Height = request.Height;
+
+    await db.SaveChangesAsync();
+    return Results.Ok(new { Success = true, Message = "Данные пользователя успешно обновлены" });
 });
 
 // Запуск приложения
@@ -141,6 +167,10 @@ public class User
     public int Id { get; set; }
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public int Age { get; set; }
+    public double Weight { get; set; }
+    public double Height { get; set; }
+    public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>(); // Коллекция упражнений
     public ICollection<Activity> Activities { get; set; } = new List<Activity>();  // Коллекция активностей
 }
 // Запрос на авторизацию
@@ -169,7 +199,7 @@ public class Activity
     public int Calories { get; set; }
 }
 
-public class Exersizes
+public class Exercise
 {
     public int Id { get; set; }
     public int UserId { get; set; }
@@ -180,6 +210,14 @@ public class Exersizes
     public DateTime Date { get; set; } = DateTime.UtcNow;
 
 }
+public class ChangeInfoRequest
+{
+    public int UserId { get; set; }
+    public int Age { get; set; }
+    public double Weight { get; set; }
+    public double Height { get; set; }
+
+}
 
 // Контекст базы данных
 public class AppDbContext : DbContext
@@ -187,5 +225,5 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     public DbSet<User> Users => Set<User>();
     public DbSet<Activity> Activities => Set<Activity>();
-    public DbSet<Exersizes> Exersizes => Set<Exersizes>();
+    public DbSet<Exercise> Exercises => Set<Exercise>();
 }

@@ -156,6 +156,16 @@ namespace FitnessTrackingApp
                 if (result?.Success == true)
                 {
                     _currentUsername = username;
+                    UserSession.Username = username;
+                    
+                    
+                    var userResponse = await _httpClient.GetAsync($"{ApiBaseUrl}/users/{username}");
+                    if (userResponse.IsSuccessStatusCode)
+                    {
+                        var user = await userResponse.Content.ReadFromJsonAsync<User>();
+                        UserSession.UserId = user.Id;
+                    }
+                    
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
@@ -171,6 +181,7 @@ namespace FitnessTrackingApp
                 await DisplayAlert("Ошибка", error ?? "Неверные учетные данные", "OK");
             }
         }
+    
 
         private async Task RegisterUser(string username, string password)
         {
@@ -220,51 +231,59 @@ namespace FitnessTrackingApp
         // Новые обработчики для навигации по разделам
         private async void OnProfileTapped(object sender, EventArgs e)
         {
-            await DisplayAlert("Профиль", "Переход на страницу профиля", "OK");
+            //await DisplayAlert("Профиль", "Переход на страницу профиля", "OK");
             await Navigation.PushAsync(new ProfilePage());
         }
 
         private async void OnWorkoutsTapped(object sender, EventArgs e)
         {
-            await DisplayAlert("Тренировки", "Переход на страницу тренировок", "OK");
+            //await DisplayAlert("Тренировки", "Переход на страницу тренировок", "OK");
             await Navigation.PushAsync(new Pages.WorkoutsPage());
         }
 
         private async void OnActivityTapped(object sender, EventArgs e)
         {
-            await DisplayAlert("Активность", "Переход на страницу активности", "OK");
+            //await DisplayAlert("Активность", "Переход на страницу активности", "OK");
             await Navigation.PushAsync(new Pages.ActivityPage());
         }
 
         private async void OnNutritionTapped(object sender, EventArgs e)
         {
-            await DisplayAlert("Питание", "Переход на страницу питания", "OK");
+            //await DisplayAlert("Питание", "Переход на страницу питания", "OK");
             await Navigation.PushAsync(new Pages.NutritionPage());
         }
 
         private async void OnProgressTapped(object sender, EventArgs e)
         {
-            await DisplayAlert("Прогресс", "Переход на страницу прогресса", "OK");
+            //await DisplayAlert("Прогресс", "Переход на страницу прогресса", "OK");
             await Navigation.PushAsync(new Pages.ProgressPage());
         }
 
         private async void OnNotificationsTapped(object sender, EventArgs e)
         {
-            await DisplayAlert("Уведомления", "Переход на страницу уведомлений", "OK");
+            //await DisplayAlert("Уведомления", "Переход на страницу уведомлений", "OK");
             await Navigation.PushAsync(new Pages.NotificationsPage());
         }
 
         private async void OnSettingsTapped(object sender, EventArgs e)
         {
-            await DisplayAlert("Настройки", "Переход на страницу настроек", "OK");
+            //await DisplayAlert("Настройки", "Переход на страницу настроек", "OK");
             await Navigation.PushAsync(new Pages.SettingsPage());
         }
+    }
+
+    // Глобальный статический класс для хранения данных пользователя
+    public static class UserSession
+    {
+        public static int UserId { get; set; }
+        public static string Username { get; set; } = string.Empty;
     }
 
     public class AuthResult
     {
         public bool Success { get; set; }
         public string? Message { get; set; }
+
     }
 
     public class UserStats
@@ -272,5 +291,16 @@ namespace FitnessTrackingApp
         public double AvgSteps { get; set; }
         public double AvgDistance { get; set; }
         public double AvgCalories { get; set; }
+    }
+
+
+    public class User
+    {
+        public int Id { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public int Age { get; set; }
+        public double Weight { get; set; }
+        public double Height { get; set; }
     }
 }
