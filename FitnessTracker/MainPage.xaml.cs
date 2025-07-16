@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
@@ -214,15 +215,54 @@ namespace FitnessTrackingApp
             AccountPopup.IsVisible = false;
         }
 
-        private void OnWorkoutButtonClicked(object sender, EventArgs e)
+        // Новые обработчики для навигации по разделам
+        private async void OnProfileTapped(object sender, EventArgs e)
         {
+<<<<<<< Updated upstream
             
             DisplayAlert("Тренировка", "Функция добавления тренировки", "OK");
 
+=======
+            await DisplayAlert("Профиль", "Переход на страницу профиля", "OK");
+            // Реальная навигация: await Navigation.PushAsync(new ProfilePage());
         }
-        private void OnNutritionButtonClicked(object sender, EventArgs e) => DisplayAlert("Питание", "Функция добавления приема пищи", "OK");
-        private void OnReminderButtonClicked(object sender, EventArgs e) => DisplayAlert("Напоминание", "Функция добавления напоминания", "OK");
-        private void OnReportButtonClicked(object sender, EventArgs e) => DisplayAlert("Аналитика", "Функция показа отчетов", "OK");
+
+        private async void OnWorkoutsTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Тренировки", "Переход на страницу тренировок", "OK");
+            // Реальная навигация: await Navigation.PushAsync(new WorkoutsPage());
+        }
+
+        private async void OnActivityTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Активность", "Переход на страницу активности", "OK");
+            // Реальная навигация: await Navigation.PushAsync(new ActivityPage());
+        }
+
+        private async void OnNutritionTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Питание", "Переход на страницу питания", "OK");
+            // Реальная навигация: await Navigation.PushAsync(new NutritionPage());
+        }
+
+        private async void OnProgressTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Прогресс", "Переход на страницу прогресса", "OK");
+            // Реальная навигация: await Navigation.PushAsync(new ProgressPage());
+        }
+
+        private async void OnNotificationsTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Уведомления", "Переход на страницу уведомлений", "OK");
+            // Реальная навигация: await Navigation.PushAsync(new NotificationsPage());
+        }
+
+        private async void OnSettingsTapped(object sender, EventArgs e)
+        {
+            await DisplayAlert("Настройки", "Переход на страницу настроек", "OK");
+            // Реальная навигация: await Navigation.PushAsync(new SettingsPage());
+>>>>>>> Stashed changes
+        }
     }
 
     public class AuthResult
