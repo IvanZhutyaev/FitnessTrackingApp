@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTrackingApp.Pages.NotificationsPage"
+             Title="Уведомления"
+             BackgroundColor="#0C1B33">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Заголовок -->
+            <Label Text="🔔 Уведомления"
+                   FontSize="24"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <!-- Напоминания -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Мои напоминания"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Button Text="+ Добавить напоминание"
+                            BackgroundColor="#00C9FF"
+                            TextColor="#0C1B33"
+                            FontAttributes="Bold"
+                            CornerRadius="10"/>
+
+                    <!-- Список напоминаний -->
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame CornerRadius="10"
+                               BackgroundColor="#1A3A6F"
+                               Padding="10"
+                               HeightRequest="60">
+                            <Label Text="08:30" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                        </Frame>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Прием пищи" TextColor="White" FontAttributes="Bold"/>
+                            <Label Text="Завтрак" TextColor="#5D8CC0"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame CornerRadius="10"
+                               BackgroundColor="#1A3A6F"
+                               Padding="10"
+                               HeightRequest="60">
+                            <Label Text="12:00" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                        </Frame>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Тренировка" TextColor="White" FontAttributes="Bold"/>
+                            <Label Text="Силовая тренировка" TextColor="#5D8CC0"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Frame CornerRadius="10"
+                               BackgroundColor="#1A3A6F"
+                               Padding="10"
+                               HeightRequest="60">
+                            <Label Text="15:00" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
+                        </Frame>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Вода" TextColor="White" FontAttributes="Bold"/>
+                            <Label Text="Стакан воды" TextColor="#5D8CC0"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Мотивационные уведомления -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Мотивационные уведомления"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnSpacing="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <VerticalStackLayout>
+                            <Label Text="Получать мотивационные сообщения" 
+                                   TextColor="White"
+                                   FontSize="16"/>
+                            <Label Text="Ежедневные вдохновляющие цитаты и советы" 
+                                   TextColor="#5D8CC0"
+                                   FontSize="14"/>
+                        </VerticalStackLayout>
+
+                        <Switch Grid.Column="1" IsToggled="True"/>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <VerticalStackLayout>
+                            <Label Text="Уведомления о достижениях" 
+                                   TextColor="White"
+                                   FontSize="16"/>
+                            <Label Text="Оповещения при выполнении целей" 
+                                   TextColor="#5D8CC0"
+                                   FontSize="14"/>
+                        </VerticalStackLayout>
+
+                        <Switch Grid.Column="1" IsToggled="True"/>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <VerticalStackLayout>
+                            <Label Text="Напоминания о прогрессе" 
+                                   TextColor="White"
+                                   FontSize="16"/>
+                            <Label Text="Еженедельные отчеты о ваших успехах" 
+                                   TextColor="#5D8CC0"
+                                   FontSize="14"/>
+                        </VerticalStackLayout>
+
+                        <Switch Grid.Column="1" IsToggled="True"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Настройки уведомлений -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Настройки уведомлений"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnSpacing="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Общие уведомления" 
+                               TextColor="White"
+                               FontSize="16"/>
+                        <Switch Grid.Column="1" IsToggled="True"/>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Звуковые оповещения" 
+                               TextColor="White"
+                               FontSize="16"/>
+                        <Switch Grid.Column="1" IsToggled="True"/>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Виброоповещения" 
+                               TextColor="White"
+                               FontSize="16"/>
+                        <Switch Grid.Column="1" IsToggled="True"/>
+                    </Grid>
+
+                    <Button Text="Выбрать время уведомлений"
+                            BackgroundColor="#2A4D80"
+                            TextColor="#A0E7FF"
+                            CornerRadius="10"
+                            Margin="0,10"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

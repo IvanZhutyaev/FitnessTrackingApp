@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTrackingApp.Pages.ActivityPage"
+             Title="Активность"
+             BackgroundColor="#0C1B33">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Заголовок -->
+            <Label Text="🚶‍♂️ Активность"
+                   FontSize="24"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <!-- Основные показатели -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <Grid RowSpacing="15" ColumnSpacing="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Шаги -->
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
+                        <Label Text="Шаги" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                        <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                            <Label Text="8,245" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Дистанция -->
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
+                        <Label Text="Дистанция" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                        <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                            <Label Text="5.8 км" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Калории -->
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="2" Spacing="5">
+                        <Label Text="Калории" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                        <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                            <Label Text="420" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Прогресс за неделю -->
+                    <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="3" Spacing="10" Margin="0,20">
+                        <Label Text="Прогресс за неделю" TextColor="#A0E7FF"/>
+                        <ProgressBar Progress="0.65" BackgroundColor="#1A3A6F" ProgressColor="#00E676" HeightRequest="8"/>
+                        <Label Text="65% от цели" TextColor="#5D8CC0" HorizontalOptions="End"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Графики активности -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Графики активности"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Picker Title="Выберите период"
+                            BackgroundColor="#1A3A6F"
+                            TextColor="White"
+                            ItemsSource="{Binding Periods}"
+                            SelectedIndex="0"/>
+
+                    <!-- Графики -->
+                    <Frame CornerRadius="10" BackgroundColor="#1A3A6F" HeightRequest="200">
+                        <Label Text="График активности" 
+                               TextColor="#5D8CC0" 
+                               VerticalOptions="Center" 
+                               HorizontalOptions="Center"/>
+                    </Frame>
+
+                    <Grid ColumnSpacing="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Text="День"
+                                BackgroundColor="#2A4D80"
+                                TextColor="#A0E7FF"
+                                CornerRadius="5"/>
+
+                        <Button Text="Неделя"
+                                Grid.Column="1"
+                                BackgroundColor="#00C9FF"
+                                TextColor="#0C1B33"
+                                CornerRadius="5"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Интеграция -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Синхронизация"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnSpacing="15" VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="google_fit.png" HeightRequest="40" WidthRequest="40"/>
+                        <Label Text="Google Fit" Grid.Column="1" TextColor="White" VerticalOptions="Center"/>
+                        <Switch Grid.Column="2" IsToggled="True"/>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="apple_health.png" HeightRequest="40" WidthRequest="40"/>
+                        <Label Text="Apple Health" Grid.Column="1" TextColor="White" VerticalOptions="Center"/>
+                        <Switch Grid.Column="2"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

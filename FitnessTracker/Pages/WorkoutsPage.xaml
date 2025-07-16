@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTrackingApp.Pages.WorkoutsPage"
+             Title="Тренировки"
+             BackgroundColor="#0C1B33">
+
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="20">
+                <!-- Заголовок -->
+                <Label Text="💪 Тренировки"
+                       FontSize="24"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+
+                <!-- Каталог упражнений -->
+                <Frame CornerRadius="15"
+                       BackgroundColor="#152642"
+                       BorderColor="#2A4D80"
+                       Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Каталог упражнений"
+                               FontSize="18"
+                               TextColor="#00C9FF"
+                               FontAttributes="Bold"/>
+
+                        <SearchBar Placeholder="Поиск упражнений..."
+                                   BackgroundColor="#1A3A6F"
+                                   TextColor="White"
+                                   CancelButtonColor="#A0E7FF"/>
+
+                        <CollectionView ItemsSource="{Binding Exercises}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame CornerRadius="10"
+                                           BackgroundColor="#1A3A6F"
+                                           Padding="10"
+                                           Margin="0,5">
+                                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10">
+                                            <Image Source="{Binding Image}"
+                                                   Aspect="AspectFill"
+                                                   HeightRequest="60"
+                                                   WidthRequest="60"
+                                                   CornerRadius="5"/>
+
+                                            <VerticalStackLayout Grid.Column="1">
+                                                <Label Text="{Binding Name}"
+                                                       FontSize="16"
+                                                       TextColor="White"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding MuscleGroup}"
+                                                       FontSize="14"
+                                                       TextColor="#A0E7FF"/>
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="2"
+                                                    Text="▶"
+                                                    FontSize="16"
+                                                    BackgroundColor="#00C9FF"
+                                                    TextColor="#0C1B33"
+                                                    CornerRadius="20"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"/>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Мои тренировки -->
+                <Frame CornerRadius="15"
+                       BackgroundColor="#152642"
+                       BorderColor="#2A4D80"
+                       Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Мои тренировки"
+                               FontSize="18"
+                               TextColor="#00C9FF"
+                               FontAttributes="Bold"/>
+
+                        <Button Text="+ Создать новую тренировку"
+                                BackgroundColor="#2A4D80"
+                                TextColor="#A0E7FF"
+                                CornerRadius="10"/>
+
+                        <CollectionView ItemsSource="{Binding MyWorkouts}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame CornerRadius="10"
+                                           BackgroundColor="#1A3A6F"
+                                           Padding="10"
+                                           Margin="0,5">
+                                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                                            <VerticalStackLayout>
+                                                <Label Text="{Binding Name}"
+                                                       FontSize="16"
+                                                       TextColor="White"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding Description}"
+                                                       FontSize="14"
+                                                       TextColor="#A0E7FF"/>
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="1"
+                                                    Text="Начать"
+                                                    BackgroundColor="#00C9FF"
+                                                    TextColor="#0C1B33"
+                                                    FontAttributes="Bold"
+                                                    CornerRadius="10"
+                                                    WidthRequest="100"/>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- История тренировок -->
+                <Frame CornerRadius="15"
+                       BackgroundColor="#152642"
+                       BorderColor="#2A4D80"
+                       Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="История тренировок"
+                               FontSize="18"
+                               TextColor="#00C9FF"
+                               FontAttributes="Bold"/>
+
+                        <CollectionView ItemsSource="{Binding WorkoutHistory}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame CornerRadius="10"
+                                           BackgroundColor="#1A3A6F"
+                                           Padding="10"
+                                           Margin="0,5">
+                                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                                            <VerticalStackLayout>
+                                                <Label Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}"
+                                                       FontSize="16"
+                                                       TextColor="White"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding WorkoutName}"
+                                                       FontSize="14"
+                                                       TextColor="#A0E7FF"/>
+                                                <Label Text="{Binding Duration, StringFormat='Длительность: {0} мин'}"
+                                                       FontSize="14"
+                                                       TextColor="#5D8CC0"/>
+                                            </VerticalStackLayout>
+
+                                            <Button Grid.Column="1"
+                                                    Text="Детали"
+                                                    BackgroundColor="#2A4D80"
+                                                    TextColor="#A0E7FF"
+                                                    CornerRadius="10"
+                                                    WidthRequest="80"/>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Таймер (плавающая кнопка) -->
+        <Button Text="⏱️"
+                FontSize="24"
+                BackgroundColor="#00C9FF"
+                TextColor="#0C1B33"
+                CornerRadius="30"
+                WidthRequest="60"
+                HeightRequest="60"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="20"/>
+    </Grid>
+</ContentPage>

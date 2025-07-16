@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTrackingApp.Pages.ProfilePage"
+             Title="Профиль"
+             BackgroundColor="#0C1B33">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Заголовок -->
+            <Label Text="👤 Профиль пользователя"
+                   FontSize="24"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <!-- Аватарка -->
+            <Frame HorizontalOptions="Center"
+                   CornerRadius="100"
+                   HeightRequest="120"
+                   WidthRequest="120"
+                   BackgroundColor="#1A3A6F"
+                   Padding="0">
+                <Image Source="user_avatar.png"
+                       Aspect="AspectFill"
+                       HeightRequest="120"
+                       WidthRequest="120"/>
+            </Frame>
+            <Button Text="Изменить фото"
+                    BackgroundColor="#2A4D80"
+                    TextColor="#A0E7FF"
+                    HorizontalOptions="Center"
+                    WidthRequest="150"/>
+
+            <!-- Личные данные -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Личные данные"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnSpacing="10" RowSpacing="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Имя:" Grid.Row="0" Grid.Column="0" TextColor="#A0E7FF"/>
+                        <Entry Text="Иван Иванов" Grid.Row="0" Grid.Column="1" TextColor="White" BackgroundColor="#1A3A6F"/>
+
+                        <Label Text="Возраст:" Grid.Row="1" Grid.Column="0" TextColor="#A0E7FF"/>
+                        <Entry Text="28" Grid.Row="1" Grid.Column="1" TextColor="White" BackgroundColor="#1A3A6F" Keyboard="Numeric"/>
+
+                        <Label Text="Рост:" Grid.Row="2" Grid.Column="0" TextColor="#A0E7FF"/>
+                        <Grid Grid.Row="2" Grid.Column="1" ColumnSpacing="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Entry Text="180" TextColor="White" BackgroundColor="#1A3A6F" Keyboard="Numeric"/>
+                            <Label Text="см" Grid.Column="1" TextColor="#5D8CC0" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Label Text="Вес:" Grid.Row="3" Grid.Column="0" TextColor="#A0E7FF"/>
+                        <Grid Grid.Row="3" Grid.Column="1" ColumnSpacing="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Entry Text="75" TextColor="White" BackgroundColor="#1A3A6F" Keyboard="Numeric"/>
+                            <Label Text="кг" Grid.Column="1" TextColor="#5D8CC0" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Label Text="Цель:" Grid.Row="4" Grid.Column="0" TextColor="#A0E7FF"/>
+                        <Picker Grid.Row="4" Grid.Column="1" 
+                                 BackgroundColor="#1A3A6F"
+                                 TextColor="White"
+                                 ItemsSource="{Binding Goals}"
+                                 SelectedIndex="0"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Цели -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Мои цели"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnSpacing="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Целевой вес" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Frame BackgroundColor="#1A3A6F" CornerRadius="10" Padding="10">
+                                <Label Text="70 кг" TextColor="White" HorizontalOptions="Center" FontSize="16"/>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Срок" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Frame BackgroundColor="#1A3A6F" CornerRadius="10" Padding="10">
+                                <Label Text="3 месяца" TextColor="White" HorizontalOptions="Center" FontSize="16"/>
+                            </Frame>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Button Text="Сохранить изменения"
+                            BackgroundColor="#00C9FF"
+                            TextColor="#0C1B33"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            Margin="0,10"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
