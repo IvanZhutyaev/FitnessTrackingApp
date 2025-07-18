@@ -30,32 +30,12 @@ namespace FitnessTrackingApp
             }
             else
             {
-                LoadAccountData();
-                AccountPopup.IsVisible = true;
+                // Вместо открытия модального окна - переход на страницу профиля
+                Navigation.PushAsync(new ProfilePage());
             }
         }
 
-        private async void LoadAccountData()
-        {
-            AccountUsernameLabel.Text = $"Имя: {_currentUsername}";
-            AccountStatsLabel.Text = "Загрузка статистики...";
-
-            try
-            {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/user/stats?username={_currentUsername}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var stats = await response.Content.ReadFromJsonAsync<UserStats>();
-                    AccountStatsLabel.Text = $"Шаги: {stats?.AvgSteps ?? 0}/день\n" +
-                                          $"Дистанция: {stats?.AvgDistance ?? 0:F1} км/день\n" +
-                                          $"Калории: {stats?.AvgCalories ?? 0}/день";
-                }
-            }
-            catch
-            {
-                AccountStatsLabel.Text = "Не удалось загрузить статистику";
-            }
-        }
+       
 
         private void CloseAuthPopup_Clicked(object sender, EventArgs e)
         {
@@ -157,15 +137,14 @@ namespace FitnessTrackingApp
                 {
                     _currentUsername = username;
                     UserSession.Username = username;
-                    
-                    
+
                     var userResponse = await _httpClient.GetAsync($"{ApiBaseUrl}/users/{username}");
                     if (userResponse.IsSuccessStatusCode)
                     {
                         var user = await userResponse.Content.ReadFromJsonAsync<User>();
                         UserSession.UserId = user.Id;
                     }
-                    
+
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
@@ -181,7 +160,7 @@ namespace FitnessTrackingApp
                 await DisplayAlert("Ошибка", error ?? "Неверные учетные данные", "OK");
             }
         }
-    
+
 
         private async Task RegisterUser(string username, string password)
         {
@@ -214,19 +193,7 @@ namespace FitnessTrackingApp
             LoginButton.WidthRequest = 150;
         }
 
-        private void LogoutButton_Clicked(object sender, EventArgs e)
-        {
-            _currentUsername = string.Empty;
-            LoginButton.Text = "Вход";
-            LoginButton.FontSize = 14;
-            LoginButton.FontAttributes = FontAttributes.None;
-            LoginButton.BackgroundColor = Color.FromArgb("#00C9FF");
-            LoginButton.TextColor = Color.FromArgb("#0C1B33");
-            LoginButton.CornerRadius = 15;
-            LoginButton.Padding = new Thickness(10, 5);
-            LoginButton.WidthRequest = 120;
-            AccountPopup.IsVisible = false;
-        }
+       
 
         // Новые обработчики для навигации по разделам
         private async void OnProfileTapped(object sender, EventArgs e)
