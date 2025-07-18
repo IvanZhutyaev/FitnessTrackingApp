@@ -33,6 +33,30 @@ namespace FitnessTrackingApp.Pages
             await LoadUserDataAsync();
         }
 
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            bool answer = await DisplayAlert("Подтверждение выхода",
+                "Вы действительно хотите выйти из аккаунта?",
+                "Да", "Нет");
+
+            if (answer)
+            {
+                // Очищаем данные сессии
+                UserSession.UserId = 0;
+                UserSession.Username = null;
+
+                // Создаем новый экземпляр AppShell и устанавливаем его как MainPage
+                var newShell = new AppShell();
+                Application.Current.MainPage = newShell;
+
+                // Находим MainPage в новом Shell и обновляем UI
+                if (newShell.CurrentPage is MainPage mainPage)
+                {
+                    mainPage.UpdateUIAfterLogout();
+                }
+            }
+        }
+
         private void OnGoalPickerChanged(object sender, EventArgs e)
         {
             // Обновляем Label в личных данных при изменении Picker'а
@@ -82,6 +106,10 @@ namespace FitnessTrackingApp.Pages
                         targetPeriodPicker.SelectedIndex = periodIndex >= 0 ? periodIndex : 1;
                     }
                 }
+                else
+                {
+                    await DisplayAlert("Ошибка", "Не удалось загрузить данные профиля", "OK");
+                }
             }
             catch (Exception ex)
             {
@@ -99,7 +127,7 @@ namespace FitnessTrackingApp.Pages
                     Age = int.Parse(ageEntry.Text),
                     Height = double.Parse(heightEntry.Text),
                     Weight = double.Parse(weightEntry.Text),
-                    Goal = goalLabel.Text, // Берем из Label
+                    Goal = goalLabel.Text,
                     TargetWeight = double.Parse(targetWeightEntry.Text),
                     TargetPeriod = targetPeriodPicker.SelectedItem?.ToString() ?? "3 месяца"
                 };
@@ -115,6 +143,10 @@ namespace FitnessTrackingApp.Pages
                     var error = await response.Content.ReadAsStringAsync();
                     await DisplayAlert("Ошибка", error, "OK");
                 }
+            }
+            catch (FormatException)
+            {
+                await DisplayAlert("Ошибка", "Проверьте правильность введенных чисел", "OK");
             }
             catch (Exception ex)
             {

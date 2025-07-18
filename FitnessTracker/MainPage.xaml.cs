@@ -183,6 +183,7 @@ namespace FitnessTrackingApp
 
         private void UpdateUIAfterLogin()
         {
+
             LoginButton.Text = _currentUsername;
             LoginButton.FontSize = 16;
             LoginButton.FontAttributes = FontAttributes.Bold;
@@ -192,8 +193,20 @@ namespace FitnessTrackingApp
             LoginButton.Padding = new Thickness(15, 8);
             LoginButton.WidthRequest = 150;
         }
+        public void UpdateUIAfterLogout()
+        {
+            _currentUsername = string.Empty;
+            LoginButton.Text = "Вход";
+            LoginButton.FontSize = 14;
+            LoginButton.FontAttributes = FontAttributes.None;
+            LoginButton.BackgroundColor = Color.FromArgb("#00C9FF");
+            LoginButton.TextColor = Color.FromArgb("#0C1B33");
+            LoginButton.CornerRadius = 15;
+            LoginButton.Padding = new Thickness(10, 5);
+            LoginButton.WidthRequest = 120;
+        }
 
-       
+
 
         // Новые обработчики для навигации по разделам
         private async void OnProfileTapped(object sender, EventArgs e)

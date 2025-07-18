@@ -160,6 +160,13 @@
                 Clicked="OnSaveProfileChangesClicked"/>
                 </VerticalStackLayout>
             </Frame>
+            <Button Text="Выйти из аккаунта"
+                    BackgroundColor="#FF3B30"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    Margin="0,20"
+                    Clicked="OnLogoutClicked"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
