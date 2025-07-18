@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FitnessTrackingApp.Pages
@@ -14,26 +12,16 @@ namespace FitnessTrackingApp.Pages
         private readonly HttpClient _httpClient = new HttpClient();
         private const string ApiBaseUrl = "http://localhost:5024";
 
-        // Список целей для Picker
-        public List<string> Goals { get; } = new List<string>
-        {
-            "Похудение",
-            "Набор массы",
-            "Поддержание формы",
-            "Увеличение выносливости"
-        };
-
         public ProfilePage()
         {
             InitializeComponent();
-            goalPicker.ItemsSource = Goals;
-            LoadUserDataAsync(); // Изменили на асинхронную версию
+            LoadUserDataAsync();
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadUserDataAsync(); // Добавили await
+            await LoadUserDataAsync();
         }
 
         private async Task LoadUserDataAsync()
@@ -52,18 +40,22 @@ namespace FitnessTrackingApp.Pages
                 {
                     var profileData = await response.Content.ReadFromJsonAsync<UserProfileDto>();
 
+                    // Основные данные
                     usernameEntry.Text = profileData.Username;
                     ageEntry.Text = profileData.Age.ToString();
                     heightEntry.Text = profileData.Height.ToString();
                     weightEntry.Text = profileData.Weight.ToString();
-                    targetWeightEntry.Text = profileData.TargetWeight.ToString(); // Обновляем Entry вместо Label
+                    goalLabel.Text = profileData.Goal ?? "Не указана";
 
-                    goalPicker.SelectedItem = profileData.Goal ?? "Похудение";
-                    targetPeriodLabel.Text = profileData.TargetPeriod ?? "3 месяца";
-                }
-                else
-                {
-                    await DisplayAlert("Ошибка", "Не удалось загрузить данные профиля", "OK");
+                    // Параметры целей
+                    targetWeightEntry.Text = profileData.TargetWeight.ToString();
+
+                    if (!string.IsNullOrEmpty(profileData.TargetPeriod))
+                    {
+                        var periodOptions = new List<string> { "1 месяц", "3 месяца", "6 месяцев", "1 год" };
+                        var periodIndex = periodOptions.IndexOf(profileData.TargetPeriod);
+                        targetPeriodPicker.SelectedIndex = periodIndex >= 0 ? periodIndex : 1;
+                    }
                 }
             }
             catch (Exception ex)
@@ -82,17 +74,16 @@ namespace FitnessTrackingApp.Pages
                     Age = int.Parse(ageEntry.Text),
                     Height = double.Parse(heightEntry.Text),
                     Weight = double.Parse(weightEntry.Text),
-                    Goal = goalPicker.SelectedItem?.ToString(),
-                    TargetWeight = double.Parse(targetWeightEntry.Text), // Получаем значение из Entry
-                    TargetPeriod = targetPeriodLabel.Text
+                    Goal = goalLabel.Text,
+                    TargetWeight = double.Parse(targetWeightEntry.Text),
+                    TargetPeriod = targetPeriodPicker.SelectedItem?.ToString() ?? "3 месяца"
                 };
 
                 var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/user/updateprofile", profileData);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    await DisplayAlert("Успех", "Профиль успешно обновлен", "OK");
-                    await LoadUserDataAsync();
+                    await DisplayAlert("Успех", "Данные сохранены", "OK");
                 }
                 else
                 {
@@ -100,27 +91,21 @@ namespace FitnessTrackingApp.Pages
                     await DisplayAlert("Ошибка", error, "OK");
                 }
             }
-            catch (FormatException)
-            {
-                await DisplayAlert("Ошибка", "Проверьте правильность введенных чисел", "OK");
-            }
             catch (Exception ex)
             {
                 await DisplayAlert("Ошибка", ex.Message, "OK");
             }
         }
+    }
 
-
-
-        public class UserProfileDto
-        {
-            public string Username { get; set; } = string.Empty;
-            public int Age { get; set; }
-            public double Weight { get; set; }
-            public double Height { get; set; }
-            public string Goal { get; set; } = string.Empty;
-            public double TargetWeight { get; set; }
-            public string TargetPeriod { get; set; } = string.Empty;
-        }
+    public class UserProfileDto
+    {
+        public string Username { get; set; } = string.Empty;
+        public int Age { get; set; }
+        public double Weight { get; set; }
+        public double Height { get; set; }
+        public string Goal { get; set; } = "Похудение";
+        public double TargetWeight { get; set; }
+        public string TargetPeriod { get; set; } = "3 месяца";
     }
 }

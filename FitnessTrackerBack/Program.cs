@@ -182,10 +182,11 @@ app.MapPost("/user/updateprofile", async (UserProfileDto request, AppDbContext d
     if (user == null)
         return Results.NotFound("Пользователь не найден");
 
+    // Гарантируем, что Goal не будет null
+    user.Goal = string.IsNullOrEmpty(request.Goal) ? "Похудение" : request.Goal;
     user.Age = request.Age;
     user.Weight = request.Weight;
     user.Height = request.Height;
-    user.Goal = request.Goal;
     user.TargetWeight = request.TargetWeight;
     user.TargetPeriod = request.TargetPeriod;
 
@@ -207,7 +208,7 @@ public class User
     public int Age { get; set; }
     public double Weight { get; set; }
     public double Height { get; set; }
-    public string Goal { get; set; } = "Похудение";
+    public string Goal { get; set; } = "Похудение"; // Устанавливаем значение по умолчанию
     public double TargetWeight { get; set; } = 70;
     public string TargetPeriod { get; set; } = "3 месяца";
     public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
