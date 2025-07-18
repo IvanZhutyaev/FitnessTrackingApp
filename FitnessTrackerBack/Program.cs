@@ -130,6 +130,26 @@ app.MapGet("/users/{username}", async (string username, AppDbContext db) =>
     return Results.Ok(user);
 });
 
+app.MapGet("/users/profile/{username}", async (string username, AppDbContext db) =>
+{
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+    if (user == null)
+        return Results.NotFound("Пользователь не найден");
+
+    var profileData = new UserProfileDto
+    {
+        Username = user.Username,
+        Age = user.Age,
+        Weight = user.Weight,
+        Height = user.Height,
+        Goal = user.Goal,
+        TargetWeight = user.TargetWeight,
+        TargetPeriod = user.TargetPeriod
+    };
+
+    return Results.Ok(profileData);
+});
+
 //Получение списка упражнений пользователя
 app.MapGet("/exercises/{userId}", async (int userId, AppDbContext db) =>
 {
@@ -156,6 +176,23 @@ app.MapPost("/user/changeinfo", async (ChangeInfoRequest request, AppDbContext d
     return Results.Ok(new { Success = true, Message = "Данные пользователя успешно обновлены" });
 });
 
+app.MapPost("/user/updateprofile", async (UserProfileDto request, AppDbContext db) =>
+{
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+    if (user == null)
+        return Results.NotFound("Пользователь не найден");
+
+    user.Age = request.Age;
+    user.Weight = request.Weight;
+    user.Height = request.Height;
+    user.Goal = request.Goal;
+    user.TargetWeight = request.TargetWeight;
+    user.TargetPeriod = request.TargetPeriod;
+
+    await db.SaveChangesAsync();
+    return Results.Ok(new { Success = true, Message = "Профиль успешно обновлен" });
+});
+
 // Запуск приложения
 app.Run();
 
@@ -170,8 +207,22 @@ public class User
     public int Age { get; set; }
     public double Weight { get; set; }
     public double Height { get; set; }
-    public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>(); // Коллекция упражнений
-    public ICollection<Activity> Activities { get; set; } = new List<Activity>();  // Коллекция активностей
+    public string Goal { get; set; } = "Похудение";
+    public double TargetWeight { get; set; } = 70;
+    public string TargetPeriod { get; set; } = "3 месяца";
+    public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
+    public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+    
+}
+public class UserProfileDto
+{
+    public string Username { get; set; } = string.Empty;
+    public int Age { get; set; }
+    public double Weight { get; set; }
+    public double Height { get; set; }
+    public string Goal { get; set; } = string.Empty;
+    public double TargetWeight { get; set; }
+    public string TargetPeriod { get; set; } = string.Empty;
 }
 // Запрос на авторизацию
 public class LoginRequest

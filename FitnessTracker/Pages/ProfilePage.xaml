@@ -58,7 +58,7 @@
 
                         
                         <Label Text="Имя:" Grid.Row="0" Grid.Column="0" TextColor="#A0E7FF"/>
-                        <Entry Text="Гость" Grid.Row="0" Grid.Column="1" TextColor="White" BackgroundColor="#1A3A6F" IsReadOnly="True"/>
+                        <Entry x:Name="usernameEntry" Text="Гость" Grid.Row="0" Grid.Column="1" TextColor="White" BackgroundColor="#1A3A6F" IsReadOnly="True"/>
 
                         <Label Text="Возраст:" Grid.Row="1" Grid.Column="0" TextColor="#A0E7FF"/>
                         <Entry x:Name ="ageEntry" Text="28" Grid.Row="1" Grid.Column="1" TextColor="White" BackgroundColor="#1A3A6F" Keyboard="Numeric"/>
@@ -110,19 +110,33 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
+                        <!-- В разделе с целями замените Label на элементы с именами: -->
                         <VerticalStackLayout Spacing="5">
-                            <Label Text="Целевой вес" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame BackgroundColor="#1A3A6F" CornerRadius="10" Padding="10">
-                                <Label Text="70 кг" TextColor="White" HorizontalOptions="Center" FontSize="16"/>
+                            <Frame BackgroundColor="#1A3A6F" CornerRadius="10" Padding="0">
+                                <Grid ColumnSpacing="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Entry x:Name="targetWeightEntry" Text="70" TextColor="White" BackgroundColor="Transparent" Keyboard="Numeric" HorizontalOptions="FillAndExpand"/>
+                                    <Label Text="кг" Grid.Column="1" TextColor="#5D8CC0" VerticalOptions="Center" Margin="0,0,10,0"/>
+                                </Grid>
                             </Frame>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Grid.Column="1" Spacing="5">
                             <Label Text="Срок" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                             <Frame BackgroundColor="#1A3A6F" CornerRadius="10" Padding="10">
-                                <Label Text="3 месяца" TextColor="White" HorizontalOptions="Center" FontSize="16"/>
+                                <Label x:Name="targetPeriodLabel" Text="3 месяца" TextColor="White" HorizontalOptions="Center" FontSize="16"/>
                             </Frame>
                         </VerticalStackLayout>
+
+                        <!-- Добавьте Picker для цели с именем: -->
+                        <Picker x:Name="goalPicker" Grid.Row="4" Grid.Column="1" 
+                            BackgroundColor="#1A3A6F"
+                            TextColor="White"
+                            ItemsSource="{Binding Goals}"
+                            SelectedIndex="0"/> 
                     </Grid>
 
                     <Button Text="Сохранить изменения"
