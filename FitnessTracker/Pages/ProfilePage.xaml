@@ -145,10 +145,11 @@
 
                     <Label Text="Текущая цель" TextColor="#A0E7FF" FontAttributes="Bold"/>
                     <Picker x:Name="goalPicker" 
-                BackgroundColor="#1A3A6F"
-                TextColor="White"
-                ItemsSource="{Binding Goals}"
-                SelectedIndex="0"/>
+        BackgroundColor="#1A3A6F"
+        TextColor="White"
+        ItemsSource="{Binding Goals}"
+        SelectedIndexChanged="OnGoalPickerChanged"
+        SelectedIndex="0"/>
 
                     <Button Text="Сохранить изменения"
                 BackgroundColor="#00C9FF"

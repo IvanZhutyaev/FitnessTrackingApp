@@ -12,9 +12,18 @@ namespace FitnessTrackingApp.Pages
         private readonly HttpClient _httpClient = new HttpClient();
         private const string ApiBaseUrl = "http://localhost:5024";
 
+        public List<string> Goals { get; } = new List<string>
+        {
+            "Похудение",
+            "Набор массы",
+            "Поддержание формы",
+            "Увеличение выносливости"
+        };
+
         public ProfilePage()
         {
             InitializeComponent();
+            goalPicker.ItemsSource = Goals;
             LoadUserDataAsync();
         }
 
@@ -22,6 +31,15 @@ namespace FitnessTrackingApp.Pages
         {
             base.OnAppearing();
             await LoadUserDataAsync();
+        }
+
+        private void OnGoalPickerChanged(object sender, EventArgs e)
+        {
+            // Обновляем Label в личных данных при изменении Picker'а
+            if (goalPicker.SelectedIndex >= 0)
+            {
+                goalLabel.Text = Goals[goalPicker.SelectedIndex];
+            }
         }
 
         private async Task LoadUserDataAsync()
@@ -45,7 +63,14 @@ namespace FitnessTrackingApp.Pages
                     ageEntry.Text = profileData.Age.ToString();
                     heightEntry.Text = profileData.Height.ToString();
                     weightEntry.Text = profileData.Weight.ToString();
-                    goalLabel.Text = profileData.Goal ?? "Не указана";
+
+                    // Устанавливаем цель
+                    if (!string.IsNullOrEmpty(profileData.Goal))
+                    {
+                        goalLabel.Text = profileData.Goal;
+                        var goalIndex = Goals.IndexOf(profileData.Goal);
+                        goalPicker.SelectedIndex = goalIndex >= 0 ? goalIndex : 0;
+                    }
 
                     // Параметры целей
                     targetWeightEntry.Text = profileData.TargetWeight.ToString();
@@ -74,7 +99,7 @@ namespace FitnessTrackingApp.Pages
                     Age = int.Parse(ageEntry.Text),
                     Height = double.Parse(heightEntry.Text),
                     Weight = double.Parse(weightEntry.Text),
-                    Goal = goalLabel.Text,
+                    Goal = goalLabel.Text, // Берем из Label
                     TargetWeight = double.Parse(targetWeightEntry.Text),
                     TargetPeriod = targetPeriodPicker.SelectedItem?.ToString() ?? "3 месяца"
                 };
