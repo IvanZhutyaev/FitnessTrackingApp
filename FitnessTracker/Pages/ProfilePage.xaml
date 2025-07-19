@@ -16,21 +16,24 @@
 
             <!-- Аватарка -->
             <Frame HorizontalOptions="Center"
-                   CornerRadius="100"
-                   HeightRequest="120"
-                   WidthRequest="120"
-                   BackgroundColor="#1A3A6F"
-                   Padding="0">
-                <Image Source="user_avatar.png"
-                       Aspect="AspectFill"
-                       HeightRequest="120"
-                       WidthRequest="120"/>
+       CornerRadius="100"
+       HeightRequest="120"
+       WidthRequest="120"
+       BackgroundColor="#1A3A6F"
+       Padding="0">
+                <Image x:Name="avatarImage" 
+           Source="user_avatar.png"
+           Aspect="AspectFill"
+           HeightRequest="120"
+           WidthRequest="120"/>
             </Frame>
             <Button Text="Изменить фото"
-                    BackgroundColor="#2A4D80"
-                    TextColor="#A0E7FF"
-                    HorizontalOptions="Center"
-                    WidthRequest="150"/>
+        BackgroundColor="#2A4D80"
+        TextColor="#A0E7FF"
+        HorizontalOptions="Center"
+        WidthRequest="150"
+        Clicked="OnChangePhotoClicked"/>
+            <!-- Добавляем обработчик -->
 
             <!-- Личные данные -->
             <Frame CornerRadius="15"

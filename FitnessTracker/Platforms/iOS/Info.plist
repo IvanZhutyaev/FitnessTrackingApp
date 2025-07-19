@@ -28,5 +28,9 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need photo access to upload profile pictures</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Need camera access to take profile pictures</string>
 </dict>
 </plist>

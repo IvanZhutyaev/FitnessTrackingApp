@@ -123,7 +123,29 @@ namespace FitnessTrackingApp
                 await DisplayAlert("Ошибка", $"Произошла ошибка: {ex.Message}", "OK");
             }
         }
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            bool answer = await DisplayAlert("Подтверждение выхода",
+                "Вы действительно хотите выйти из аккаунта?",
+                "Да", "Нет");
 
+            if (answer)
+            {
+                // Очищаем данные сессии
+                UserSession.UserId = 0;
+                UserSession.Username = null;
+
+                // Создаем новый экземпляр AppShell и устанавливаем его как MainPage
+                var newShell = new AppShell();
+                Application.Current.MainPage = newShell;
+
+                // Находим MainPage в новом Shell и обновляем UI
+                if (newShell.CurrentPage is MainPage mainPage)
+                {
+                    mainPage.UpdateUIAfterLogout();
+                }
+            }
+        }
         private async Task LoginUser(string username, string password)
         {
             var response = await _httpClient.PostAsJsonAsync(

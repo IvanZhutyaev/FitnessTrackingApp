@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Microsoft.Maui.Media; // Добавляем для работы с MediaPicker
+using Microsoft.Maui.Storage; // Для работы с файловой системой
+
 
 namespace FitnessTrackingApp.Pages
 {
@@ -27,10 +30,90 @@ namespace FitnessTrackingApp.Pages
             LoadUserDataAsync();
         }
 
+        private string _photoPath; // Путь к текущему фото
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
             await LoadUserDataAsync();
+            await LoadUserPhotoAsync(); // Загружаем фото при открытии страницы
+        }
+
+        private async Task LoadUserPhotoAsync()
+        {
+            try
+            {
+                if (UserSession.UserId == 0) return;
+
+                // Проверяем, существует ли фото
+                var fileName = $"{UserSession.UserId}.jpg";
+                var localFilePath = Path.Combine(FileSystem.AppDataDirectory, "Media", fileName);
+
+                if (File.Exists(localFilePath))
+                {
+                    _photoPath = localFilePath;
+                    avatarImage.Source = ImageSource.FromFile(localFilePath);
+                }
+                else
+                {
+                    avatarImage.Source = "user_avatar.png"; // Фото по умолчанию
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка загрузки фото: {ex.Message}");
+            }
+        }
+
+        private async void OnChangePhotoClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                // Запрашиваем разрешения
+                var status = await Permissions.RequestAsync<Permissions.Photos>();
+                if (status != PermissionStatus.Granted)
+                {
+                    await DisplayAlert("Ошибка", "Необходимо разрешение на доступ к фото", "OK");
+                    return;
+                }
+
+                // Выбираем фото из галереи
+                var result = await MediaPicker.PickPhotoAsync();
+                if (result != null)
+                {
+                    // Создаем папку Media, если ее нет
+                    var mediaFolder = Path.Combine(FileSystem.AppDataDirectory, "Media");
+                    if (!Directory.Exists(mediaFolder))
+                    {
+                        Directory.CreateDirectory(mediaFolder);
+                    }
+
+                    // Удаляем старое фото, если оно есть
+                    var oldFilePath = Path.Combine(mediaFolder, $"{UserSession.UserId}.jpg");
+                    if (File.Exists(oldFilePath))
+                    {
+                        File.Delete(oldFilePath);
+                    }
+
+                    // Сохраняем новое фото
+                    var newFilePath = Path.Combine(mediaFolder, $"{UserSession.UserId}.jpg");
+                    using (var stream = await result.OpenReadAsync())
+                    using (var newStream = File.OpenWrite(newFilePath))
+                    {
+                        await stream.CopyToAsync(newStream);
+                    }
+
+                    // Обновляем отображение
+                    _photoPath = newFilePath;
+                    avatarImage.Source = ImageSource.FromFile(newFilePath);
+
+                    await DisplayAlert("Успех", "Фото профиля обновлено", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", $"Не удалось обновить фото: {ex.Message}", "OK");
+            }
         }
 
         private async void OnLogoutClicked(object sender, EventArgs e)
