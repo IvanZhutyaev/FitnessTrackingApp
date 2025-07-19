@@ -209,7 +209,7 @@ namespace FitnessTrackingApp
             LoginButton.Text = _currentUsername;
             LoginButton.FontSize = 16;
             LoginButton.FontAttributes = FontAttributes.Bold;
-            LoginButton.BackgroundColor = Color.FromArgb("#1A3A6F");
+            LoginButton.BackgroundColor = Color.FromArgb("#0d1a32ff");
             LoginButton.TextColor = Colors.White;
             LoginButton.CornerRadius = 20;
             LoginButton.Padding = new Thickness(15, 8);

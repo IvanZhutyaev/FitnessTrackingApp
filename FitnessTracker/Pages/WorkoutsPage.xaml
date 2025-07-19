@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FitnessTrackingApp.Pages.WorkoutsPage"
              Title="Тренировки"
-             BackgroundColor="#0C1B33">
+             BackgroundColor="#FF0C1B33">
 
     <Grid>
         <ScrollView>
@@ -90,7 +90,8 @@
                         <Button Text="+ Создать новую тренировку"
                                 BackgroundColor="#2A4D80"
                                 TextColor="#A0E7FF"
-                                CornerRadius="10"/>
+                                CornerRadius="10"
+                                Clicked="OnAddWorkoutClicked"/>
 
                         <CollectionView ItemsSource="{Binding MyWorkouts}">
                             <CollectionView.ItemTemplate>
@@ -184,5 +185,26 @@
                 HorizontalOptions="End"
                 VerticalOptions="End"
                 Margin="20"/>
+
+
+                
+        <!-- Модальное окно для добавления тренировки -->
+        <ContentView x:Name="AddWorkoutPopup" IsVisible="False" BackgroundColor="#80000000">
+            <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                <Frame BackgroundColor="#1A3A6F" CornerRadius="20" Padding="20" WidthRequest="320" VerticalOptions="Center" HorizontalOptions="Center">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Добавить тренировку" FontSize="20" TextColor="#00C9FF" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Entry x:Name="WorkoutNameEntry" Placeholder="Название тренировки" BackgroundColor="#152642" TextColor="White"/>
+                        <Entry x:Name="WorkoutDescriptionEntry" Placeholder="Описание" BackgroundColor="#152642" TextColor="White"/>
+                        <Entry x:Name="WorkoutDurationEntry" Placeholder="Длительность (мин)" Keyboard="Numeric" BackgroundColor="#152642" TextColor="White"/>
+                        <Entry x:Name="WorkoutCaloriesEntry" Placeholder="Калории" Keyboard="Numeric" BackgroundColor="#152642" TextColor="White"/>
+                        <HorizontalStackLayout Spacing="10">
+                            <Button Text="Сохранить" BackgroundColor="#00C9FF" TextColor="#0C1B33" CornerRadius="10" Clicked="OnSaveWorkoutClicked"/>
+                            <Button Text="Отмена" BackgroundColor="#2A4D80" TextColor="#A0E7FF" CornerRadius="10" Clicked="OnCancelAddWorkoutClicked"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+        </ContentView>
     </Grid>
 </ContentPage>
