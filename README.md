@@ -1,6 +1,6 @@
 # FitTrackPro: Your Ultimate Fitness Companion
 
-![FitTrackPro Logo](https://via.placeholder.com/150) *(placeholder for actual logo)*
+![FitTrackPro Logo](https://cdn.sologo.ai/2025/07/2507190315219428.jpeg) 
 
 ## Overview
 FitTrackPro is a comprehensive fitness tracking application designed to help users achieve their health and wellness goals. With features ranging from activity tracking and workout planning to nutrition monitoring and progress visualization, FitTrackPro serves as an all-in-one solution for fitness enthusiasts of all levels.
