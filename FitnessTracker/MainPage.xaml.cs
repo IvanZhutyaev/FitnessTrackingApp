@@ -187,10 +187,10 @@ namespace FitnessTrackingApp
         private async Task RegisterUser(string username, string password)
         {
             // Формируем дату рождения из пикеров
-            string birthDay = regBirthDayPicker.SelectedIndex >= 0 ? (regBirthDayPicker.SelectedIndex + 1).ToString("D2") : "01";
+            string birthDay = (regBirthDayPicker.SelectedIndex + 1).ToString("D2");
             string[] months = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" };
-            string birthMonth = regBirthMonthPicker.SelectedIndex >= 0 ? (regBirthMonthPicker.SelectedIndex + 1).ToString("D2") : "01";
-            string birthYear = regBirthYearPicker.SelectedIndex >= 0 ? (1950 + regBirthYearPicker.SelectedIndex).ToString() : "2000";
+            string birthMonth = (regBirthMonthPicker.SelectedIndex + 1).ToString("D2");
+            string birthYear = (1950 + regBirthYearPicker.SelectedIndex).ToString();
             string birthDate = $"{birthDay}.{birthMonth}.{birthYear}";
 
             // Пример дополнительных полей (если будут)

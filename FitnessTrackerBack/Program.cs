@@ -83,14 +83,14 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 // Регистрация нового пользователя
 app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
 {
-    if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
-        return Results.BadRequest("Имя пользователя и пароль обязательны для заполнения");
+    if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.BirthDate))
+        return Results.BadRequest("Имя пользователя, пароль и дата рождения обязательны для заполнения");
 
     var exists = await db.Users.AnyAsync(user => user.Username == request.Username);
     if (exists)
         return Results.BadRequest("Пользователь с таким именем уже существует");
 
-    var user = new User { Username = request.Username, Password = request.Password };
+    var user = new User { Username = request.Username, Password = request.Password, BirthDate = request.BirthDate };
     db.Users.Add(user);
     await db.SaveChangesAsync();
     return Results.Ok(new { Success = true, Message = "Пользователь успешно зарегистрирован" });
