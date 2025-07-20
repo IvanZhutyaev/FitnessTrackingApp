@@ -262,19 +262,48 @@
                     <Entry x:Name="PasswordEntry"
                            Placeholder="Пароль"
                            IsPassword="True"
+                           Keyboard="Default"
+                           IsTextPredictionEnabled="False"
+                           InputTransparent="False"
                            FontSize="16"
                            BackgroundColor="#F0F4FA"
                            TextColor="#0C1B33"
                            HeightRequest="50"/>
 
+
                     <Entry x:Name="ConfirmPasswordEntry"
                            Placeholder="Повторите пароль"
                            IsPassword="True"
+                           Keyboard="Default"
+                           IsTextPredictionEnabled="False"
+                           InputTransparent="False"
                            FontSize="16"
                            BackgroundColor="#F0F4FA"
                            TextColor="#0C1B33"
                            HeightRequest="50"
                            IsVisible="False"/>
+
+                    
+                    <VerticalStackLayout IsVisible="{Binding Source={x:Reference ConfirmPasswordEntry}, Path=IsVisible}" Spacing="2" HorizontalOptions="Center" Margin="0,0,0,5">
+                        <Label Text="Дата рождения:" FontSize="14" TextColor="#0C1B33" HorizontalOptions="Center"/>
+                        <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+                            <Picker x:Name="regBirthDayPicker" Title="День" WidthRequest="60" HeightRequest="40" BackgroundColor="#F0F4FA" TextColor="#0C1B33">
+                                <Picker.Items>
+                                    <x:String>1</x:String><x:String>2</x:String><x:String>3</x:String><x:String>4</x:String><x:String>5</x:String><x:String>6</x:String><x:String>7</x:String><x:String>8</x:String><x:String>9</x:String><x:String>10</x:String><x:String>11</x:String><x:String>12</x:String><x:String>13</x:String><x:String>14</x:String><x:String>15</x:String><x:String>16</x:String><x:String>17</x:String><x:String>18</x:String><x:String>19</x:String><x:String>20</x:String><x:String>21</x:String><x:String>22</x:String><x:String>23</x:String><x:String>24</x:String><x:String>25</x:String><x:String>26</x:String><x:String>27</x:String><x:String>28</x:String><x:String>29</x:String><x:String>30</x:String><x:String>31</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            <Picker x:Name="regBirthMonthPicker" Title="Месяц" WidthRequest="90" HeightRequest="40" BackgroundColor="#F0F4FA" TextColor="#0C1B33">
+                                <Picker.Items>
+                                    <x:String>Январь</x:String><x:String>Февраль</x:String><x:String>Март</x:String><x:String>Апрель</x:String><x:String>Май</x:String><x:String>Июнь</x:String><x:String>Июль</x:String><x:String>Август</x:String><x:String>Сентябрь</x:String><x:String>Октябрь</x:String><x:String>Ноябрь</x:String><x:String>Декабрь</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            <Picker x:Name="regBirthYearPicker" Title="Год" WidthRequest="80" HeightRequest="40" BackgroundColor="#F0F4FA" TextColor="#0C1B33">
+                                <Picker.Items>
+                                    <x:String>1950</x:String><x:String>1951</x:String><x:String>1952</x:String><x:String>1953</x:String><x:String>1954</x:String><x:String>1955</x:String><x:String>1956</x:String><x:String>1957</x:String><x:String>1958</x:String><x:String>1959</x:String><x:String>1960</x:String><x:String>1961</x:String><x:String>1962</x:String><x:String>1963</x:String><x:String>1964</x:String><x:String>1965</x:String><x:String>1966</x:String><x:String>1967</x:String><x:String>1968</x:String><x:String>1969</x:String><x:String>1970</x:String><x:String>1971</x:String><x:String>1972</x:String><x:String>1973</x:String><x:String>1974</x:String><x:String>1975</x:String><x:String>1976</x:String><x:String>1977</x:String><x:String>1978</x:String><x:String>1979</x:String><x:String>1980</x:String><x:String>1981</x:String><x:String>1982</x:String><x:String>1983</x:String><x:String>1984</x:String><x:String>1985</x:String><x:String>1986</x:String><x:String>1987</x:String><x:String>1988</x:String><x:String>1989</x:String><x:String>1990</x:String><x:String>1991</x:String><x:String>1992</x:String><x:String>1993</x:String><x:String>1994</x:String><x:String>1995</x:String><x:String>1996</x:String><x:String>1997</x:String><x:String>1998</x:String><x:String>1999</x:String><x:String>2000</x:String><x:String>2001</x:String><x:String>2002</x:String><x:String>2003</x:String><x:String>2004</x:String><x:String>2005</x:String><x:String>2006</x:String><x:String>2007</x:String><x:String>2008</x:String><x:String>2009</x:String><x:String>2010</x:String><x:String>2011</x:String><x:String>2012</x:String><x:String>2013</x:String><x:String>2014</x:String><x:String>2015</x:String><x:String>2016</x:String><x:String>2017</x:String><x:String>2018</x:String><x:String>2019</x:String><x:String>2020</x:String><x:String>2021</x:String><x:String>2022</x:String><x:String>2023</x:String><x:String>2024</x:String><x:String>2025</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
 
                     <Button x:Name="AuthActionButton"
                             Clicked="AuthActionButton_Clicked"

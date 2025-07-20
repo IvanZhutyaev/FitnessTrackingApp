@@ -186,9 +186,28 @@ namespace FitnessTrackingApp
 
         private async Task RegisterUser(string username, string password)
         {
+            // Формируем дату рождения из пикеров
+            string birthDay = regBirthDayPicker.SelectedIndex >= 0 ? (regBirthDayPicker.SelectedIndex + 1).ToString("D2") : "01";
+            string[] months = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" };
+            string birthMonth = regBirthMonthPicker.SelectedIndex >= 0 ? (regBirthMonthPicker.SelectedIndex + 1).ToString("D2") : "01";
+            string birthYear = regBirthYearPicker.SelectedIndex >= 0 ? (1950 + regBirthYearPicker.SelectedIndex).ToString() : "2000";
+            string birthDate = $"{birthDay}.{birthMonth}.{birthYear}";
+
+            // Пример дополнительных полей (если будут)
+            // double weight = 0;
+            // if (!string.IsNullOrWhiteSpace(WeightEntry.Text) && double.TryParse(WeightEntry.Text, out double w))
+            //     weight = w;
+
+            var regData = new {
+                Username = username,
+                Password = password,
+                BirthDate = birthDate
+                
+            };
+
             var response = await _httpClient.PostAsJsonAsync(
                 $"{ApiBaseUrl}/register",
-                new { Username = username, Password = password });
+                regData);
 
             if (response.IsSuccessStatusCode)
             {

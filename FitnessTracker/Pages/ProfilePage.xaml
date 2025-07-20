@@ -64,7 +64,7 @@
                         <Entry x:Name="usernameEntry" Text="Гость" Grid.Row="0" Grid.Column="1" TextColor="White" BackgroundColor="#1A3A6F" IsReadOnly="True"/>
 
                         <Label Text="Возраст:" Grid.Row="1" Grid.Column="0" TextColor="#A0E7FF"/>
-                        <Entry x:Name ="ageEntry" Text="28" Grid.Row="1" Grid.Column="1" TextColor="White" BackgroundColor="#1A3A6F" Keyboard="Numeric"/>
+                        <Entry x:Name="birthDateEntry" Grid.Row="1" Grid.Column="1" TextColor="White" BackgroundColor="#1A3A6F" Keyboard="Numeric" Placeholder="Сколько лет" IsReadOnly="True"/>
 
                         <Label Text="Рост:" Grid.Row="2" Grid.Column="0" TextColor="#A0E7FF"/>
                         <Grid Grid.Row="2" Grid.Column="1" ColumnSpacing="5">

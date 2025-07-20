@@ -1,4 +1,6 @@
+
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -139,7 +141,7 @@ app.MapGet("/users/profile/{username}", async (string username, AppDbContext db)
     var profileData = new UserProfileDto
     {
         Username = user.Username,
-        Age = user.Age,
+        BirthDate = user.BirthDate,
         Weight = user.Weight,
         Height = user.Height,
         Goal = user.Goal,
@@ -168,7 +170,7 @@ app.MapPost("/user/changeinfo", async (ChangeInfoRequest request, AppDbContext d
         return Results.NotFound("Пользователь не найден");
 
     // Обновляем данные
-    user.Age = request.Age;
+    //user.Age = request.Age;
     user.Weight = request.Weight;
     user.Height = request.Height;
 
@@ -184,7 +186,7 @@ app.MapPost("/user/updateprofile", async (UserProfileDto request, AppDbContext d
 
     // Гарантируем, что Goal не будет null
     user.Goal = string.IsNullOrEmpty(request.Goal) ? "Похудение" : request.Goal;
-    user.Age = request.Age;
+    user.BirthDate = request.BirthDate;
     user.Weight = request.Weight;
     user.Height = request.Height;
     user.TargetWeight = request.TargetWeight;
@@ -205,7 +207,7 @@ public class User
     public int Id { get; set; }
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
-    public int Age { get; set; }
+    public string BirthDate { get; set; } = string.Empty;
     public double Weight { get; set; }
     public double Height { get; set; }
     public string Goal { get; set; } = "Похудение"; // Устанавливаем значение по умолчанию
@@ -215,10 +217,12 @@ public class User
     public ICollection<Activity> Activities { get; set; } = new List<Activity>();
     
 }
+
 public class UserProfileDto
 {
     public string Username { get; set; } = string.Empty;
-    public int Age { get; set; }
+    [JsonPropertyName("birthDate")]
+    public string BirthDate { get; set; } = string.Empty;
     public double Weight { get; set; }
     public double Height { get; set; }
     public string Goal { get; set; } = string.Empty;
@@ -237,6 +241,7 @@ public class RegisterRequest
 {
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public string BirthDate { get; set; } = string.Empty;
 }
 
 // Активность пользователя
@@ -264,8 +269,9 @@ public class Exercise
 }
 public class ChangeInfoRequest
 {
+    
     public int UserId { get; set; }
-    public int Age { get; set; }
+    public string BirthDate { get; set; } = string.Empty;
     public double Weight { get; set; }
     public double Height { get; set; }
 
