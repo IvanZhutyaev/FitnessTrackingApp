@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Добавляем сервисы
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -196,6 +197,33 @@ app.MapPost("/user/updateprofile", async (UserProfileDto request, AppDbContext d
     return Results.Ok(new { Success = true, Message = "Профиль успешно обновлен" });
 });
 
+
+// Удаление упражнения
+app.MapDelete("/exercises/{id}", async (int id, AppDbContext db) =>
+{
+    var exercise = await db.Exercises.FindAsync(id);
+    if (exercise == null) return Results.NotFound();
+
+    db.Exercises.Remove(exercise);
+    await db.SaveChangesAsync();
+    return Results.NoContent();
+});
+// Перед app.Run() добавьте:
+app.MapPost("/workouthistory", async (WorkoutHistory history, AppDbContext db) =>
+{
+    db.WorkoutHistory.Add(history);
+    await db.SaveChangesAsync();
+    return Results.Created($"/workouthistory/{history.Id}", history);
+});
+
+app.MapGet("/workouthistory/{userId}", async (int userId, AppDbContext db) =>
+{
+    return await db.WorkoutHistory
+        .Where(h => h.UserId == userId)
+        .OrderByDescending(h => h.Date)
+        .ToListAsync();
+});
+
 // Запуск приложения
 app.Run();
 
@@ -244,6 +272,16 @@ public class RegisterRequest
     public string BirthDate { get; set; } = string.Empty;
 }
 
+public class WorkoutHistory
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public string WorkoutName { get; set; } = string.Empty;
+    public DateTime Date { get; set; } = DateTime.UtcNow;
+    public int Duration { get; set; }
+    public int CaloriesBurned { get; set; }
+}
+
 // Активность пользователя
 public class Activity
 {
@@ -281,7 +319,9 @@ public class ChangeInfoRequest
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
     public DbSet<User> Users => Set<User>();
     public DbSet<Activity> Activities => Set<Activity>();
     public DbSet<Exercise> Exercises => Set<Exercise>();
-}
+    public DbSet<WorkoutHistory> WorkoutHistory => Set<WorkoutHistory>(); // Добавьте эту строку
+} 

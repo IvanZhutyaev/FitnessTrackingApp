@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-
+using CommunityToolkit.Maui;
 namespace FitnessTrackingApp
 {
     public static class MauiProgram
@@ -7,6 +7,11 @@ namespace FitnessTrackingApp
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+            builder.UseMauiApp<App>();
+            builder
+                .UseMauiApp<App>()
+                .UseMauiCommunityToolkit();
+            builder.UseMauiApp<App>().UseMauiCommunityToolkit();
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -17,6 +22,7 @@ namespace FitnessTrackingApp
 
 #if DEBUG
     		builder.Logging.AddDebug();
+           
 #endif
 
             return builder.Build();
