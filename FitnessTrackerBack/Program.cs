@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -211,6 +210,10 @@ app.MapDelete("/exercises/{id}", async (int id, AppDbContext db) =>
 // Перед app.Run() добавьте:
 app.MapPost("/workouthistory", async (WorkoutHistory history, AppDbContext db) =>
 {
+    // Добавьте проверку и значения по умолчанию
+    history.Description ??= string.Empty;
+    history.Notes ??= string.Empty;
+
     db.WorkoutHistory.Add(history);
     await db.SaveChangesAsync();
     return Results.Created($"/workouthistory/{history.Id}", history);
@@ -295,9 +298,11 @@ public class WorkoutHistory
     public int Id { get; set; }
     public int UserId { get; set; }
     public string WorkoutName { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty; // Добавлено
     public DateTime Date { get; set; } = DateTime.UtcNow;
-    public int Duration { get; set; }
+    public int Duration { get; set; } // в минутах
     public int CaloriesBurned { get; set; }
+    public string Notes { get; set; } = string.Empty; // Добавлено
 }
 
 // Активность пользователя

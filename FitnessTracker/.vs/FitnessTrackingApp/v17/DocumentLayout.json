@@ -53,8 +53,7 @@
               "RelativeToolTip": "Models\\WorkoutDetailDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T19:10:06.705Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T19:10:06.705Z"
             },
             {
               "$type": "Document",
@@ -64,7 +63,7 @@
               "RelativeDocumentMoniker": "..\\FitnessTrackerBack\\Program.cs",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs",
               "RelativeToolTip": "..\\FitnessTrackerBack\\Program.cs",
-              "ViewState": "AgIAADYBAAAAAAAAAAAmwF0BAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAMAAAAAAAAAAAAAAANsAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-21T15:53:57.99Z",
               "EditorCaption": ""
@@ -90,8 +89,7 @@
               "RelativeToolTip": "Models\\WorkoutHistory.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T18:11:43.97Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T18:11:43.97Z"
             },
             {
               "$type": "Document",
@@ -115,8 +113,7 @@
               "RelativeToolTip": "MauiProgram.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAgwB8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T17:56:55.978Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T17:56:55.978Z"
             },
             {
               "$type": "Document",
@@ -128,8 +125,7 @@
               "RelativeToolTip": "Pages\\WorkoutsPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T15:51:09.813Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T15:51:09.813Z"
             },
             {
               "$type": "Document",
@@ -141,8 +137,7 @@
               "RelativeToolTip": "Pages\\WorkoutsPage.xaml",
               "ViewState": "AgIAAO4AAAAAAAAAAAAAABEBAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-07-21T15:50:55.544Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T15:50:55.544Z"
             }
           ]
         }
