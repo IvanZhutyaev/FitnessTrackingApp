@@ -223,7 +223,25 @@ app.MapGet("/workouthistory/{userId}", async (int userId, AppDbContext db) =>
         .OrderByDescending(h => h.Date)
         .ToListAsync();
 });
+app.MapGet("/workouthistory/details/{id}", async (int id, AppDbContext db) =>
+{
+    var workout = await db.WorkoutHistory.FindAsync(id);
+    if (workout == null)
+        return Results.NotFound();
 
+    var details = new WorkoutDetailResponse
+    {
+        Id = workout.Id,
+        WorkoutName = workout.WorkoutName,
+        Description = workout.Description,
+        Duration = workout.Duration,
+        CaloriesBurned = workout.CaloriesBurned,
+        Date = workout.Date,
+        Notes = workout.Notes
+    };
+
+    return Results.Ok(details);
+});
 // Запуск приложения
 app.Run();
 
@@ -314,7 +332,16 @@ public class ChangeInfoRequest
     public double Height { get; set; }
 
 }
-
+public class WorkoutDetailResponse // Переименуем для ясности
+{
+    public int Id { get; set; }
+    public string WorkoutName { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public int Duration { get; set; } // в минутах
+    public int CaloriesBurned { get; set; }
+    public DateTime Date { get; set; }
+    public string Notes { get; set; } = string.Empty;
+}
 // Контекст базы данных
 public class AppDbContext : DbContext
 {

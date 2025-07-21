@@ -5,16 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using System;
 using System.Net.Http.Headers;
-using Microsoft.Maui.Media;
-using Microsoft.Maui.Media;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using FitnessTrackingApp.Models;
 namespace FitnessTrackingApp.Pages;
 using Microsoft.Maui.Media;
 using System.Reflection;
-using FitnessTrackingApp.Models;
-using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 public partial class WorkoutsPage : ContentPage, INotifyPropertyChanged
 {
     private readonly HttpClient _httpClient = new HttpClient();
@@ -25,7 +22,7 @@ public partial class WorkoutsPage : ContentPage, INotifyPropertyChanged
     private IDispatcherTimer _timer;
     private int _remainingSeconds;
     public ObservableCollection<WorkoutHistory> WorkoutHistoryList { get; } = new();
-
+    private WorkoutDetailDto _currentWorkoutDetails;
     private string _searchText;
     public string SearchText
     {
@@ -320,6 +317,51 @@ public partial class WorkoutsPage : ContentPage, INotifyPropertyChanged
         {
             await DisplayAlert("Ошибка", ex.Message, "OK");
         }
+    }
+    private async void OnDetailsClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is WorkoutHistory workout)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/workouthistory/details/{workout.Id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var details = JsonSerializer.Deserialize<WorkoutDetailDto>(json);
+
+                    DetailWorkoutName.Text = details.WorkoutName;
+                    DetailDate.Text = details.Date.ToString("dd MMMM yyyy HH:mm");
+                    DetailDuration.Text = $"{details.Duration} минут";
+                    DetailCalories.Text = $"{details.CaloriesBurned} ккал";
+                    DetailNotes.Text = details.Notes;
+                    DetailDescription.Text = details.Description; // Добавьте этот Label в XAML
+
+                    await ShowDetailsPopup();
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Ошибка", ex.Message, "OK");
+            }
+        }
+    }
+
+    private async Task ShowDetailsPopup()
+    {
+        DetailsPopup.IsVisible = true;
+        await DetailsPopup.FadeTo(1, 200);
+    }
+
+    private async void OnCloseDetailsClicked(object sender, EventArgs e)
+    {
+        await HideDetailsPopup();
+    }
+
+    private async Task HideDetailsPopup()
+    {
+        await DetailsPopup.FadeTo(0, 200);
+        DetailsPopup.IsVisible = false;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

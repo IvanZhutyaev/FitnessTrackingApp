@@ -161,9 +161,14 @@
                                                 <Label Text="{Binding Duration, StringFormat='Длительность: {0} мин'}"
                                FontSize="14" TextColor="#5D8CC0"/>
                                             </VerticalStackLayout>
-                                            <Button Grid.Column="1" Text="Детали"
-                            BackgroundColor="#2A4D80" TextColor="#A0E7FF"
-                            CornerRadius="10" WidthRequest="80"/>
+                                            <Button Grid.Column="1"
+                                                Text="Детали"
+                                                BackgroundColor="#2A4D80"
+                                                TextColor="#A0E7FF"
+                                                CornerRadius="10"
+                                                WidthRequest="80"
+                                                Clicked="OnDetailsClicked"
+                                                CommandParameter="{Binding .}"/>            
                                         </Grid>
                                     </Frame>
                                 </DataTemplate>
@@ -233,6 +238,47 @@
                             TextColor="White" 
                             CornerRadius="10" 
                             Clicked="OnCompleteWorkoutClicked"/>
+                </VerticalStackLayout>
+            </Frame>
+        </ContentView>
+        <ContentView x:Name="DetailsPopup" 
+             IsVisible="False" 
+             BackgroundColor="#80000000"
+             Opacity="0"
+             VerticalOptions="FillAndExpand"
+             HorizontalOptions="FillAndExpand">
+            <Frame BackgroundColor="#1A3A6F" 
+           CornerRadius="20" 
+           Padding="20" 
+           WidthRequest="320"
+           VerticalOptions="Center" 
+           HorizontalOptions="Center">
+                <VerticalStackLayout Spacing="15">
+                    <Label x:Name="DetailWorkoutName" 
+                   FontSize="20" 
+                   TextColor="#00C9FF" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"/>
+                    <Label Text="Описание:" FontSize="16" TextColor="White"/>
+                    <Label x:Name="DetailDescription" FontSize="14" TextColor="#A0E7FF"/>
+                    
+                    <Label Text="Дата:" FontSize="16" TextColor="White"/>
+                    <Label x:Name="DetailDate" FontSize="14" TextColor="#A0E7FF"/>
+
+                    <Label Text="Длительность:" FontSize="16" TextColor="White"/>
+                    <Label x:Name="DetailDuration" FontSize="14" TextColor="#A0E7FF"/>
+
+                    <Label Text="Сожжено калорий:" FontSize="16" TextColor="White"/>
+                    <Label x:Name="DetailCalories" FontSize="14" TextColor="#A0E7FF"/>
+
+                    <Label Text="Заметки:" FontSize="16" TextColor="White"/>
+                    <Label x:Name="DetailNotes" FontSize="14" TextColor="#A0E7FF"/>
+
+                    <Button Text="Закрыть" 
+                    BackgroundColor="#FF4081" 
+                    TextColor="White" 
+                    CornerRadius="10" 
+                    Clicked="OnCloseDetailsClicked"/>
                 </VerticalStackLayout>
             </Frame>
         </ContentView>
