@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:FitnessTrackingApp.Pages"
+             xmlns:converters="clr-namespace:FitnessTrackingApp.Converters"
              x:Class="FitnessTrackingApp.Pages.WorkoutsPage"
              Title="Тренировки"
              BackgroundColor="#FF0C1B33">
@@ -9,8 +10,9 @@
         <Style TargetType="Button">
             <Setter Property="FontAttributes" Value="Bold"/>
         </Style>
+        <converters:NotNullToBoolConverter x:Key="NotNullConverter"/>
     </ContentPage.Resources>
-
+    
     <Grid>
         
         <ScrollView>
@@ -34,10 +36,10 @@
                                FontAttributes="Bold"/>
 
                         <SearchBar Placeholder="Поиск упражнений..."
-                               BackgroundColor="#1A3A6F"
-                               TextColor="White"
-                               CancelButtonColor="#A0E7FF"
-                               Text="{Binding SearchText, Mode=TwoWay}"/>
+           BackgroundColor="#1A3A6F"
+           TextColor="White"
+           CancelButtonColor="#A0E7FF"
+           Text="{Binding SearchText, Mode=TwoWay}"/>
 
                         <CollectionView ItemsSource="{Binding Exercises}">
                             <CollectionView.ItemTemplate>
@@ -148,7 +150,6 @@
                                FontAttributes="Bold"/>
 
                         <CollectionView ItemsSource="{Binding WorkoutHistoryList}">
-                            <!-- Изменили привязку -->
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10" Margin="0,5">
@@ -161,20 +162,22 @@
                                                 <Label Text="{Binding Duration, StringFormat='Длительность: {0} мин'}"
                                FontSize="14" TextColor="#5D8CC0"/>
                                             </VerticalStackLayout>
-                                            <Button Grid.Column="1"
-                                                Text="Детали"
+                                            <Button Text="Детали"
                                                 BackgroundColor="#2A4D80"
                                                 TextColor="#A0E7FF"
                                                 CornerRadius="10"
                                                 WidthRequest="80"
-                                                Clicked="OnDetailsClicked"
-                                                CommandParameter="{Binding .}"/>            
+                                                Command="{Binding ShowDetailsCommand}"
+            CommandParameter="{Binding}"
+            IsEnabled="{Binding Id, Converter={StaticResource NotNullConverter}}"/>
+
+
                                         </Grid>
                                     </Frame>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                        
+
                     </VerticalStackLayout>
                 </Frame>
             </VerticalStackLayout>
@@ -259,11 +262,12 @@
                    TextColor="#00C9FF" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center"/>
-                    <Label Text="Описание:" FontSize="16" TextColor="White"/>
-                    <Label x:Name="DetailDescription" FontSize="14" TextColor="#A0E7FF"/>
-                    
+
                     <Label Text="Дата:" FontSize="16" TextColor="White"/>
                     <Label x:Name="DetailDate" FontSize="14" TextColor="#A0E7FF"/>
+
+                    <Label Text="Описание:" FontSize="16" TextColor="White"/>
+                    <Label x:Name="DetailDescription" FontSize="14" TextColor="#A0E7FF"/>
 
                     <Label Text="Длительность:" FontSize="16" TextColor="White"/>
                     <Label x:Name="DetailDuration" FontSize="14" TextColor="#A0E7FF"/>

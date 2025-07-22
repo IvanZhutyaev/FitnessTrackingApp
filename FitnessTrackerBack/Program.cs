@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-
+using System.Text.Json; 
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -221,29 +221,28 @@ app.MapPost("/workouthistory", async (WorkoutHistory history, AppDbContext db) =
 
 app.MapGet("/workouthistory/{userId}", async (int userId, AppDbContext db) =>
 {
-    return await db.WorkoutHistory
+    Console.WriteLine($"Запрос истории для пользователя: {userId}"); // Логирование
+    var history = await db.WorkoutHistory
         .Where(h => h.UserId == userId)
         .OrderByDescending(h => h.Date)
         .ToListAsync();
+    Console.WriteLine($"Найдено записей: {history.Count}"); // Логирование
+    return Results.Ok(history);
 });
+
 app.MapGet("/workouthistory/details/{id}", async (int id, AppDbContext db) =>
 {
-    var workout = await db.WorkoutHistory.FindAsync(id);
+    Console.WriteLine($"Запрос деталей для ID: {id}"); // Логирование
+
+    var workout = await db.WorkoutHistory.FirstOrDefaultAsync(w => w.Id == id);
     if (workout == null)
-        return Results.NotFound();
-
-    var details = new WorkoutDetailResponse
     {
-        Id = workout.Id,
-        WorkoutName = workout.WorkoutName,
-        Description = workout.Description,
-        Duration = workout.Duration,
-        CaloriesBurned = workout.CaloriesBurned,
-        Date = workout.Date,
-        Notes = workout.Notes
-    };
+        Console.WriteLine($"Тренировка с ID {id} не найдена");
+        return Results.NotFound();
+    }
 
-    return Results.Ok(details);
+    Console.WriteLine($"Найдена тренировка: {workout.WorkoutName}");
+    return Results.Ok(workout);
 });
 // Запуск приложения
 app.Run();
@@ -310,7 +309,7 @@ public class Activity
 {
     public int Id { get; set; }
     public int UserId { get; set; }
-    public User User { get; set; }  // Навигационное свойство
+    public User User { get; set; } = new User(); // Инициализировано
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public int Steps { get; set; }
     public double Distance { get; set; }
@@ -337,7 +336,7 @@ public class ChangeInfoRequest
     public double Height { get; set; }
 
 }
-public class WorkoutDetailResponse // Переименуем для ясности
+public class WorkoutDetailResponse 
 {
     public int Id { get; set; }
     public string WorkoutName { get; set; } = string.Empty;
