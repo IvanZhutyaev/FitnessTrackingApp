@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:FitnessTrackingApp.Pages"
-             xmlns:converters="clr-namespace:FitnessTrackingApp.Converters"
              x:Class="FitnessTrackingApp.Pages.WorkoutsPage"
              Title="Тренировки"
              BackgroundColor="#FF0C1B33">
@@ -10,21 +8,17 @@
         <Style TargetType="Button">
             <Setter Property="FontAttributes" Value="Bold"/>
         </Style>
-        <converters:NotNullToBoolConverter x:Key="NotNullConverter"/>
     </ContentPage.Resources>
-    
+
     <Grid>
-        
         <ScrollView>
             <VerticalStackLayout Padding="20" Spacing="20">
-                <!-- Заголовок -->
                 <Label Text="💪 Тренировки"
                        FontSize="24"
                        TextColor="White"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"/>
 
-                <!-- Каталог упражнений -->
                 <Frame CornerRadius="15"
                        BackgroundColor="#152642"
                        BorderColor="#2A4D80"
@@ -36,10 +30,10 @@
                                FontAttributes="Bold"/>
 
                         <SearchBar Placeholder="Поиск упражнений..."
-           BackgroundColor="#1A3A6F"
-           TextColor="White"
-           CancelButtonColor="#A0E7FF"
-           Text="{Binding SearchText, Mode=TwoWay}"/>
+                                   BackgroundColor="#1A3A6F"
+                                   TextColor="White"
+                                   CancelButtonColor="#A0E7FF"
+                                   Text="{Binding SearchText, Mode=TwoWay}"/>
 
                         <CollectionView ItemsSource="{Binding Exercises}">
                             <CollectionView.ItemTemplate>
@@ -71,15 +65,15 @@
                                             </VerticalStackLayout>
 
                                             <Button Grid.Column="2"
-                                                Text="▶"
-                                                FontSize="16"
-                                                BackgroundColor="#00C9FF"
-                                                TextColor="#0C1B33"
-                                                CornerRadius="20"
-                                                WidthRequest="40"
-                                                HeightRequest="40"
-                                                Clicked="OnStartWorkoutClicked"
-                                                CommandParameter="{Binding .}"/>
+                                                    Text="▶"
+                                                    FontSize="16"
+                                                    BackgroundColor="#00C9FF"
+                                                    TextColor="#0C1B33"
+                                                    CornerRadius="20"
+                                                    WidthRequest="40"
+                                                    HeightRequest="40"
+                                                    Clicked="OnStartWorkoutClicked"
+                                                    CommandParameter="{Binding .}"/>
                                         </Grid>
                                     </Frame>
                                 </DataTemplate>
@@ -88,7 +82,6 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Мои тренировки -->
                 <Frame CornerRadius="15"
                        BackgroundColor="#152642"
                        BorderColor="#2A4D80"
@@ -138,7 +131,6 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- История тренировок -->
                 <Frame CornerRadius="15"
                        BackgroundColor="#152642"
                        BorderColor="#2A4D80"
@@ -152,50 +144,33 @@
                         <CollectionView ItemsSource="{Binding WorkoutHistoryList}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10" Margin="0,5">
-                                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
-                                            <VerticalStackLayout>
-                                                <Label Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}"
-                               FontSize="16" TextColor="White" FontAttributes="Bold"/>
-                                                <Label Text="{Binding WorkoutName}"
-                               FontSize="14" TextColor="#A0E7FF"/>
-                                                <Label Text="{Binding Duration, StringFormat='Длительность: {0} мин'}"
-                               FontSize="14" TextColor="#5D8CC0"/>
-                                            </VerticalStackLayout>
-                                            <Button Text="Детали"
-                                                BackgroundColor="#2A4D80"
-                                                TextColor="#A0E7FF"
-                                                CornerRadius="10"
-                                                WidthRequest="80"
-                                                Command="{Binding ShowDetailsCommand}"
-            CommandParameter="{Binding}"
-            IsEnabled="{Binding Id, Converter={StaticResource NotNullConverter}}"/>
-
-
-                                        </Grid>
+                                    <Frame CornerRadius="10" 
+                                           BackgroundColor="#1A3A6F" 
+                                           Padding="10" 
+                                           Margin="0,5">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}"
+                                                   FontSize="16" 
+                                                   TextColor="White" 
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding WorkoutName}"
+                                                   FontSize="14" 
+                                                   TextColor="#A0E7FF"/>
+                                            <Label Text="{Binding Duration, StringFormat='Длительность: {0} мин'}"
+                                                   FontSize="14" 
+                                                   TextColor="#5D8CC0"/>
+                                        </VerticalStackLayout>
                                     </Frame>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-
                     </VerticalStackLayout>
                 </Frame>
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Таймер (плавающая кнопка) -->
-        <Button Text="⏱️"
-                FontSize="24"
-                BackgroundColor="#00C9FF"
-                TextColor="#0C1B33"
-                CornerRadius="30"
-                WidthRequest="60"
-                HeightRequest="60"
-                HorizontalOptions="End"
-                VerticalOptions="End"
-                Margin="20"/>
+        
 
-        <!-- Модальное окно для добавления тренировки -->
         <ContentView x:Name="AddWorkoutPopup" IsVisible="False" BackgroundColor="#80000000">
             <Grid VerticalOptions="Center" HorizontalOptions="Center">
                 <Frame BackgroundColor="#1A3A6F" CornerRadius="20" Padding="20" WidthRequest="320" VerticalOptions="Center" HorizontalOptions="Center">
@@ -215,11 +190,11 @@
         </ContentView>
 
         <ContentView x:Name="TimerPopup" 
-             IsVisible="False" 
-             BackgroundColor="#80000000"
-             Opacity="0"
-             VerticalOptions="FillAndExpand"
-             HorizontalOptions="FillAndExpand">
+                     IsVisible="False" 
+                     BackgroundColor="#80000000"
+                     Opacity="0"
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand">
             <Frame BackgroundColor="#1A3A6F" 
                    CornerRadius="20" 
                    Padding="20" 
@@ -241,48 +216,6 @@
                             TextColor="White" 
                             CornerRadius="10" 
                             Clicked="OnCompleteWorkoutClicked"/>
-                </VerticalStackLayout>
-            </Frame>
-        </ContentView>
-        <ContentView x:Name="DetailsPopup" 
-             IsVisible="False" 
-             BackgroundColor="#80000000"
-             Opacity="0"
-             VerticalOptions="FillAndExpand"
-             HorizontalOptions="FillAndExpand">
-            <Frame BackgroundColor="#1A3A6F" 
-           CornerRadius="20" 
-           Padding="20" 
-           WidthRequest="320"
-           VerticalOptions="Center" 
-           HorizontalOptions="Center">
-                <VerticalStackLayout Spacing="15">
-                    <Label x:Name="DetailWorkoutName" 
-                   FontSize="20" 
-                   TextColor="#00C9FF" 
-                   FontAttributes="Bold" 
-                   HorizontalOptions="Center"/>
-
-                    <Label Text="Дата:" FontSize="16" TextColor="White"/>
-                    <Label x:Name="DetailDate" FontSize="14" TextColor="#A0E7FF"/>
-
-                    <Label Text="Описание:" FontSize="16" TextColor="White"/>
-                    <Label x:Name="DetailDescription" FontSize="14" TextColor="#A0E7FF"/>
-
-                    <Label Text="Длительность:" FontSize="16" TextColor="White"/>
-                    <Label x:Name="DetailDuration" FontSize="14" TextColor="#A0E7FF"/>
-
-                    <Label Text="Сожжено калорий:" FontSize="16" TextColor="White"/>
-                    <Label x:Name="DetailCalories" FontSize="14" TextColor="#A0E7FF"/>
-
-                    <Label Text="Заметки:" FontSize="16" TextColor="White"/>
-                    <Label x:Name="DetailNotes" FontSize="14" TextColor="#A0E7FF"/>
-
-                    <Button Text="Закрыть" 
-                    BackgroundColor="#FF4081" 
-                    TextColor="White" 
-                    CornerRadius="10" 
-                    Clicked="OnCloseDetailsClicked"/>
                 </VerticalStackLayout>
             </Frame>
         </ContentView>

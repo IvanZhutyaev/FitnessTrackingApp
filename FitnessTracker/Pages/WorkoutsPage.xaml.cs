@@ -21,7 +21,6 @@ namespace FitnessTrackingApp.Pages
         private Exercise _currentExercise;
         private IDispatcherTimer _timer;
         private int _remainingSeconds;
-        private ICommand _showDetailsCommand;
 
         public ObservableCollection<Exercise> Exercises { get; } = new ObservableCollection<Exercise>();
         public ObservableCollection<WorkoutHistory> WorkoutHistoryList { get; } = new ObservableCollection<WorkoutHistory>();
@@ -40,41 +39,6 @@ namespace FitnessTrackingApp.Pages
                 }
             }
         }
-
-        public ICommand ShowDetailsCommand => _showDetailsCommand ??= new Command<WorkoutHistory>(async (workout) =>
-        {
-            if (workout?.Id <= 0)
-            {
-                Console.WriteLine($"Invalid workout ID: {workout?.Id}");
-                return;
-            }
-
-            try
-            {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/workouthistory/details/{workout.Id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var details = await response.Content.ReadFromJsonAsync<WorkoutDetailResponse>();
-
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        DetailWorkoutName.Text = details.WorkoutName;
-                        DetailDate.Text = details.Date.ToString("dd.MM.yyyy");
-                        DetailDescription.Text = details.Description;
-                        DetailDuration.Text = $"{details.Duration} минут";
-                        DetailCalories.Text = $"{details.CaloriesBurned} ккал";
-                        DetailNotes.Text = details.Notes;
-                    });
-
-                    await ShowDetailsPopup();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading details: {ex.Message}");
-                await DisplayAlert("Ошибка", ex.Message, "OK");
-            }
-        });
 
         public WorkoutsPage()
         {
@@ -240,18 +204,6 @@ namespace FitnessTrackingApp.Pages
             TimerPopup.IsVisible = false;
         }
 
-        private async Task ShowDetailsPopup()
-        {
-            DetailsPopup.IsVisible = true;
-            await DetailsPopup.FadeTo(1, 200);
-        }
-
-        private async Task HideDetailsPopup()
-        {
-            await DetailsPopup.FadeTo(0, 200);
-            DetailsPopup.IsVisible = false;
-        }
-
         private async void OnCompleteWorkoutClicked(object sender, EventArgs e)
         {
             _timer.Stop();
@@ -294,24 +246,6 @@ namespace FitnessTrackingApp.Pages
         private void OnCancelAddWorkoutClicked(object sender, EventArgs e)
         {
             AddWorkoutPopup.IsVisible = false;
-        }
-
-        private async void OnCloseDetailsClicked(object sender, EventArgs e)
-        {
-            await HideDetailsPopup();
-        }
-
-        public class NotNullToBoolConverter : IValueConverter
-        {
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                return value != null && (value is int id ? id > 0 : true);
-            }
-
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
