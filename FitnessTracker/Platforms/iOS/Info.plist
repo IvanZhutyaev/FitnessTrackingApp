@@ -32,5 +32,9 @@
 	<string>Need photo access to upload profile pictures</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Need camera access to take profile pictures</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

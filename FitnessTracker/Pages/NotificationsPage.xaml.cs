@@ -1,85 +1,43 @@
+п»їusing CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
+using Plugin.LocalNotification.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
 using System.Net.Http;
 using System.Net.Http.Json;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
+using System.Threading.Tasks;
 
 namespace FitnessTrackingApp.Pages
 {
-    // Добавляем модели прямо в этом файле
-    public enum NotificationType
-    {
-        Meal,
-        Workout,
-        Water,
-        Custom
-    }
-
-    public class Notification
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public TimeSpan Time { get; set; }
-        public bool IsActive { get; set; } = true;
-        public NotificationType Type { get; set; }
-    }
-
-    public class NotificationSettings
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public bool MotivationalEnabled { get; set; } = true;
-        public bool AchievementsEnabled { get; set; } = true;
-        public bool ProgressEnabled { get; set; } = true;
-        public bool GeneralEnabled { get; set; } = true;
-        public bool SoundEnabled { get; set; } = true;
-        public bool VibrationEnabled { get; set; } = true;
-        public TimeSpan NotificationTime { get; set; } = new TimeSpan(9, 0, 0);
-    }
-
     public partial class NotificationsPage : ContentPage
     {
         private readonly HttpClient _httpClient = new();
         private const string ApiBaseUrl = "http://localhost:5024";
-
         private int _userId;
         private List<Notification> _notifications = new();
-        private NotificationSettings _settings = new();
 
-        private readonly Dictionary<string, List<string>> _motivationalMessages = new()
-        {
-            ["Motivational"] = new List<string>
-            {
-                "Ты сегодня уже на шаг ближе к своей цели!",
-                "Маленькие шаги приводят к большим результатам!",
-                "Помни, почему ты начал - это поможет не сдаваться!"
-            },
-            ["Achievements"] = new List<string>
-            {
-                "Поздравляем! Вы достигли новой цели!",
-                "Отличная работа! Вы выполнили недельный план!",
-                "Новый рекорд! Вы превзошли себя!"
-            },
-            ["Progress"] = new List<string>
-            {
-                "За неделю вы прошли на 15% больше!",
-                "Ваш прогресс впечатляет - продолжайте в том же духе!",
-                "Анализ показал, что вы стали выносливее на 20%"
-            }
-        };
+        // ID РґР»СЏ СЃРёСЃС‚РµРјРЅС‹С… СѓРІРµРґРѕРјР»РµРЅРёР№
+        private const int MotivationalNotificationId = 1000;
+        private const int AchievementNotificationId = 1001;
+        private const int ProgressNotificationId = 1002;
+        private const int TestNotificationId = 999;
+
+        // Р¤Р»Р°Рі РґР»СЏ Р±Р»РѕРєРёСЂРѕРІРєРё РјРЅРѕРіРѕРєСЂР°С‚РЅС‹С… РЅР°Р¶Р°С‚РёР№
+        private bool _isTestNotificationInProgress = false;
 
         public NotificationsPage(int userId)
         {
             InitializeComponent();
             _userId = userId;
             _httpClient.BaseAddress = new Uri(ApiBaseUrl);
-            LoadData();
+
+            LocalNotificationCenter.Current.NotificationActionTapped += OnNotificationTapped;
+            LoadNotificationSettings();
         }
 
         protected override void OnAppearing()
@@ -88,10 +46,20 @@ namespace FitnessTrackingApp.Pages
             LoadData();
         }
 
+        private void LoadNotificationSettings()
+        {
+            MotivationalSwitch.IsToggled = Preferences.Get("Notification_Motivational", true);
+            AchievementsSwitch.IsToggled = Preferences.Get("Notification_Achievements", true);
+            ProgressSwitch.IsToggled = Preferences.Get("Notification_Progress", true);
+            GeneralSwitch.IsToggled = Preferences.Get("Notification_General", true);
+            SoundSwitch.IsToggled = Preferences.Get("Notification_Sound", true);
+            VibrationSwitch.IsToggled = Preferences.Get("Notification_Vibration", true);
+        }
+
         private async void LoadData()
         {
             await LoadNotifications();
-            await LoadSettings();
+            UpdateSystemNotifications();
         }
 
         private async Task LoadNotifications()
@@ -104,42 +72,39 @@ namespace FitnessTrackingApp.Pages
                     _notifications = await response.Content.ReadFromJsonAsync<List<Notification>>() ?? new();
                     UpdateNotificationsUI();
                 }
-                else
-                {
-                    await DisplayAlert("Ошибка", "Не удалось загрузить напоминания", "OK");
-                }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Ошибка", $"Не удалось загрузить напоминания: {ex.Message}", "OK");
+                await DisplayAlert("РћС€РёР±РєР°", ex.Message, "OK");
             }
         }
 
-        private async Task LoadSettings()
+        private void UpdateSystemNotifications()
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"/notifications/settings/{_userId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    _settings = await response.Content.ReadFromJsonAsync<NotificationSettings>() ?? new();
+            CancelNotification(MotivationalNotificationId);
+            CancelNotification(AchievementNotificationId);
+            CancelNotification(ProgressNotificationId);
 
-                    MotivationalSwitch.IsToggled = _settings.MotivationalEnabled;
-                    AchievementsSwitch.IsToggled = _settings.AchievementsEnabled;
-                    ProgressSwitch.IsToggled = _settings.ProgressEnabled;
-                    GeneralSwitch.IsToggled = _settings.GeneralEnabled;
-                    SoundSwitch.IsToggled = _settings.SoundEnabled;
-                    VibrationSwitch.IsToggled = _settings.VibrationEnabled;
-                }
-                else
-                {
-                    await DisplayAlert("Ошибка", "Не удалось загрузить настройки", "OK");
-                }
-            }
-            catch (Exception ex)
+            if (MotivationalSwitch.IsToggled)
+                ScheduleMotivationalNotification();
+
+            if (AchievementsSwitch.IsToggled)
+                ScheduleAchievementNotification();
+
+            if (ProgressSwitch.IsToggled)
+                ScheduleProgressNotification();
+        }
+
+        private void OnNotificationTapped(NotificationActionEventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("Ошибка", $"Не удалось загрузить настройки: {ex.Message}", "OK");
-            }
+                if (e.Request.NotificationId == MotivationalNotificationId)
+                {
+                    await DisplayAlert("РњРѕС‚РёРІР°С†РёСЏ", "Р’С‹ СЃРµРіРѕРґРЅСЏ РїСЂРѕСЃС‚Рѕ РІРµР»РёРєРѕР»РµРїРЅС‹!", "OK");
+                }
+                await Shell.Current.GoToAsync("//notifications");
+            });
         }
 
         private void UpdateNotificationsUI()
@@ -151,6 +116,7 @@ namespace FitnessTrackingApp.Pages
                 var grid = new Grid { ColumnSpacing = 15, Margin = new Thickness(0, 10) };
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
                 var timeFrame = new Frame
@@ -190,13 +156,27 @@ namespace FitnessTrackingApp.Pages
                 var switchControl = new Switch
                 {
                     IsToggled = notification.IsActive,
-                    HorizontalOptions = LayoutOptions.End
+                    HorizontalOptions = LayoutOptions.End,
+                    BindingContext = notification
                 };
-                switchControl.Toggled += async (s, e) => await OnNotificationToggled(notification, e.Value);
+                switchControl.Toggled += OnNotificationToggled;
+
+                var deleteButton = new ImageButton
+                {
+                    Source = "delete.png",
+                    BackgroundColor = Colors.Transparent,
+                    HeightRequest = 30,
+                    WidthRequest = 30,
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.Center,
+                    BindingContext = notification
+                };
+                deleteButton.Clicked += OnDeleteNotificationClicked;
 
                 grid.Add(timeFrame, 0, 0);
                 grid.Add(contentStack, 1, 0);
                 grid.Add(switchControl, 2, 0);
+                grid.Add(deleteButton, 3, 0);
 
                 NotificationsContainer.Children.Add(grid);
             }
@@ -205,219 +185,421 @@ namespace FitnessTrackingApp.Pages
         private async Task ChangeNotificationTime(Notification notification, Label timeLabel)
         {
             var result = await DisplayPromptAsync(
-                "Изменить время",
-                "Введите новое время в формате HH:mm",
-                "Сохранить",
-                "Отмена",
+                "РР·РјРµРЅРёС‚СЊ РІСЂРµРјСЏ",
+                "Р’РІРµРґРёС‚Рµ РЅРѕРІРѕРµ РІСЂРµРјСЏ РІ С„РѕСЂРјР°С‚Рµ HH:mm",
+                "РЎРѕС…СЂР°РЅРёС‚СЊ",
+                "РћС‚РјРµРЅР°",
+                initialValue: notification.Time.ToString(@"hh\:mm"),
                 keyboard: Keyboard.Numeric);
 
-            if (!string.IsNullOrWhiteSpace(result))
+            if (!string.IsNullOrWhiteSpace(result) && TimeSpan.TryParse(result, out var newTime))
             {
-                if (TimeSpan.TryParse(result, out var newTime))
-                {
-                    notification.Time = newTime;
-                    timeLabel.Text = newTime.ToString(@"hh\:mm");
+                notification.Time = newTime;
+                timeLabel.Text = newTime.ToString(@"hh\:mm");
 
-                    var response = await _httpClient.PutAsJsonAsync(
-                        $"/notifications/{notification.Id}", notification);
+                var response = await _httpClient.PutAsJsonAsync($"/notifications/{notification.Id}", notification);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        await Toast.Make("Время напоминания изменено", ToastDuration.Short).Show();
-                    }
-                    else
-                    {
-                        await DisplayAlert("Ошибка", "Не удалось сохранить изменения", "OK");
-                    }
-                }
-                else
+                if (response.IsSuccessStatusCode)
                 {
-                    await DisplayAlert("Ошибка", "Некорректный формат времени", "OK");
+                    if (notification.IsActive)
+                    {
+                        CancelNotification(notification.Id);
+                        ScheduleNotification(notification);
+                    }
+                    await Toast.Make("Р’СЂРµРјСЏ РёР·РјРµРЅРµРЅРѕ", ToastDuration.Short).Show();
                 }
             }
+        }
+
+        private async void OnDeleteNotificationClicked(object sender, EventArgs e)
+        {
+            var button = (ImageButton)sender;
+            var notification = (Notification)button.BindingContext;
+
+            bool confirm = await DisplayAlert(
+                "РЈРґР°Р»РµРЅРёРµ",
+                $"РЈРґР°Р»РёС‚СЊ РЅР°РїРѕРјРёРЅР°РЅРёРµ '{notification.Title}'?",
+                "РЈРґР°Р»РёС‚СЊ",
+                "РћС‚РјРµРЅР°");
+
+            if (confirm)
+            {
+                var response = await _httpClient.DeleteAsync($"/notifications/{notification.Id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    _notifications.Remove(notification);
+                    CancelNotification(notification.Id);
+                    UpdateNotificationsUI();
+                    await Toast.Make("РќР°РїРѕРјРёРЅР°РЅРёРµ СѓРґР°Р»РµРЅРѕ", ToastDuration.Short).Show();
+                }
+            }
+        }
+
+        private async void OnNotificationToggled(object sender, ToggledEventArgs e)
+        {
+            var switchControl = (Switch)sender;
+            var notification = (Notification)switchControl.BindingContext;
+
+            notification.IsActive = e.Value;
+
+            var response = await _httpClient.PutAsJsonAsync($"/notifications/{notification.Id}", notification);
+
+            if (response.IsSuccessStatusCode)
+            {
+                if (e.Value)
+                    ScheduleNotification(notification);
+                else
+                    CancelNotification(notification.Id);
+            }
+            else
+            {
+                switchControl.IsToggled = !e.Value;
+            }
+        }
+
+        private void ScheduleNotification(Notification notification)
+        {
+            CancelNotification(notification.Id);
+
+            var now = DateTime.Now;
+            var notifyTime = DateTime.Today.Add(notification.Time);
+
+            if (notifyTime < now)
+            {
+                notifyTime = notifyTime.AddDays(1);
+            }
+
+            var request = new NotificationRequest
+            {
+                NotificationId = notification.Id,
+                Title = notification.Title,
+                Description = notification.Description,
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = notifyTime,
+                    RepeatType = NotificationRepeat.Daily
+                },
+                Android = new AndroidOptions
+                {
+                    ChannelId = "fitness_reminders",
+                    AutoCancel = true,
+                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                }
+            };
+
+            LocalNotificationCenter.Current.Show(request);
+        }
+
+        private void ScheduleMotivationalNotification()
+        {
+            var now = DateTime.Now;
+            var notifyTime = DateTime.Today.AddHours(12);
+
+            if (notifyTime < now)
+            {
+                notifyTime = notifyTime.AddDays(1);
+            }
+
+            var request = new NotificationRequest
+            {
+                NotificationId = MotivationalNotificationId,
+                Title = "рџ’Є РњРѕС‚РёРІР°С†РёСЏ РґРЅСЏ",
+                Description = GetRandomMotivationalMessage(),
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = notifyTime,
+                    RepeatType = NotificationRepeat.Daily
+                },
+                Android = new AndroidOptions
+                {
+                    ChannelId = "motivational_messages",
+                    AutoCancel = true,
+                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                }
+            };
+
+            LocalNotificationCenter.Current.Show(request);
+        }
+
+        private void ScheduleAchievementNotification()
+        {
+            var now = DateTime.Now;
+            var notifyTime = DateTime.Today.AddHours(20);
+
+            if (notifyTime < now)
+            {
+                notifyTime = notifyTime.AddDays(1);
+            }
+
+            var request = new NotificationRequest
+            {
+                NotificationId = AchievementNotificationId,
+                Title = "рџЏ† РџСЂРѕРІРµСЂРєР° РґРѕСЃС‚РёР¶РµРЅРёР№",
+                Description = "РџРѕСЂР° РїСЂРѕРІРµСЂРёС‚СЊ РІР°С€Рё СЃРїРѕСЂС‚РёРІРЅС‹Рµ РґРѕСЃС‚РёР¶РµРЅРёСЏ!",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = notifyTime,
+                    RepeatType = NotificationRepeat.Daily
+                },
+                Android = new AndroidOptions
+                {
+                    ChannelId = "achievement_notifications",
+                    AutoCancel = true,
+                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                }
+            };
+
+            LocalNotificationCenter.Current.Show(request);
+        }
+
+        private void ScheduleProgressNotification()
+        {
+            var now = DateTime.Now;
+            var notifyTime = DateTime.Today.AddHours(21);
+
+            if (notifyTime < now)
+            {
+                notifyTime = notifyTime.AddDays(1);
+            }
+
+            var request = new NotificationRequest
+            {
+                NotificationId = ProgressNotificationId,
+                Title = "рџ“Љ Р’Р°С€ РїСЂРѕРіСЂРµСЃСЃ",
+                Description = "РќРµ Р·Р°Р±СѓРґСЊС‚Рµ РІРЅРµСЃС‚Рё РґР°РЅРЅС‹Рµ Рѕ РІР°С€РµР№ Р°РєС‚РёРІРЅРѕСЃС‚Рё СЃРµРіРѕРґРЅСЏ",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = notifyTime,
+                    RepeatType = NotificationRepeat.Daily
+                },
+                Android = new AndroidOptions
+                {
+                    ChannelId = "progress_reports",
+                    AutoCancel = true,
+                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                }
+            };
+
+            LocalNotificationCenter.Current.Show(request);
+        }
+
+        private string GetRandomMotivationalMessage()
+        {
+            var messages = new List<string>
+            {
+                "РЎРµРіРѕРґРЅСЏ С‚РѕС‚ РґРµРЅСЊ, РєРѕРіРґР° РІС‹ СЃС‚Р°РЅРµС‚Рµ Р»СѓС‡С€Рµ!",
+                "Р’Р°С€ РїСЂРѕРіСЂРµСЃСЃ РІРїРµС‡Р°С‚Р»СЏРµС‚! РџСЂРѕРґРѕР»Р¶Р°Р№С‚Рµ РІ С‚РѕРј Р¶Рµ РґСѓС…Рµ!",
+                "РљР°Р¶РґР°СЏ С‚СЂРµРЅРёСЂРѕРІРєР° РґРµР»Р°РµС‚ РІР°СЃ СЃРёР»СЊРЅРµРµ!",
+                "РџРѕРјРЅРёС‚Рµ, РїРѕС‡РµРјСѓ РІС‹ РЅР°С‡Р°Р»Рё! Р’С‹ Р±Р»РёР¶Рµ Рє С†РµР»Рё, С‡РµРј РґСѓРјР°РµС‚Рµ!",
+                "РЈСЃРїРµС… вЂ” СЌС‚Рѕ СЃСѓРјРјР° РЅРµР±РѕР»СЊС€РёС… СѓСЃРёР»РёР№, РїРѕРІС‚РѕСЂСЏРµРјС‹С… РёР·Рѕ РґРЅСЏ РІ РґРµРЅСЊ!"
+            };
+
+            return messages[new Random().Next(messages.Count)];
+        }
+
+        private void CancelNotification(int notificationId)
+        {
+            LocalNotificationCenter.Current.Cancel(notificationId);
         }
 
         private async void OnAddNotificationClicked(object sender, EventArgs e)
         {
             var result = await DisplayActionSheet(
-                "Добавить напоминание",
-                "Отмена",
+                "Р”РѕР±Р°РІРёС‚СЊ РЅР°РїРѕРјРёРЅР°РЅРёРµ",
+                "РћС‚РјРµРЅР°",
                 null,
-                "Прием пищи", "Тренировка", "Вода", "Другое");
+                "РџСЂРёРµРј РїРёС‰Рё", "РўСЂРµРЅРёСЂРѕРІРєР°", "Р’РѕРґР°", "Р”СЂСѓРіРѕРµ");
 
-            if (result != "Отмена" && result != null)
+            if (result != "РћС‚РјРµРЅР°")
             {
                 var timeResult = await DisplayPromptAsync(
-                    "Укажите время",
-                    "Введите время в формате HH:mm",
-                    "Добавить",
-                    "Отмена",
+                    "Р’РІРµРґРёС‚Рµ РІСЂРµРјСЏ",
+                    "Р¤РѕСЂРјР°С‚ HH:mm",
+                    "OK",
+                    "РћС‚РјРµРЅР°",
                     keyboard: Keyboard.Numeric);
 
-                if (!string.IsNullOrWhiteSpace(timeResult) &&
-                    TimeSpan.TryParse(timeResult, out var time))
+                if (!string.IsNullOrWhiteSpace(timeResult) && TimeSpan.TryParse(timeResult, out var time))
                 {
                     var newNotification = new Notification
                     {
                         UserId = _userId,
                         Title = result,
-                        Description = GetDefaultDescription(result),
+                        Description = GetDescription(result),
                         Time = time,
-                        Type = GetNotificationType(result),
                         IsActive = true
                     };
 
-                    var response = await _httpClient.PostAsJsonAsync(
-                        "/notifications", newNotification);
-
+                    var response = await _httpClient.PostAsJsonAsync("/notifications", newNotification);
                     if (response.IsSuccessStatusCode)
                     {
                         var createdNotification = await response.Content.ReadFromJsonAsync<Notification>();
                         _notifications.Add(createdNotification);
                         UpdateNotificationsUI();
-                        await Toast.Make("Напоминание добавлено", ToastDuration.Short).Show();
-                    }
-                    else
-                    {
-                        await DisplayAlert("Ошибка", "Не удалось добавить напоминание", "OK");
+                        ScheduleNotification(createdNotification);
+                        await Toast.Make("РќР°РїРѕРјРёРЅР°РЅРёРµ РґРѕР±Р°РІР»РµРЅРѕ", ToastDuration.Short).Show();
                     }
                 }
             }
         }
 
-        private async Task OnNotificationToggled(Notification notification, bool isActive)
+        private string GetDescription(string title)
         {
-            notification.IsActive = isActive;
-
-            var response = await _httpClient.PutAsJsonAsync(
-                $"/notifications/{notification.Id}/status", isActive);
-
-            if (!response.IsSuccessStatusCode)
+            return title switch
             {
-                await DisplayAlert("Ошибка", "Не удалось обновить статус напоминания", "OK");
-                notification.IsActive = !isActive; // Откатываем изменение
-                UpdateNotificationsUI();
+                "РџСЂРёРµРј РїРёС‰Рё" => "РќРµ Р·Р°Р±СѓРґСЊС‚Рµ РїРѕРµСЃС‚СЊ",
+                "РўСЂРµРЅРёСЂРѕРІРєР°" => "Р’СЂРµРјСЏ С‚СЂРµРЅРёСЂРѕРІРєРё",
+                "Р’РѕРґР°" => "Р’С‹РїРµР№С‚Рµ СЃС‚Р°РєР°РЅ РІРѕРґС‹",
+                _ => "РџРµСЂСЃРѕРЅР°Р»РёР·РёСЂРѕРІР°РЅРЅРѕРµ РЅР°РїРѕРјРёРЅР°РЅРёРµ"
+            };
+        }
+
+        private void OnSettingToggled(object sender, ToggledEventArgs e)
+        {
+            if (sender is not Switch switchControl)
+                return;
+
+            string settingType = switchControl.StyleId;
+            bool isEnabled = e.Value;
+
+            Preferences.Set($"Notification_{settingType}", isEnabled);
+
+            switch (settingType)
+            {
+                case "Motivational":
+                    if (isEnabled)
+                        ScheduleMotivationalNotification();
+                    else
+                        CancelNotification(MotivationalNotificationId);
+                    break;
+
+                case "Achievements":
+                    if (isEnabled)
+                        ScheduleAchievementNotification();
+                    else
+                        CancelNotification(AchievementNotificationId);
+                    break;
+
+                case "Progress":
+                    if (isEnabled)
+                        ScheduleProgressNotification();
+                    else
+                        CancelNotification(ProgressNotificationId);
+                    break;
+
+                case "General":
+                    if (!isEnabled)
+                    {
+                        MotivationalSwitch.IsToggled = false;
+                        AchievementsSwitch.IsToggled = false;
+                        ProgressSwitch.IsToggled = false;
+                    }
+                    break;
+
+                case "Sound":
+                case "Vibration":
+                    UpdateAllActiveNotifications();
+                    break;
             }
+
+            Toast.Make($"РќР°СЃС‚СЂРѕР№РєР° '{GetSettingName(settingType)}' {(isEnabled ? "РІРєР»СЋС‡РµРЅР°" : "РІС‹РєР»СЋС‡РµРЅР°")}",
+                      ToastDuration.Short).Show();
+        }
+
+        private void UpdateAllActiveNotifications()
+        {
+            foreach (var notification in _notifications.Where(n => n.IsActive))
+            {
+                CancelNotification(notification.Id);
+                ScheduleNotification(notification);
+            }
+
+            if (MotivationalSwitch.IsToggled)
+            {
+                CancelNotification(MotivationalNotificationId);
+                ScheduleMotivationalNotification();
+            }
+
+            if (AchievementsSwitch.IsToggled)
+            {
+                CancelNotification(AchievementNotificationId);
+                ScheduleAchievementNotification();
+            }
+
+            if (ProgressSwitch.IsToggled)
+            {
+                CancelNotification(ProgressNotificationId);
+                ScheduleProgressNotification();
+            }
+        }
+
+        private string GetSettingName(string settingType)
+        {
+            return settingType switch
+            {
+                "Motivational" => "РњРѕС‚РёРІР°С†РёРѕРЅРЅС‹Рµ СѓРІРµРґРѕРјР»РµРЅРёСЏ",
+                "Achievements" => "РЈРІРµРґРѕРјР»РµРЅРёСЏ Рѕ РґРѕСЃС‚РёР¶РµРЅРёСЏС…",
+                "Progress" => "РќР°РїРѕРјРёРЅР°РЅРёСЏ Рѕ РїСЂРѕРіСЂРµСЃСЃРµ",
+                "General" => "РћР±С‰РёРµ СѓРІРµРґРѕРјР»РµРЅРёСЏ",
+                "Sound" => "Р—РІСѓРєРѕРІС‹Рµ РѕРїРѕРІРµС‰РµРЅРёСЏ",
+                "Vibration" => "Р’РёР±СЂРѕРѕРїРѕРІРµС‰РµРЅРёСЏ",
+                _ => "РќРµРёР·РІРµСЃС‚РЅР°СЏ РЅР°СЃС‚СЂРѕР№РєР°"
+            };
         }
 
         private async void OnViewMessagesClicked(object sender, EventArgs e)
         {
-            var category = await DisplayActionSheet(
-                "Выберите тип сообщений",
-                "Отмена",
-                null,
-                "Мотивационные", "Достижения", "Прогресс");
-
-            if (category != null && category != "Отмена")
-            {
-                var key = category switch
-                {
-                    "Мотивационные" => "Motivational",
-                    "Достижения" => "Achievements",
-                    "Прогресс" => "Progress",
-                    _ => ""
-                };
-
-                if (!string.IsNullOrEmpty(key) && _motivationalMessages.ContainsKey(key))
-                {
-                    var message = string.Join("\n\n", _motivationalMessages[key]);
-                    await DisplayAlert($"Примеры {category.ToLower()} сообщений", message, "Понятно");
-                }
-            }
+            await DisplayAlert("РџСЂРёРјРµСЂС‹ СЃРѕРѕР±С‰РµРЅРёР№",
+                string.Join("\n\n", new[] {
+                    "рџ’Є Р’С‹ СѓР¶Рµ РЅР° 75% РїСѓС‚Рё Рє РІР°С€РµР№ С†РµР»Рё!",
+                    "рџЏ‹пёЏ РЎРµРіРѕРґРЅСЏ РѕС‚Р»РёС‡РЅС‹Р№ РґРµРЅСЊ РґР»СЏ СЃРёР»РѕРІРѕР№ С‚СЂРµРЅРёСЂРѕРІРєРё!",
+                    "рџҐ— РќРµ Р·Р°Р±СѓРґСЊС‚Рµ РїСЂРѕ РїСЂР°РІРёР»СЊРЅРѕРµ РїРёС‚Р°РЅРёРµ РїРѕСЃР»Рµ С‚СЂРµРЅРёСЂРѕРІРєРё",
+                    "рџЊџ Р’С‹ РґРµР»Р°РµС‚Рµ РїРѕС‚СЂСЏСЃР°СЋС‰РёРµ СѓСЃРїРµС…Рё! РўР°Рє РґРµСЂР¶Р°С‚СЊ!"
+                }),
+                "Р—Р°РєСЂС‹С‚СЊ");
         }
 
-        private async void OnSelectTimeClicked(object sender, EventArgs e)
+        private async void OnTestNotificationClicked(object sender, EventArgs e)
         {
-            var result = await DisplayPromptAsync(
-                "Выбор времени уведомлений",
-                "Введите время в формате HH:mm",
-                "Сохранить",
-                "Отмена",
-                keyboard: Keyboard.Numeric);
+            if (_isTestNotificationInProgress)
+                return;
 
-            if (!string.IsNullOrWhiteSpace(result))
-            {
-                if (TimeSpan.TryParse(result, out var time))
-                {
-                    _settings.NotificationTime = time;
-                    await SaveSettings();
-                    await Toast.Make($"Время уведомлений установлено на {time:hh\\:mm}", ToastDuration.Short).Show();
-                }
-                else
-                {
-                    await DisplayAlert("Ошибка", "Некорректный формат времени", "OK");
-                }
-            }
-        }
-
-        private async void OnSettingToggled(object sender, ToggledEventArgs e)
-        {
-            var switchControl = (Switch)sender;
-            var settingName = switchControl.StyleId;
-
-            switch (settingName)
-            {
-                case "Motivational":
-                    _settings.MotivationalEnabled = e.Value;
-                    break;
-                case "Achievements":
-                    _settings.AchievementsEnabled = e.Value;
-                    break;
-                case "Progress":
-                    _settings.ProgressEnabled = e.Value;
-                    break;
-                case "General":
-                    _settings.GeneralEnabled = e.Value;
-                    break;
-                case "Sound":
-                    _settings.SoundEnabled = e.Value;
-                    break;
-                case "Vibration":
-                    _settings.VibrationEnabled = e.Value;
-                    break;
-            }
-
-            await SaveSettings();
-        }
-
-        private async Task SaveSettings()
-        {
             try
             {
-                var response = await _httpClient.PutAsJsonAsync(
-                    $"/notifications/settings/{_userId}", _settings);
+                _isTestNotificationInProgress = true;
 
-                if (!response.IsSuccessStatusCode)
+                CancelNotification(TestNotificationId);
+
+                var request = new NotificationRequest
                 {
-                    await DisplayAlert("Ошибка", "Не удалось сохранить настройки", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Ошибка", $"Не удалось сохранить настройки: {ex.Message}", "OK");
-            }
-        }
+                    NotificationId = TestNotificationId,
+                    Title = "РўРµСЃС‚РѕРІРѕРµ СѓРІРµРґРѕРјР»РµРЅРёРµ",
+                    Description = "РџСЂРѕРІРµСЂРєР° СЂР°Р±РѕС‚С‹ СЃРёСЃС‚РµРјС‹ СѓРІРµРґРѕРјР»РµРЅРёР№",
+                    Android = new AndroidOptions
+                    {
+                        ChannelId = "test_notifications",
+                        AutoCancel = true,
+                        VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                    }
+                };
 
-        private string GetDefaultDescription(string title)
-        {
-            return title switch
+                LocalNotificationCenter.Current.Show(request);
+                await Toast.Make("РўРµСЃС‚РѕРІРѕРµ СѓРІРµРґРѕРјР»РµРЅРёРµ РѕС‚РїСЂР°РІР»РµРЅРѕ", ToastDuration.Short).Show();
+            }
+            finally
             {
-                "Прием пищи" => "Основной прием пищи",
-                "Тренировка" => "Запланированная тренировка",
-                "Вода" => "Стакан воды",
-                _ => "Персонализированное напоминание"
-            };
+                _isTestNotificationInProgress = false;
+            }
         }
+    }
 
-        private NotificationType GetNotificationType(string title)
-        {
-            return title switch
-            {
-                "Прием пищи" => NotificationType.Meal,
-                "Тренировка" => NotificationType.Workout,
-                "Вода" => NotificationType.Water,
-                _ => NotificationType.Custom
-            };
-        }
+    public class Notification
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public TimeSpan Time { get; set; }
+        public bool IsActive { get; set; }
     }
 }
