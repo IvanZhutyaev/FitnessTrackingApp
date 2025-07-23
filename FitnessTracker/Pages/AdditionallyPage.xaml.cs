@@ -19,10 +19,10 @@ public partial class AdditionallyPage : ContentPage
     private async void OnAboutAppTapped(object sender, EventArgs e)
     {
         await DisplayAlert("О приложении",
-            "FitnessTracker v1.0\n\n" +
+            "FitnessTrackingApp v1.0\n\n" +
             "Ваш надежный помощник в мире фитнеса\n\n" +
-            "Разработчик: FitnessTeam\n" +
-            "Контакты: support@fitnesstracker.com",
+            "Разработчики: Жутяев Иван, Ломовской Артём\n" +
+            "Контакты: https://github.com/IvanZhutyaev",
             "Понятно");
     }
 
@@ -30,7 +30,7 @@ public partial class AdditionallyPage : ContentPage
     {
         try
         {
-            await Launcher.OpenAsync("https://t.me/fitness_support_bot");
+            await Launcher.OpenAsync("https://t.me/FitnessTrackingAppBot");
         }
         catch
         {
@@ -49,7 +49,7 @@ public partial class AdditionallyPage : ContentPage
     {
         try
         {
-            await Launcher.OpenAsync("https://vk.com/fitness_community");
+            await Launcher.OpenAsync("https://vk.com/fitnesstrackingappVK");
         }
         catch
         {

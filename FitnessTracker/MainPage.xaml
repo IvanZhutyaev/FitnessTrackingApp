@@ -26,7 +26,6 @@
             <VerticalStackLayout Spacing="0">
                 <!-- Шапка -->
                 <Grid HeightRequest="280" BackgroundColor="#1A3A6F">
-                    <Image Source="fitness_bg.jpg" Aspect="AspectFill" Opacity="0.2"/>
                     <VerticalStackLayout VerticalOptions="Center" Padding="30" Spacing="15">
                         <Label Text="FITNESS TRACKER" 
                                FontSize="28"
