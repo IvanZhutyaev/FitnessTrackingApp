@@ -441,6 +441,7 @@ public class NotificationSettings
     public bool GeneralEnabled { get; set; } = true;
     public bool SoundEnabled { get; set; } = true;
     public bool VibrationEnabled { get; set; } = true;
+    public TimeSpan NotificationTime { get; set; } = new TimeSpan(9, 0, 0); // Добавлено новое свойство
 }
 // Контекст базы данных
 public class AppDbContext : DbContext

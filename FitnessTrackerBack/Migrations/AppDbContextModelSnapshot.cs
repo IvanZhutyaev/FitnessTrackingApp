@@ -136,6 +136,9 @@ namespace FitnessTrackerBack.Migrations
                     b.Property<bool>("MotivationalEnabled")
                         .HasColumnType("boolean");
 
+                    b.Property<TimeSpan>("NotificationTime")
+                        .HasColumnType("interval");
+
                     b.Property<bool>("ProgressEnabled")
                         .HasColumnType("boolean");
 
