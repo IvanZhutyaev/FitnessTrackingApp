@@ -29,65 +29,44 @@
                             BackgroundColor="#00C9FF"
                             TextColor="#0C1B33"
                             FontAttributes="Bold"
-                            CornerRadius="10"/>
+                            CornerRadius="10"
+                            x:Name="AddNotificationButton"
+                            Clicked="OnAddNotificationClicked"/>
 
                     <!-- Список напоминаний -->
-                    <Grid ColumnSpacing="15" Margin="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
+                    <VerticalStackLayout x:Name="NotificationsContainer" Spacing="10">
+                        <!-- Пример элемента напоминания (будет заполняться динамически) -->
+                        <Grid ColumnSpacing="15" Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Frame CornerRadius="10"
-                               BackgroundColor="#1A3A6F"
-                               Padding="10"
-                               HeightRequest="60">
-                            <Label Text="08:30" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
-                        </Frame>
+                            <Frame CornerRadius="10"
+                                   BackgroundColor="#1A3A6F"
+                                   Padding="10"
+                                   HeightRequest="60">
+                                <Label Text="08:30" 
+                                       FontSize="18" 
+                                       TextColor="White" 
+                                       HorizontalOptions="Center"/>
+                            </Frame>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Label Text="Прием пищи" TextColor="White" FontAttributes="Bold"/>
-                            <Label Text="Завтрак" TextColor="#5D8CC0"/>
-                        </VerticalStackLayout>
-                    </Grid>
+                            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                <Label Text="Прием пищи" 
+                                       TextColor="White" 
+                                       FontAttributes="Bold"/>
+                                <Label Text="Завтрак" 
+                                       TextColor="#5D8CC0"/>
+                            </VerticalStackLayout>
 
-                    <Grid ColumnSpacing="15" Margin="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Frame CornerRadius="10"
-                               BackgroundColor="#1A3A6F"
-                               Padding="10"
-                               HeightRequest="60">
-                            <Label Text="12:00" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
-                        </Frame>
-
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Label Text="Тренировка" TextColor="White" FontAttributes="Bold"/>
-                            <Label Text="Силовая тренировка" TextColor="#5D8CC0"/>
-                        </VerticalStackLayout>
-                    </Grid>
-
-                    <Grid ColumnSpacing="15" Margin="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Frame CornerRadius="10"
-                               BackgroundColor="#1A3A6F"
-                               Padding="10"
-                               HeightRequest="60">
-                            <Label Text="15:00" FontSize="18" TextColor="White" HorizontalOptions="Center"/>
-                        </Frame>
-
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Label Text="Вода" TextColor="White" FontAttributes="Bold"/>
-                            <Label Text="Стакан воды" TextColor="#5D8CC0"/>
-                        </VerticalStackLayout>
-                    </Grid>
+                            <Switch Grid.Column="2" 
+                                    IsToggled="True"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Frame>
 
@@ -117,7 +96,11 @@
                                    FontSize="14"/>
                         </VerticalStackLayout>
 
-                        <Switch Grid.Column="1" IsToggled="True"/>
+                        <Switch Grid.Column="1" 
+                                IsToggled="True"
+                                x:Name="MotivationalSwitch"
+                                StyleId="Motivational"
+                                Toggled="OnSettingToggled"/>
                     </Grid>
 
                     <Grid ColumnSpacing="15" Margin="0,10">
@@ -135,7 +118,11 @@
                                    FontSize="14"/>
                         </VerticalStackLayout>
 
-                        <Switch Grid.Column="1" IsToggled="True"/>
+                        <Switch Grid.Column="1" 
+                                IsToggled="True"
+                                x:Name="AchievementsSwitch"
+                                StyleId="Achievements"
+                                Toggled="OnSettingToggled"/>
                     </Grid>
 
                     <Grid ColumnSpacing="15" Margin="0,10">
@@ -153,7 +140,11 @@
                                    FontSize="14"/>
                         </VerticalStackLayout>
 
-                        <Switch Grid.Column="1" IsToggled="True"/>
+                        <Switch Grid.Column="1" 
+                                IsToggled="True"
+                                x:Name="ProgressSwitch"
+                                StyleId="Progress"
+                                Toggled="OnSettingToggled"/>
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
@@ -178,7 +169,11 @@
                         <Label Text="Общие уведомления" 
                                TextColor="White"
                                FontSize="16"/>
-                        <Switch Grid.Column="1" IsToggled="True"/>
+                        <Switch Grid.Column="1" 
+                                IsToggled="True"
+                                x:Name="GeneralSwitch"
+                                StyleId="General"
+                                Toggled="OnSettingToggled"/>
                     </Grid>
 
                     <Grid ColumnSpacing="15" Margin="0,10">
@@ -190,7 +185,11 @@
                         <Label Text="Звуковые оповещения" 
                                TextColor="White"
                                FontSize="16"/>
-                        <Switch Grid.Column="1" IsToggled="True"/>
+                        <Switch Grid.Column="1" 
+                                IsToggled="True"
+                                x:Name="SoundSwitch"
+                                StyleId="Sound"
+                                Toggled="OnSettingToggled"/>
                     </Grid>
 
                     <Grid ColumnSpacing="15" Margin="0,10">
@@ -202,14 +201,20 @@
                         <Label Text="Виброоповещения" 
                                TextColor="White"
                                FontSize="16"/>
-                        <Switch Grid.Column="1" IsToggled="True"/>
+                        <Switch Grid.Column="1" 
+                                IsToggled="True"
+                                x:Name="VibrationSwitch"
+                                StyleId="Vibration"
+                                Toggled="OnSettingToggled"/>
                     </Grid>
 
                     <Button Text="Выбрать время уведомлений"
                             BackgroundColor="#2A4D80"
                             TextColor="#A0E7FF"
                             CornerRadius="10"
-                            Margin="0,10"/>
+                            Margin="0,10"
+                            x:Name="SelectTimeButton"
+                            Clicked="OnSelectTimeClicked"/>
                 </VerticalStackLayout>
             </Frame>
         </VerticalStackLayout>

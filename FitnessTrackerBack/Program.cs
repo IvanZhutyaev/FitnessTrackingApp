@@ -244,6 +244,72 @@ app.MapGet("/workouthistory/details/{id}", async (int id, AppDbContext db) =>
     Console.WriteLine($"Найдена тренировка: {workout.WorkoutName}");
     return Results.Ok(workout);
 });
+// Уведомления
+app.MapGet("/notifications/{userId}", async (int userId, AppDbContext db) =>
+{
+    var notifications = await db.Notifications
+        .Where(n => n.UserId == userId)
+        .OrderBy(n => n.Time)
+        .ToListAsync();
+    return Results.Ok(notifications);
+});
+
+app.MapPost("/notifications", async (Notification notification, AppDbContext db) =>
+{
+    db.Notifications.Add(notification);
+    await db.SaveChangesAsync();
+    return Results.Created($"/notifications/{notification.Id}", notification);
+});
+
+app.MapPut("/notifications/{id}/status", async (int id, bool isActive, AppDbContext db) =>
+{
+    var notification = await db.Notifications.FindAsync(id);
+    if (notification == null) return Results.NotFound();
+
+    notification.IsActive = isActive;
+    await db.SaveChangesAsync();
+    return Results.Ok(notification);
+});
+
+app.MapDelete("/notifications/{id}", async (int id, AppDbContext db) =>
+{
+    var notification = await db.Notifications.FindAsync(id);
+    if (notification == null) return Results.NotFound();
+
+    db.Notifications.Remove(notification);
+    await db.SaveChangesAsync();
+    return Results.NoContent();
+});
+
+// Настройки уведомлений
+app.MapGet("/notifications/settings/{userId}", async (int userId, AppDbContext db) =>
+{
+    var settings = await db.NotificationSettings.FirstOrDefaultAsync(n => n.UserId == userId);
+    if (settings == null)
+    {
+        // Создаем настройки по умолчанию
+        settings = new NotificationSettings { UserId = userId };
+        db.NotificationSettings.Add(settings);
+        await db.SaveChangesAsync();
+    }
+    return Results.Ok(settings);
+});
+
+app.MapPut("/notifications/settings/{userId}", async (int userId, NotificationSettings updatedSettings, AppDbContext db) =>
+{
+    var settings = await db.NotificationSettings.FirstOrDefaultAsync(n => n.UserId == userId);
+    if (settings == null) return Results.NotFound();
+
+    settings.MotivationalEnabled = updatedSettings.MotivationalEnabled;
+    settings.AchievementsEnabled = updatedSettings.AchievementsEnabled;
+    settings.ProgressEnabled = updatedSettings.ProgressEnabled;
+    settings.GeneralEnabled = updatedSettings.GeneralEnabled;
+    settings.SoundEnabled = updatedSettings.SoundEnabled;
+    settings.VibrationEnabled = updatedSettings.VibrationEnabled;
+
+    await db.SaveChangesAsync();
+    return Results.Ok(settings);
+});
 // Запуск приложения
 app.Run();
 
@@ -346,6 +412,36 @@ public class WorkoutDetailResponse
     public DateTime Date { get; set; }
     public string Notes { get; set; } = string.Empty;
 }
+public class Notification
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public TimeSpan Time { get; set; }
+    public bool IsActive { get; set; } = true;
+    public NotificationType Type { get; set; }
+}
+
+public enum NotificationType
+{
+    Meal,
+    Workout,
+    Water,
+    Custom
+}
+
+public class NotificationSettings
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public bool MotivationalEnabled { get; set; } = true;
+    public bool AchievementsEnabled { get; set; } = true;
+    public bool ProgressEnabled { get; set; } = true;
+    public bool GeneralEnabled { get; set; } = true;
+    public bool SoundEnabled { get; set; } = true;
+    public bool VibrationEnabled { get; set; } = true;
+}
 // Контекст базы данных
 public class AppDbContext : DbContext
 {
@@ -355,4 +451,6 @@ public class AppDbContext : DbContext
     public DbSet<Activity> Activities => Set<Activity>();
     public DbSet<Exercise> Exercises => Set<Exercise>();
     public DbSet<WorkoutHistory> WorkoutHistory => Set<WorkoutHistory>(); // Добавьте эту строку
+    public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<NotificationSettings> NotificationSettings => Set<NotificationSettings>();
 } 

@@ -283,7 +283,7 @@ namespace FitnessTrackingApp
         private async void OnNotificationsTapped(object sender, EventArgs e)
         {
             //await DisplayAlert("Уведомления", "Переход на страницу уведомлений", "OK");
-            await Navigation.PushAsync(new Pages.NotificationsPage());
+            await Navigation.PushAsync(new Pages.NotificationsPage(UserSession.UserId));
         }
 
         private async void OnAdditionallyTapped(object sender, EventArgs e)
