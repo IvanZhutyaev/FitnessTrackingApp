@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTrackingApp.Pages.AdditionallyPage"
+             Title="Настройки"
+             BackgroundColor="#0C1B33">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Заголовок -->
+            <Label Text="⚙️ Настройки"
+                   FontSize="24"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <!-- Тема -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Тема приложения"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnSpacing="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Text="Светлая"
+                                BackgroundColor="#2A4D80"
+                                TextColor="#A0E7FF"
+                                CornerRadius="10"/>
+
+                        <Button Grid.Column="1"
+                                Text="Темная"
+                                BackgroundColor="#00C9FF"
+                                TextColor="#0C1B33"
+                                FontAttributes="Bold"
+                                CornerRadius="10"/>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Следовать системным настройкам" 
+                               TextColor="White"
+                               FontSize="16"/>
+                        <Switch Grid.Column="1" IsToggled="True"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Единицы измерения -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Единицы измерения"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnSpacing="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Вес" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Picker ItemsSource="{Binding WeightUnits}" 
+                                    SelectedIndex="0"
+                                    BackgroundColor="#1A3A6F"
+                                    TextColor="White"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Расстояние" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Picker ItemsSource="{Binding DistanceUnits}" 
+                                    SelectedIndex="0"
+                                    BackgroundColor="#1A3A6F"
+                                    TextColor="White"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Энергия" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Picker ItemsSource="{Binding EnergyUnits}" 
+                                    SelectedIndex="0"
+                                    BackgroundColor="#1A3A6F"
+                                    TextColor="White"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Объем" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Picker ItemsSource="{Binding VolumeUnits}" 
+                                    SelectedIndex="0"
+                                    BackgroundColor="#1A3A6F"
+                                    TextColor="White"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Синхронизация -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Синхронизация данных"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnSpacing="15" VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="google_fit.png" HeightRequest="40" WidthRequest="40"/>
+                        <Label Text="Google Fit" Grid.Column="1" TextColor="White" VerticalOptions="Center"/>
+                        <Switch Grid.Column="2" IsToggled="True"/>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" VerticalOptions="Center" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="apple_health.png" HeightRequest="40" WidthRequest="40"/>
+                        <Label Text="Apple Health" Grid.Column="1" TextColor="White" VerticalOptions="Center"/>
+                        <Switch Grid.Column="2"/>
+                    </Grid>
+
+                    <Grid ColumnSpacing="15" VerticalOptions="Center" Margin="0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="fitbit.png" HeightRequest="40" WidthRequest="40"/>
+                        <Label Text="Fitbit" Grid.Column="1" TextColor="White" VerticalOptions="Center"/>
+                        <Switch Grid.Column="2"/>
+                    </Grid>
+
+                    <Button Text="Синхронизировать сейчас"
+                            BackgroundColor="#00C9FF"
+                            TextColor="#0C1B33"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            Margin="0,10"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Прочие настройки -->
+            <Frame CornerRadius="15"
+                   BackgroundColor="#152642"
+                   BorderColor="#2A4D80"
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Прочие настройки"
+                           FontSize="18"
+                           TextColor="#00C9FF"
+                           FontAttributes="Bold"/>
+
+                    <Button Text="Управление аккаунтом"
+                            BackgroundColor="#2A4D80"
+                            TextColor="#A0E7FF"
+                            CornerRadius="10"/>
+
+                    <Button Text="Резервное копирование данных"
+                            BackgroundColor="#2A4D80"
+                            TextColor="#A0E7FF"
+                            CornerRadius="10"
+                            Margin="0,10"/>
+
+                    <Button Text="О приложении"
+                            BackgroundColor="#2A4D80"
+                            TextColor="#A0E7FF"
+                            CornerRadius="10"
+                            Margin="0,10"/>
+
+                    <Button Text="Помощь и поддержка"
+                            BackgroundColor="#2A4D80"
+                            TextColor="#A0E7FF"
+                            CornerRadius="10"
+                            Margin="0,10"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

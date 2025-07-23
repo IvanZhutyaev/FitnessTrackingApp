@@ -192,7 +192,7 @@
                         </Grid.GestureRecognizers>
                     </Grid>
 
-                    <!-- Настройки -->
+                    <!-- Дополнительно -->
                     <Grid Margin="0,0,0,40">
                         <Frame CornerRadius="20" 
                                BackgroundColor="#152642"
@@ -202,18 +202,18 @@
                             <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15" Padding="20">
                                 <Label Text="⚙️" FontSize="32" VerticalOptions="Center"/>
                                 <VerticalStackLayout Grid.Column="1">
-                                    <Label Text="Настройки" 
+                                    <Label Text="Дополнительно" 
                                            FontSize="20" 
                                            TextColor="White" 
                                            FontAttributes="Bold"/>
-                                    <Label Text="Тема, единицы измерения, синхронизация" 
+                                    <Label Text="О приложении, тех-поддержка, резервное копирование" 
                                            TextColor="#A0E7FF"
                                            FontSize="14"/>
                                 </VerticalStackLayout>
                             </Grid>
                         </Frame>
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnSettingsTapped"/>
+                            <TapGestureRecognizer Tapped="OnAdditionallyTapped"/>
                         </Grid.GestureRecognizers>
                     </Grid>
                 </VerticalStackLayout>

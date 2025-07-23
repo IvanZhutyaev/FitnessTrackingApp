@@ -286,10 +286,10 @@ namespace FitnessTrackingApp
             await Navigation.PushAsync(new Pages.NotificationsPage());
         }
 
-        private async void OnSettingsTapped(object sender, EventArgs e)
+        private async void OnAdditionallyTapped(object sender, EventArgs e)
         {
             //await DisplayAlert("Настройки", "Переход на страницу настроек", "OK");
-            await Navigation.PushAsync(new Pages.SettingsPage());
+            await Navigation.PushAsync(new Pages.AdditionallyPage());
         }
     }
 

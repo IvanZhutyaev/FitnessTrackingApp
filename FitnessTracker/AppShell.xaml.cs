@@ -8,6 +8,8 @@ namespace FitnessTrackingApp
             InitializeComponent();
             Routing.RegisterRoute("MainPage", typeof(MainPage));
             Routing.RegisterRoute("ProfilePage", typeof(ProfilePage));
+            Routing.RegisterRoute("WorkoutsPage", typeof(WorkoutsPage));
+            Routing.RegisterRoute("AdditionallyPage", typeof(AdditionallyPage));
         }
     }
 }
