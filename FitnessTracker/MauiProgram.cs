@@ -26,8 +26,11 @@ namespace FitnessTrackingApp
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+            var app = builder.Build();
 
-            return builder.Build();
+            ServiceHelper.Services = app.Services;
+
+            return app;
         }
     }
 }

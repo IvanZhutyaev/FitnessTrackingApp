@@ -5,6 +5,12 @@ namespace FitnessTrackingApp.Services
 {
     public class StepsService : IStepsService
     {
+
+        //Убрать после полной реализации
+        #if DEBUG
+        private System.Timers.Timer? _debugTimer;
+        #endif
+
         private int _steps = 0;
         private Vector3 _lastAcceleration;
         private bool _isFirst = true;
@@ -19,7 +25,19 @@ namespace FitnessTrackingApp.Services
         {
             _steps = 0;
             _isFirst = true;
-            Accelerometer.Start(SensorSpeed.UI);
+            try
+            {
+                Accelerometer.Start(SensorSpeed.UI);
+            }
+            catch
+            { 
+                #if DEBUG
+                    // Для отладки, если устройство не поддерживает акселерометр
+                    _debugTimer = new System.Timers.Timer(1000);
+                    _debugTimer.Elapsed += (s, e) => _steps++;
+                    _debugTimer.Start();
+                #endif
+            }
         }
 
         public void Stop()
