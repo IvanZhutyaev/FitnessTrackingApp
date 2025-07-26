@@ -197,7 +197,7 @@ app.MapPost("/user/updateprofile", async (UserProfileDto request, AppDbContext d
 });
 
 
-// Удаление упражнения
+
 app.MapDelete("/exercises/{id}", async (int id, AppDbContext db) =>
 {
     var exercise = await db.Exercises.FindAsync(id);
@@ -207,7 +207,7 @@ app.MapDelete("/exercises/{id}", async (int id, AppDbContext db) =>
     await db.SaveChangesAsync();
     return Results.NoContent();
 });
-// Перед app.Run() добавьте:
+
 app.MapPost("/workouthistory", async (WorkoutHistory history, AppDbContext db) =>
 {
     // Добавьте проверку и значения по умолчанию

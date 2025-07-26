@@ -18,7 +18,10 @@ namespace FitnessTrackingApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
+                .Services.AddSingleton<IStepsService, FitnessTrackingApp.Services.StepsService>()
+
+                ;
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -6,6 +6,11 @@
         {
             InitializeComponent();
             
+
+            var stepService = ServiceHelper.GetService<IStepsService>();
+            stepService.Start();
+
+
             MainPage = new AppShell();
         }
     }
