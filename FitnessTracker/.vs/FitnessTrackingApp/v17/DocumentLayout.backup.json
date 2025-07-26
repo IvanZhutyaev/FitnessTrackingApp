@@ -43,7 +43,7 @@
               "RelativeDocumentMoniker": "Pages\\NotificationsPage.xaml.cs",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\NotificationsPage.xaml.cs",
               "RelativeToolTip": "Pages\\NotificationsPage.xaml.cs",
-              "ViewState": "AgIAACsCAAAAAAAAAAAwwFACAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACsCAAAAAAAAAAAwwEsCAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-23T06:48:50.756Z",
               "IsPinned": true,
@@ -60,8 +60,7 @@
               "ViewState": "AgIAAJgAAAAAAAAAAAAqwLYAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-07-23T06:48:47.915Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -84,8 +83,7 @@
               "RelativeToolTip": "MauiProgram.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-23T10:18:32.264Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-23T10:18:32.264Z"
             },
             {
               "$type": "Document",
@@ -97,8 +95,7 @@
               "RelativeToolTip": "MainPage.xaml.cs",
               "ViewState": "AgIAACIBAAAAAAAAAAAwwEYBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-23T07:24:08.805Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-23T07:24:08.805Z"
             },
             {
               "$type": "Document",
