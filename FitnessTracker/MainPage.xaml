@@ -326,7 +326,18 @@
                 </VerticalStackLayout>
             </Frame>
         </ContentView>
+        <Button x:Name="OpenChatButton"
+                Text="🤖"
+                WidthRequest="60"
+                HeightRequest="60"
+                BackgroundColor="#2196F3"
+                CornerRadius="30"
+                TextColor="White"
+                FontSize="24"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                Margin="20"
+                Clicked="OpenChatButton_Clicked"/>
 
-       
     </Grid>
 </ContentPage>

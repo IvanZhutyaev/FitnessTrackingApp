@@ -10,6 +10,7 @@ namespace FitnessTrackingApp
             Routing.RegisterRoute("ProfilePage", typeof(ProfilePage));
             Routing.RegisterRoute("WorkoutsPage", typeof(WorkoutsPage));
             Routing.RegisterRoute("AdditionallyPage", typeof(AdditionallyPage));
+            Routing.RegisterRoute("ChatModal", typeof(ChatModal));
         }
     }
 }

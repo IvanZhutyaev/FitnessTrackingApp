@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FitnessTrackingApp.Pages;
-
+using Microsoft.Maui.Controls;
 namespace FitnessTrackingApp
 {
     public partial class MainPage : ContentPage
@@ -290,6 +290,11 @@ namespace FitnessTrackingApp
         {
             //await DisplayAlert("Настройки", "Переход на страницу настроек", "OK");
             await Navigation.PushAsync(new Pages.AdditionallyPage());
+        }
+        private async void OpenChatButton_Clicked(object sender, EventArgs e)
+        {
+            var chatModal = new ChatModal();
+            await Navigation.PushModalAsync(chatModal); 
         }
     }
 
