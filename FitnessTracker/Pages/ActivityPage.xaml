@@ -32,9 +32,9 @@
 
                     <!-- Шаги -->
                     <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
-                        <Label Text="Шаги" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                        <Label  Text="Шаги" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                         <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                            <Label Text="8,245" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                            <Label x:Name ="StepsLabel" Text ="0" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
                         </Frame>
                     </VerticalStackLayout>
 
