@@ -56,7 +56,7 @@ public partial class ActivityPage : ContentPage
 			return true;
 		});
 		//обновление шагов в БД
-		Dispatcher.StartTimer(TimeSpan.FromHours(24), () =>
+		Dispatcher.StartTimer(TimeSpan.FromHours(1), () =>
 		{
 			StepsToDataBase(this, EventArgs.Empty, steps);
 			return true;
