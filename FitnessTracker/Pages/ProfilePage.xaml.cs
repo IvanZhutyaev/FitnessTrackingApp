@@ -13,7 +13,7 @@ namespace FitnessTrackingApp.Pages
     public partial class ProfilePage : ContentPage
     {
         private readonly HttpClient _httpClient = new HttpClient();
-        private const string ApiBaseUrl = "http://192.168.0.127:5024";
+        private const string ApiBaseUrl = "http://localhost:5024";
 
         public List<string> Goals { get; } = new List<string>
         {

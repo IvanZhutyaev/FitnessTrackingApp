@@ -310,6 +310,35 @@ app.MapPut("/notifications/settings/{userId}", async (int userId, NotificationSe
     await db.SaveChangesAsync();
     return Results.Ok(settings);
 });
+
+app.MapPost("/user/steps", async(Activity activity, AppDbContext db) =>
+{
+    app.MapPost("/user/steps", async (Activity activity, AppDbContext db) =>
+{
+    
+    var today = activity.Date.Date;
+    var existingActivity = await db.Activities
+        .FirstOrDefaultAsync(a => a.UserId == activity.UserId && a.Date.Date == today);
+
+    if (existingActivity != null)
+    {
+        
+        existingActivity.Steps = activity.Steps;
+        existingActivity.Distance = activity.Distance;
+        existingActivity.Calories = activity.Calories;
+    }
+    else
+    {
+        
+        db.Activities.Add(activity);
+    }
+
+    await db.SaveChangesAsync();
+    return Results.Ok(new { Success = true, Message = "Шаги успешно сохранены" });
+});
+});
+
+
 // Запуск приложения
 app.Run();
 
