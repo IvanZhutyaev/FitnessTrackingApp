@@ -252,33 +252,70 @@ namespace FitnessTrackingApp
         // Новые обработчики для навигации по разделам
         private async void OnProfileTapped(object sender, EventArgs e)
         {
-            //await DisplayAlert("Профиль", "Переход на страницу профиля", "OK");
-            await Navigation.PushAsync(new ProfilePage());
+            if (UserSession.UserId > 0)
+            {
+                await Navigation.PushAsync(new ProfilePage());
+            }
+            else
+            {
+                await DisplayAlert("Ошибка", "Сначала выполните вход в систему", "OK");
+            }
+
         }
 
         private async void OnWorkoutsTapped(object sender, EventArgs e)
         {
-            //await DisplayAlert("Тренировки", "Переход на страницу тренировок", "OK");
-            await Navigation.PushAsync(new Pages.WorkoutsPage());
+            if (UserSession.UserId > 0)
+            {
+                await Navigation.PushAsync(new WorkoutsPage());
+            }
+            else
+            {
+                await DisplayAlert("Ошибка", "Сначала выполните вход в систему", "OK");
+            }
+        
         }
 
         private async void OnActivityTapped(object sender, EventArgs e)
         {
             //await DisplayAlert("Активность", "Переход на страницу активности", "OK");
-            var activityPage = Handler.MauiContext.Services.GetService<ActivityPage>();
-            await Navigation.PushAsync(activityPage);
+            if (UserSession.UserId > 0)
+            {
+                var activityPage = Handler.MauiContext.Services.GetService<ActivityPage>();
+                await Navigation.PushAsync(activityPage);
+            }
+            else
+            {
+                await DisplayAlert("Ошибка", "Сначала выполните вход в систему", "OK");
+            }
+            
+            
         }
 
         private async void OnNutritionTapped(object sender, EventArgs e)
         {
             //await DisplayAlert("Питание", "Переход на страницу питания", "OK");
-            await Navigation.PushAsync(new Pages.NutritionPage());
+            if (UserSession.UserId > 0)
+            {
+                await Navigation.PushAsync(new Pages.NutritionPage());
+            }
+            else
+            {
+                await DisplayAlert("Ошибка", "Сначала выполните вход в систему", "OK");
+            }
         }
 
         private async void OnProgressTapped(object sender, EventArgs e)
         {
             //await DisplayAlert("Прогресс", "Переход на страницу прогресса", "OK");
-            await Navigation.PushAsync(new Pages.ProgressPage());
+            if (UserSession.UserId > 0)
+            {
+                await Navigation.PushAsync(new Pages.ProgressPage());
+            }
+            else
+            {
+                await DisplayAlert("Ошибка", "Сначала выполните вход в систему", "OK");
+            }
         }
 
         private async void OnNotificationsTapped(object sender, EventArgs e)
@@ -294,8 +331,16 @@ namespace FitnessTrackingApp
         }
         private async void OpenChatButton_Clicked(object sender, EventArgs e)
         {
-            var chatModal = new ChatModal();
-            await Navigation.PushModalAsync(chatModal); 
+            if (UserSession.UserId > 0)
+            {
+                var chatModal = new ChatModal();
+                await Navigation.PushModalAsync(chatModal);
+            }
+            else
+            {
+                await DisplayAlert("Ошибка", "Сначала выполните вход в систему", "OK");
+            }
+
         }
     }
 
