@@ -45,7 +45,16 @@ public partial class ActivityPage : ContentPage
 
 	public ActivityPage()
 	{
-		InitializeComponent();
+        if (UserSession.UserId == 0)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await DisplayAlert("Ошибка", "Сначала войдите в аккаунт", "OK");
+                await Navigation.PopAsync(); // Возврат на предыдущую страницу
+            });
+            return;
+        }
+        InitializeComponent();
 		_stepService = ServiceHelper.GetService<IStepsService>();
 		int steps = _stepService.GetSteps();
 		//Обновление шагов на экране
