@@ -39,7 +39,7 @@ builder.Services.AddSingleton<IStepsService, DummyStepService>();
 #endif
 
             builder.Services.AddTransient<ActivityPage>();
-            SyncfusionLicenseProvider.RegisterLicense("ваш_ключ_лицензии");
+            SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JEaF5cXmRCdkxwWmFZfVtgfV9EYFZSRmYuP1ZhSXxWdkJgWX9XcnRWRGNUWUV9XEI=");
             var app = builder.Build();
 
             ServiceHelper.Services = app.Services;
