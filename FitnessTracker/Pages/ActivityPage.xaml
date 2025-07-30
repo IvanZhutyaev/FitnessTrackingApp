@@ -34,7 +34,7 @@
                     <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
                         <Label  Text="Шаги" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                         <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                            <Label x:Name ="StepsLabel" Text ="0" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                            <Label x:Name="StepsLabel" Text="0" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
                         </Frame>
                     </VerticalStackLayout>
 
@@ -42,7 +42,7 @@
                     <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
                         <Label Text="Дистанция" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                         <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                            <Label Text="5.8 км" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                            <Label x:Name="DistanceLabel" Text="0 км" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
                         </Frame>
                     </VerticalStackLayout>
 
@@ -50,15 +50,15 @@
                     <VerticalStackLayout Grid.Row="0" Grid.Column="2" Spacing="5">
                         <Label Text="Калории" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                         <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                            <Label Text="420" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                            <Label x:Name="CaloriesLabel" Text="0" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
                         </Frame>
                     </VerticalStackLayout>
 
                     <!-- Прогресс за неделю -->
                     <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="3" Spacing="10" Margin="0,20">
                         <Label Text="Прогресс за неделю" TextColor="#A0E7FF"/>
-                        <ProgressBar Progress="0.65" BackgroundColor="#1A3A6F" ProgressColor="#00E676" HeightRequest="8"/>
-                        <Label Text="65% от цели" TextColor="#5D8CC0" HorizontalOptions="End"/>
+                        <ProgressBar x:Name="WeeklyProgressBar" Progress="0" BackgroundColor="#1A3A6F" ProgressColor="#00E676" HeightRequest="8"/>
+                        <Label x:Name="WeeklyProgressLabel" Text="0% от цели" TextColor="#5D8CC0" HorizontalOptions="End"/>
                     </VerticalStackLayout>
                 </Grid>
             </Frame>
@@ -97,13 +97,17 @@
                         <Button Text="День"
                                 BackgroundColor="#2A4D80"
                                 TextColor="#A0E7FF"
-                                CornerRadius="5"/>
+                                CornerRadius="5"
+                                x:Name="DayButton"
+                                Clicked="OnPeriodButtonClicked"/>
 
                         <Button Text="Неделя"
                                 Grid.Column="1"
                                 BackgroundColor="#00C9FF"
                                 TextColor="#0C1B33"
-                                CornerRadius="5"/>
+                                CornerRadius="5"
+                                x:Name="WeekButton"
+                                Clicked="OnPeriodButtonClicked"/>
                     </Grid>
                 </VerticalStackLayout>
             </Frame>

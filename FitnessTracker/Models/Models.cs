@@ -39,7 +39,15 @@ namespace FitnessTrackingApp.Models
         public DateTime Date { get; set; }
         public string Notes { get; set; }
     }
-
+    public class Activity
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public DateTime Date { get; set; } = DateTime.UtcNow;
+        public int Steps { get; set; }
+        public double Distance { get; set; }
+        public int Calories { get; set; }
+    }
     public static class UserSession
     {
         public static int UserId { get; set; }
