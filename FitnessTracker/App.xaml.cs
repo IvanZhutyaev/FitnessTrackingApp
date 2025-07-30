@@ -1,17 +1,15 @@
-﻿namespace FitnessTrackingApp
+﻿// App.xaml.cs
+using FitnessTrackingApp.Services;
+using FitnessTrackingApp.Pages;
+using Microsoft.Maui.Controls;
+
+namespace FitnessTrackingApp;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public App(IStepsService stepsService)
     {
-        public App()
-        {
-            InitializeComponent();
-            
-
-            var stepService = ServiceHelper.GetService<IStepsService>();
-            stepService.Start();
-
-
-            MainPage = new AppShell();
-        }
+        InitializeComponent();
+        MainPage = new NavigationPage(new MainPage());
     }
 }

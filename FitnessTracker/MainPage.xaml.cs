@@ -265,7 +265,8 @@ namespace FitnessTrackingApp
         private async void OnActivityTapped(object sender, EventArgs e)
         {
             //await DisplayAlert("Активность", "Переход на страницу активности", "OK");
-            await Navigation.PushAsync(new Pages.ActivityPage());
+            var activityPage = Handler.MauiContext.Services.GetService<ActivityPage>();
+            await Navigation.PushAsync(activityPage);
         }
 
         private async void OnNutritionTapped(object sender, EventArgs e)

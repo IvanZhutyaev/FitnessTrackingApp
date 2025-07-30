@@ -1,7 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
+using FitnessTrackingApp.Services;
 using Plugin.LocalNotification;
-
+using FitnessTrackingApp.Services;
+using FitnessTrackingApp.Services;
+using FitnessTrackingApp.Pages;
+#if ANDROID
+using FitnessTrackingApp.Platforms.Android.Services;
+#endif
 namespace FitnessTrackingApp
 {
     public static class MauiProgram
@@ -23,12 +28,17 @@ namespace FitnessTrackingApp
 
                 ;
 
-#if DEBUG
-            builder.Logging.AddDebug();
+#if ANDROID
+            builder.Services.AddSingleton<IStepsService, AndroidStepCounterService>();
+#else
+builder.Services.AddSingleton<IStepsService, DummyStepService>();
 #endif
+
+            builder.Services.AddTransient<ActivityPage>();
             var app = builder.Build();
 
             ServiceHelper.Services = app.Services;
+
 
             return app;
         }

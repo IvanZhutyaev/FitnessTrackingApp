@@ -1,10 +1,12 @@
-using System.Net.Http.Json;
 using FitnessTrackingApp.Models; // Добавлено для использования общей модели
+using FitnessTrackingApp.Services;
 using Microsoft.Maui.Controls;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
-
+using FitnessTrackingApp.Services;
+using Microsoft.Maui.Controls;
 namespace FitnessTrackingApp.Pages;
 
 public partial class ActivityPage : ContentPage
@@ -29,8 +31,9 @@ public partial class ActivityPage : ContentPage
     // Недельный прогресс
     private const int WeeklyGoal = 70000; // Недельная цель по шагам
 
-    public ActivityPage()
+    public ActivityPage(IStepsService stepService)
     {
+        _stepService = stepService;
         if (UserSession.UserId == 0)
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -50,8 +53,27 @@ public partial class ActivityPage : ContentPage
         // Первоначальная загрузка данных
         LoadActivityData();
         LoadWeeklyProgress();
+        LoadData();
+    }
+    private void LoadData()
+    {
+        StepsLabel.Text = _stepService.GetSteps().ToString();
+    }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _stepService.Start();
     }
 
+    
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _stepService.Stop();
+        _updateUiTimer.Stop();
+        _saveToDbTimer.Stop();
+    }
     private void SetupTimers()
     {
         // Таймер обновления UI (каждые 5 секунд)
@@ -182,12 +204,7 @@ public partial class ActivityPage : ContentPage
         Console.WriteLine("Загрузка данных за неделю");
     }
 
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        _updateUiTimer.Stop();
-        _saveToDbTimer.Stop();
-    }
+    
 }
 
 public class ActivityStat
