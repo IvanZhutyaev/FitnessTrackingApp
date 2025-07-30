@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              x:Class="FitnessTrackingApp.Pages.ActivityPage"
              Title="Активность"
              BackgroundColor="#0C1B33">
+    
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
@@ -81,11 +83,11 @@
                             SelectedIndex="0"/>
 
                     <!-- Графики -->
-                    <Frame CornerRadius="10" BackgroundColor="#1A3A6F" HeightRequest="200">
-                        <Label Text="График активности" 
-                               TextColor="#5D8CC0" 
-                               VerticalOptions="Center" 
-                               HorizontalOptions="Center"/>
+                    <Frame x:Name="ChartFrame" CornerRadius="10" BackgroundColor="#1A3A6F" HeightRequest="200">
+                        <Label Text="Загрузка данных..." 
+           TextColor="#5D8CC0" 
+           VerticalOptions="Center" 
+           HorizontalOptions="Center"/>
                     </Frame>
 
                     <Grid ColumnSpacing="15">

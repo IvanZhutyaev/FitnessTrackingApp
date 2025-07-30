@@ -3,12 +3,23 @@
   "WorkspaceRootPath": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\pages\\activitypage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:pages\\activitypage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\pages\\activitypage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:pages\\activitypage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\platforms\\android\\services\\androidstepcounterservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -17,10 +28,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\services\\istepservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -50,37 +57,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "App.xaml.cs",
-              "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\App.xaml.cs",
-              "RelativeDocumentMoniker": "App.xaml.cs",
-              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\App.xaml.cs",
-              "RelativeToolTip": "App.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T12:28:48.387Z",
+              "DocumentIndex": 2,
+              "Title": "ActivityPage.xaml",
+              "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\ActivityPage.xaml",
+              "RelativeDocumentMoniker": "Pages\\ActivityPage.xaml",
+              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\ActivityPage.xaml",
+              "RelativeToolTip": "Pages\\ActivityPage.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-07-30T12:41:26.303Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "MainPage.xaml.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MainPage.xaml.cs",
               "RelativeDocumentMoniker": "MainPage.xaml.cs",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MainPage.xaml.cs",
               "RelativeToolTip": "MainPage.xaml.cs",
-              "ViewState": "AgIAAPIAAAAAAAAAAADgvxkBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAPIAAAAAAAAAAADgvxYBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-30T12:22:27.525Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "DummyStepService.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Services\\DummyStepService.cs",
               "RelativeDocumentMoniker": "Services\\DummyStepService.cs",
@@ -88,12 +95,11 @@
               "RelativeToolTip": "Services\\DummyStepService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T12:19:06.54Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-30T12:19:06.54Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "StepsService.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Services\\StepsService.cs",
               "RelativeDocumentMoniker": "Services\\StepsService.cs",
@@ -101,12 +107,11 @@
               "RelativeToolTip": "Services\\StepsService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T12:18:11.938Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-30T12:18:11.938Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "IStepService.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Services\\IStepService.cs",
               "RelativeDocumentMoniker": "Services\\IStepService.cs",
@@ -114,8 +119,7 @@
               "RelativeToolTip": "Services\\IStepService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T12:18:12.215Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-30T12:18:12.215Z"
             },
             {
               "$type": "Document",
@@ -125,14 +129,14 @@
               "RelativeDocumentMoniker": "Pages\\ActivityPage.xaml.cs",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\ActivityPage.xaml.cs",
               "RelativeToolTip": "Pages\\ActivityPage.xaml.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAACwAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAewJIAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-30T12:16:25.447Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "MainActivity.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Platforms\\Android\\MainActivity.cs",
               "RelativeDocumentMoniker": "Platforms\\Android\\MainActivity.cs",
@@ -140,12 +144,11 @@
               "RelativeToolTip": "Platforms\\Android\\MainActivity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T12:15:20.885Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-30T12:15:20.885Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "AndroidManifest.xml",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Platforms\\Android\\AndroidManifest.xml",
               "RelativeDocumentMoniker": "Platforms\\Android\\AndroidManifest.xml",
@@ -156,20 +159,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "MauiProgram.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MauiProgram.cs",
               "RelativeDocumentMoniker": "MauiProgram.cs",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\MauiProgram.cs",
               "RelativeToolTip": "MauiProgram.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAABLAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-30T12:13:52.985Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "AndroidStepCounterService.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Platforms\\Android\\Services\\AndroidStepCounterService.cs",
               "RelativeDocumentMoniker": "Platforms\\Android\\Services\\AndroidStepCounterService.cs",
@@ -177,8 +180,32 @@
               "RelativeToolTip": "Platforms\\Android\\Services\\AndroidStepCounterService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T12:13:19.236Z",
+              "WhenOpened": "2025-07-30T12:13:19.236Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs",
+              "RelativeDocumentMoniker": "..\\FitnessTrackerBack\\Program.cs",
+              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs",
+              "RelativeToolTip": "..\\FitnessTrackerBack\\Program.cs",
+              "ViewState": "AgIAAEQBAAAAAAAAAAAAAE0BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-30T12:37:06.782Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\App.xaml.cs",
+              "RelativeDocumentMoniker": "App.xaml.cs",
+              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\App.xaml.cs",
+              "RelativeToolTip": "App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-30T12:28:48.387Z"
             }
           ]
         }

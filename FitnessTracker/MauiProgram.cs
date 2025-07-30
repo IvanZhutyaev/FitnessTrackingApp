@@ -3,6 +3,8 @@ using FitnessTrackingApp.Services;
 using Plugin.LocalNotification;
 using FitnessTrackingApp.Services;
 using FitnessTrackingApp.Services;
+using Syncfusion.Maui.Core.Hosting;
+using Syncfusion.Licensing;
 using FitnessTrackingApp.Pages;
 #if ANDROID
 using FitnessTrackingApp.Platforms.Android.Services;
@@ -19,6 +21,8 @@ namespace FitnessTrackingApp
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseLocalNotification()
+                .ConfigureSyncfusionCore()
+                
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -35,6 +39,7 @@ builder.Services.AddSingleton<IStepsService, DummyStepService>();
 #endif
 
             builder.Services.AddTransient<ActivityPage>();
+            SyncfusionLicenseProvider.RegisterLicense("ваш_ключ_лицензии");
             var app = builder.Build();
 
             ServiceHelper.Services = app.Services;

@@ -1,11 +1,32 @@
 using FitnessTrackingApp.Models; // Добавлено для использования общей модели
+using FitnessTrackingApp.Models;
 using FitnessTrackingApp.Services;
+using FitnessTrackingApp.Services;
+using FitnessTrackingApp.Services;
+using Microcharts;
+using Microcharts.Maui;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls;
+using SkiaSharp;
+using Syncfusion.Maui.Charts;
+using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
-using FitnessTrackingApp.Services;
+using Syncfusion.Maui.Charts;
+using Microsoft.Maui.Graphics;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Controls;
+using Syncfusion.Maui.Charts;
+using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Controls;
 namespace FitnessTrackingApp.Pages;
 
@@ -14,10 +35,12 @@ public partial class ActivityPage : ContentPage
     private readonly IStepsService _stepService;
     private readonly HttpClient _httpClient = new HttpClient();
     private const string ApiBaseUrl = "http://localhost:5024";
+    private bool _isDayView = true;
+    private SfCartesianChart _chart;
 
     // Константы для расчетов
-    private const double StepLength = 0.7; // Длина шага в метрах
-    private const double CaloriesPerStep = 0.04; // Калорий на шаг
+    private const double StepLength = 0.7;
+    private const double CaloriesPerStep = 0.04;
 
     // Текущие данные активности
     private int _currentSteps;
@@ -29,7 +52,7 @@ public partial class ActivityPage : ContentPage
     private IDispatcherTimer _saveToDbTimer;
 
     // Недельный прогресс
-    private const int WeeklyGoal = 70000; // Недельная цель по шагам
+    private const int WeeklyGoal = 70000;
 
     public ActivityPage(IStepsService stepService)
     {
@@ -45,27 +68,53 @@ public partial class ActivityPage : ContentPage
         }
 
         InitializeComponent();
+        InitializeChart();
         _stepService = ServiceHelper.GetService<IStepsService>();
 
-        // Инициализация таймеров
         SetupTimers();
-
-        // Первоначальная загрузка данных
         LoadActivityData();
         LoadWeeklyProgress();
         LoadData();
+    }
+    private void InitializeChart()
+    {
+        _chart = new SfCartesianChart
+        {
+            Background = Colors.Transparent,
+            Margin = new Thickness(0, 10, 0, 0),
+            HeightRequest = 200
+        };
+
+        var xAxis = new DateTimeAxis
+        {
+            LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.White },
+            MajorGridLineStyle = new ChartLineStyle { Stroke = Colors.Gray.WithAlpha(0.3f) }
+        };
+
+        var yAxis = new NumericalAxis
+        {
+            LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.White },
+            MajorGridLineStyle = new ChartLineStyle { Stroke = Colors.Gray.WithAlpha(0.3f) }
+        };
+
+        _chart.XAxes.Add(xAxis);
+        _chart.YAxes.Add(yAxis);
+
+        var chartFrame = (Frame)FindByName("ChartFrame");
+        chartFrame.Content = _chart;
     }
     private void LoadData()
     {
         StepsLabel.Text = _stepService.GetSteps().ToString();
     }
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
         _stepService.Start();
+        await UpdateChartData();
     }
 
-    
+
 
     protected override void OnDisappearing()
     {
@@ -74,6 +123,65 @@ public partial class ActivityPage : ContentPage
         _updateUiTimer.Stop();
         _saveToDbTimer.Stop();
     }
+
+
+
+    private async Task UpdateChartData()
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/{UserSession.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var activities = await response.Content.ReadFromJsonAsync<List<Activity>>();
+                if (activities != null && activities.Any())
+                {
+                    var filteredActivities = _isDayView
+                        ? activities.Where(a => a.Date.Date == DateTime.Today).OrderBy(a => a.Date)
+                        : activities.Where(a => a.Date >= DateTime.Today.AddDays(-7)).OrderBy(a => a.Date);
+
+                    var series = new LineSeries()
+                    {
+                        ItemsSource = filteredActivities,
+                        XBindingPath = "Date",
+                        YBindingPath = "Steps",
+                        ShowMarkers = true,
+                        PaletteBrushes = new List<Brush> { new SolidColorBrush(Colors.Cyan) }
+                    };
+
+                    // Создаем стиль для линии
+                    var style = new ChartLineStyle()
+                    {
+                        Stroke = new SolidColorBrush(Colors.Cyan),
+                    };
+
+                    
+                    
+                    series.Fill = new SolidColorBrush(Colors.Cyan.WithAlpha(0.2f));
+
+                    _chart.Series.Clear();
+                    _chart.Series.Add(series);
+
+                    // Настраиваем оси
+                    if (_isDayView)
+                    {
+                        ((DateTimeAxis)_chart.XAxes[0]).Minimum = DateTime.Today;
+                        ((DateTimeAxis)_chart.XAxes[0]).Maximum = DateTime.Today.AddDays(1);
+                    }
+                    else
+                    {
+                        ((DateTimeAxis)_chart.XAxes[0]).Minimum = DateTime.Today.AddDays(-7);
+                        ((DateTimeAxis)_chart.XAxes[0]).Maximum = DateTime.Today.AddDays(1);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка загрузки данных для графика: {ex.Message}");
+        }
+    }
+
     private void SetupTimers()
     {
         // Таймер обновления UI (каждые 5 секунд)
@@ -192,19 +300,19 @@ public partial class ActivityPage : ContentPage
         }
     }
 
-    private void LoadDayData()
+    private async void LoadDayData()
     {
-        // Реализация загрузки данных за день
-        Console.WriteLine("Загрузка данных за день");
+        _isDayView = true;
+        await UpdateChartData();
     }
 
-    private void LoadWeekData()
+    private async void LoadWeekData()
     {
-        // Реализация загрузки данных за неделю
-        Console.WriteLine("Загрузка данных за неделю");
+        _isDayView = false;
+        await UpdateChartData();
     }
 
-    
+
 }
 
 public class ActivityStat
