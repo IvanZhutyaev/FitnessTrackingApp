@@ -1,62 +1,129 @@
-using FitnessTrackingApp.Models; // Добавлено для использования общей модели
 using FitnessTrackingApp.Models;
 using FitnessTrackingApp.Services;
-using FitnessTrackingApp.Services;
-using FitnessTrackingApp.Services;
-using Microcharts;
 using Microcharts.Maui;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 using SkiaSharp;
-using Syncfusion.Maui.Charts;
 using System;
 using System.Collections.Generic;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Linq;
-using System.Net.Http.Json;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Syncfusion.Maui.Charts;
-using Microsoft.Maui.Graphics;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Controls;
-using Syncfusion.Maui.Charts;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Controls;
+
 namespace FitnessTrackingApp.Pages;
+
+public class ActivityChartDrawable : IDrawable
+{
+    public List<Activity> DayActivities { get; set; } = new();
+    public List<Activity> WeekActivities { get; set; } = new();
+    public bool IsDayView { get; set; } = true;
+
+    public void Draw(ICanvas canvas, RectF dirtyRect)
+    {
+        var activities = IsDayView ? DayActivities : WeekActivities;
+        if (!activities.Any()) return;
+
+        var textColor = Colors.White;
+        var lineColor = Colors.Cyan;
+        var fillColor = new Color(0, 201, 255, 50);
+        var pointColor = Colors.Cyan;
+        var axisColor = Colors.Gray.WithAlpha(0.5f);
+
+        var maxValue = activities.Max(a => a.Steps) * 1.1f;
+        if (maxValue <= 0) maxValue = 1000;
+        var minValue = 0;
+        var valueRange = maxValue - minValue;
+
+        // Оси
+        canvas.StrokeColor = axisColor;
+        canvas.StrokeSize = 1;
+        canvas.DrawLine(40, dirtyRect.Height - 30, dirtyRect.Width, dirtyRect.Height - 30); // X
+        canvas.DrawLine(40, 0, 40, dirtyRect.Height - 30); // Y
+
+        // Подписи осей
+        canvas.FontColor = textColor;
+        canvas.FontSize = 10;
+
+        // Точки графика
+        var points = new List<PointF>();
+        for (int i = 0; i < activities.Count; i++)
+        {
+            var x = 40 + (i * (dirtyRect.Width - 40) / Math.Max(1, activities.Count - 1));
+            var y = dirtyRect.Height - 30 - ((activities[i].Steps - minValue) / valueRange * (dirtyRect.Height - 40));
+            points.Add(new PointF(x, y));
+        }
+
+        // Заливка под графиком
+        if (points.Count > 1)
+        {
+            var path = new PathF();
+            path.MoveTo(40, dirtyRect.Height - 30);
+            foreach (var point in points)
+                path.LineTo(point);
+            path.LineTo(points.Last().X, dirtyRect.Height - 30);
+            path.Close();
+
+            canvas.FillColor = fillColor;
+            canvas.FillPath(path);
+        }
+
+        // Линия графика
+        if (points.Count > 1)
+        {
+            canvas.StrokeColor = lineColor;
+            canvas.StrokeSize = 2;
+            var path = new PathF();
+            path.MoveTo(points[0]);
+            for (int i = 1; i < points.Count; i++)
+                path.LineTo(points[i]);
+            canvas.DrawPath(path);
+        }
+
+        // Точки
+        foreach (var point in points)
+        {
+            canvas.FillColor = pointColor;
+            canvas.FillCircle(point, 4);
+        }
+
+        // Подписи X
+        for (int i = 0; i < activities.Count; i++)
+        {
+            var label = IsDayView
+                ? activities[i].Date.ToString("HH:mm")
+                : activities[i].Date.ToString("dd.MM");
+            var x = 40 + (i * (dirtyRect.Width - 40) / Math.Max(1, activities.Count - 1));
+            canvas.DrawString(label, x - 20, dirtyRect.Height - 20, 40, 20,
+                HorizontalAlignment.Center, VerticalAlignment.Top);
+        }
+    }
+}
 
 public partial class ActivityPage : ContentPage
 {
     private readonly IStepsService _stepService;
-    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly HttpClient _httpClient = new();
     private const string ApiBaseUrl = "http://localhost:5024";
     private bool _isDayView = true;
-    private SfCartesianChart _chart;
-
-    // Константы для расчетов
-    private const double StepLength = 0.7;
-    private const double CaloriesPerStep = 0.04;
-
-    // Текущие данные активности
-    private int _currentSteps;
-    private double _currentDistance;
-    private int _currentCalories;
-
-    // Таймеры
+    private readonly ActivityChartDrawable _chartDrawable = new();
+    private IDispatcherTimer _chartUpdateTimer;
     private IDispatcherTimer _updateUiTimer;
     private IDispatcherTimer _saveToDbTimer;
 
-    // Недельный прогресс
+    private int _currentSteps;
+    private double _currentDistance;
+    private int _currentCalories;
+    private const double StepLength = 0.7;
+    private const double CaloriesPerStep = 0.04;
     private const int WeeklyGoal = 70000;
 
     public ActivityPage(IStepsService stepService)
     {
-        _stepService = stepService;
+        InitializeComponent();
+
+        _stepService = stepService ?? throw new ArgumentNullException(nameof(stepService));
+        _chartDrawable = new ActivityChartDrawable();
+
         if (UserSession.UserId == 0)
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -67,130 +134,70 @@ public partial class ActivityPage : ContentPage
             return;
         }
 
-        InitializeComponent();
         InitializeChart();
-        _stepService = ServiceHelper.GetService<IStepsService>();
-
+        SetupChartUpdateTimer();
         SetupTimers();
         LoadActivityData();
         LoadWeeklyProgress();
         LoadData();
     }
+
     private void InitializeChart()
     {
-        _chart = new SfCartesianChart
+        if (ChartGraphicsView != null)
         {
-            Background = Colors.Transparent,
-            Margin = new Thickness(0, 10, 0, 0),
-            HeightRequest = 200
-        };
-
-        var xAxis = new DateTimeAxis
+            ChartGraphicsView.Drawable = _chartDrawable;
+        }
+        else
         {
-            LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.White },
-            MajorGridLineStyle = new ChartLineStyle { Stroke = Colors.Gray.WithAlpha(0.3f) }
-        };
-
-        var yAxis = new NumericalAxis
-        {
-            LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.White },
-            MajorGridLineStyle = new ChartLineStyle { Stroke = Colors.Gray.WithAlpha(0.3f) }
-        };
-
-        _chart.XAxes.Add(xAxis);
-        _chart.YAxes.Add(yAxis);
-
-        var chartFrame = (Frame)FindByName("ChartFrame");
-        chartFrame.Content = _chart;
+            Console.WriteLine("ChartGraphicsView is null during initialization");
+        }
     }
-    private void LoadData()
+
+    protected override void OnHandlerChanged()
     {
-        StepsLabel.Text = _stepService.GetSteps().ToString();
+        base.OnHandlerChanged();
+        if (Handler != null && ChartGraphicsView.Drawable == null)
+        {
+            ChartGraphicsView.Drawable = _chartDrawable;
+        }
     }
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         _stepService.Start();
         await UpdateChartData();
+        ChartGraphicsView.Invalidate(); // <-- ВАЖНО
     }
-
-
 
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
         _stepService.Stop();
-        _updateUiTimer.Stop();
-        _saveToDbTimer.Stop();
+        _updateUiTimer?.Stop();
+        _saveToDbTimer?.Stop();
     }
 
-
-
-    private async Task UpdateChartData()
+    private void SetupChartUpdateTimer()
     {
-        try
+        _chartUpdateTimer = Dispatcher.CreateTimer();
+        _chartUpdateTimer.Interval = TimeSpan.FromMinutes(5);
+        _chartUpdateTimer.Tick += async (s, e) =>
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/{UserSession.UserId}");
-            if (response.IsSuccessStatusCode)
-            {
-                var activities = await response.Content.ReadFromJsonAsync<List<Activity>>();
-                if (activities != null && activities.Any())
-                {
-                    var filteredActivities = _isDayView
-                        ? activities.Where(a => a.Date.Date == DateTime.Today).OrderBy(a => a.Date)
-                        : activities.Where(a => a.Date >= DateTime.Today.AddDays(-7)).OrderBy(a => a.Date);
-
-                    var series = new LineSeries()
-                    {
-                        ItemsSource = filteredActivities,
-                        XBindingPath = "Date",
-                        YBindingPath = "Steps",
-                        ShowMarkers = true,
-                        PaletteBrushes = new List<Brush> { new SolidColorBrush(Colors.Cyan) }
-                    };
-
-                    // Создаем стиль для линии
-                    var style = new ChartLineStyle()
-                    {
-                        Stroke = new SolidColorBrush(Colors.Cyan),
-                    };
-
-                    
-                    
-                    series.Fill = new SolidColorBrush(Colors.Cyan.WithAlpha(0.2f));
-
-                    _chart.Series.Clear();
-                    _chart.Series.Add(series);
-
-                    // Настраиваем оси
-                    if (_isDayView)
-                    {
-                        ((DateTimeAxis)_chart.XAxes[0]).Minimum = DateTime.Today;
-                        ((DateTimeAxis)_chart.XAxes[0]).Maximum = DateTime.Today.AddDays(1);
-                    }
-                    else
-                    {
-                        ((DateTimeAxis)_chart.XAxes[0]).Minimum = DateTime.Today.AddDays(-7);
-                        ((DateTimeAxis)_chart.XAxes[0]).Maximum = DateTime.Today.AddDays(1);
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Ошибка загрузки данных для графика: {ex.Message}");
-        }
+            await UpdateChartData();
+            ChartGraphicsView.Invalidate();
+        };
+        _chartUpdateTimer.Start();
     }
 
     private void SetupTimers()
     {
-        // Таймер обновления UI (каждые 5 секунд)
         _updateUiTimer = Dispatcher.CreateTimer();
         _updateUiTimer.Interval = TimeSpan.FromSeconds(5);
         _updateUiTimer.Tick += (s, e) => UpdateActivityData();
         _updateUiTimer.Start();
 
-        // Таймер сохранения в БД (каждый час)
         _saveToDbTimer = Dispatcher.CreateTimer();
         _saveToDbTimer.Interval = TimeSpan.FromHours(1);
         _saveToDbTimer.Tick += async (s, e) => await SaveActivityToDatabase();
@@ -213,10 +220,7 @@ public partial class ActivityPage : ContentPage
 
     private void CalculateDerivedMetrics()
     {
-        // Расчет дистанции в км
         _currentDistance = Math.Round((_currentSteps * StepLength) / 1000, 1);
-
-        // Расчет калорий
         _currentCalories = (int)(_currentSteps * CaloriesPerStep);
     }
 
@@ -225,6 +229,58 @@ public partial class ActivityPage : ContentPage
         StepsLabel.Text = _currentSteps.ToString();
         DistanceLabel.Text = $"{_currentDistance} км";
         CaloriesLabel.Text = _currentCalories.ToString();
+    }
+
+    private void LoadData()
+    {
+        StepsLabel.Text = _stepService.GetSteps().ToString();
+    }
+
+    private async Task UpdateChartData()
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{UserSession.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var stats = await response.Content.ReadFromJsonAsync<List<ActivityStat>>();
+                if (stats != null && stats.Any())
+                {
+                    var today = DateTime.Today;
+
+                    _chartDrawable.DayActivities = stats
+                        .Where(s => s.Date.Date == today)
+                        .Select(s => new Activity { Date = s.Date, Steps = s.Steps })
+                        .ToList();
+
+                    _chartDrawable.WeekActivities = stats
+                        .Where(s => s.Date >= today.AddDays(-7))
+                        .GroupBy(s => s.Date.Date)
+                        .Select(g => new Activity
+                        {
+                            Date = g.Key,
+                            Steps = g.Sum(x => x.Steps)
+                        })
+                        .OrderBy(a => a.Date)
+                        .ToList();
+
+                    _chartDrawable.IsDayView = _isDayView;
+                    ChartGraphicsView.Invalidate();
+                }
+                else
+                {
+                    Console.WriteLine("Нет данных для отображения графика");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ошибка при получении статистики: " + response.StatusCode);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка обновления графика: {ex.Message}");
+        }
     }
 
     private async void LoadWeeklyProgress()
@@ -239,7 +295,6 @@ public partial class ActivityPage : ContentPage
                 {
                     var totalSteps = stats.Sum(s => s.Steps);
                     var progress = (double)totalSteps / WeeklyGoal;
-
                     WeeklyProgressBar.Progress = progress;
                     WeeklyProgressLabel.Text = $"{Math.Round(progress * 100)}% от цели";
                 }
@@ -255,7 +310,7 @@ public partial class ActivityPage : ContentPage
     {
         try
         {
-            var activity = new Models.Activity // Явное указание пространства имен
+            var activity = new Models.Activity
             {
                 Steps = _currentSteps,
                 Distance = _currentDistance,
@@ -278,26 +333,19 @@ public partial class ActivityPage : ContentPage
 
     private void OnPeriodButtonClicked(object sender, EventArgs e)
     {
-        // Сбрасываем цвет всех кнопок
         DayButton.BackgroundColor = Color.FromArgb("#2A4D80");
         DayButton.TextColor = Color.FromArgb("#A0E7FF");
         WeekButton.BackgroundColor = Color.FromArgb("#2A4D80");
         WeekButton.TextColor = Color.FromArgb("#A0E7FF");
 
-        // Устанавливаем цвет активной кнопки
         var button = (Button)sender;
         button.BackgroundColor = Color.FromArgb("#00C9FF");
         button.TextColor = Color.FromArgb("#0C1B33");
 
-        // Загружаем данные для выбранного периода
         if (button == DayButton)
-        {
             LoadDayData();
-        }
         else
-        {
             LoadWeekData();
-        }
     }
 
     private async void LoadDayData()
@@ -311,8 +359,6 @@ public partial class ActivityPage : ContentPage
         _isDayView = false;
         await UpdateChartData();
     }
-
-
 }
 
 public class ActivityStat

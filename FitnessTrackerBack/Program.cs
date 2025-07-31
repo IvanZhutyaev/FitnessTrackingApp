@@ -54,18 +54,18 @@ app.MapGet("/activities/stats/{userId}", async (int userId, AppDbContext db) =>
 
     var stats = await db.Activities
         .Where(a => a.UserId == userId && a.Date >= weekAgo)
-        .GroupBy(a => a.Date.Date)
-        .Select(g => new
+        .OrderBy(a => a.Date)
+        .Select(a => new
         {
-            Date = g.Key,
-            Steps = g.Sum(a => a.Steps),
-            Distance = g.Sum(a => a.Distance),
-            Calories = g.Sum(a => a.Calories)
+            Date = a.Date,
+            Steps = a.Steps,
+            Distance = a.Distance,
+            Calories = a.Calories
         })
-        .OrderBy(s => s.Date)
         .ToListAsync();
+
     return Results.Ok(stats);
-});
+});ы
 
 // Авторизация пользователя
 app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
