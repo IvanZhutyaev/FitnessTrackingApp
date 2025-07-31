@@ -35,6 +35,7 @@ public class ActivityChartDrawable : IDrawable
         var valueRange = maxValue - minValue;
 
         // Оси
+       
         canvas.StrokeColor = axisColor;
         canvas.StrokeSize = 1;
         canvas.DrawLine(40, dirtyRect.Height - 30, dirtyRect.Width, dirtyRect.Height - 30); // X
@@ -105,7 +106,7 @@ public partial class ActivityPage : ContentPage
     private readonly HttpClient _httpClient = new();
     private const string ApiBaseUrl = "http://localhost:5024";
     private bool _isDayView = true;
-    private readonly ActivityChartDrawable _chartDrawable = new();
+    private ActivityChartDrawable _chartDrawable = new();
     private IDispatcherTimer _chartUpdateTimer;
     private IDispatcherTimer _updateUiTimer;
     private IDispatcherTimer _saveToDbTimer;
@@ -116,6 +117,8 @@ public partial class ActivityPage : ContentPage
     private const double StepLength = 0.7;
     private const double CaloriesPerStep = 0.04;
     private const int WeeklyGoal = 70000;
+    private bool _isInitialLoad = true;
+    private const int ChartUpdateIntervalSeconds = 30;
 
     public ActivityPage(IStepsService stepService)
     {
@@ -146,11 +149,15 @@ public partial class ActivityPage : ContentPage
     {
         if (ChartGraphicsView != null)
         {
+            _chartDrawable = new ActivityChartDrawable
+            {
+                DayActivities = new List<Activity>(),
+                WeekActivities = new List<Activity>(),
+                IsDayView = true
+            };
+
             ChartGraphicsView.Drawable = _chartDrawable;
-        }
-        else
-        {
-            Console.WriteLine("ChartGraphicsView is null during initialization");
+            ChartGraphicsView.Invalidate();
         }
     }
     private void SetupMidnightResetTimer()
@@ -189,24 +196,67 @@ public partial class ActivityPage : ContentPage
     {
         base.OnAppearing();
 
+        if (_isInitialLoad)
+        {
+            await LoadInitialData();
+            _isInitialLoad = false;
+        }
+
         _stepService.Start();
+        StartAllTimers();
+    }
+    private async Task LoadInitialData()
+    {
         await LoadSavedSteps();
+        await UpdateAllData();
+    }
+    private async Task UpdateAllData()
+    {
         await UpdateChartData();
         LoadWeeklyProgress();
-        SetupMidnightResetTimer();
-
-        ChartGraphicsView.Invalidate(); // <-- ВАЖНО
+        ChartGraphicsView.Invalidate();
     }
+    private void StartAllTimers()
+    {
+        // Таймер для обновления UI (каждые 5 сек)
+        _updateUiTimer = Dispatcher.CreateTimer();
+        _updateUiTimer.Interval = TimeSpan.FromSeconds(5);
+        _updateUiTimer.Tick += (s, e) => UpdateActivityData();
+        _updateUiTimer.Start();
 
+        // Таймер для обновления графиков и прогресса (каждые 30 сек)
+        _chartUpdateTimer = Dispatcher.CreateTimer();
+        _chartUpdateTimer.Interval = TimeSpan.FromSeconds(ChartUpdateIntervalSeconds);
+        _chartUpdateTimer.Tick += async (s, e) => await UpdateAllData();
+        _chartUpdateTimer.Start();
+
+        // Таймер для сохранения в БД (каждые 10 мин)
+        _saveToDbTimer = Dispatcher.CreateTimer();
+        _saveToDbTimer.Interval = TimeSpan.FromMinutes(10);
+        _saveToDbTimer.Tick += async (s, e) => await SaveActivityToDatabase();
+        _saveToDbTimer.Start();
+    }
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
         _stepService.Stop();
-        _updateUiTimer?.Stop();
-        _saveToDbTimer?.Stop();
-        _ = SaveActivityToDatabase();
+
+        // Принудительное сохранение при выходе
+        Task.Run(async () =>
+        {
+            await SaveActivityToDatabase();
+        }).Wait(); // Ждем завершения
+
+        StopAllTimers();
     }
 
+    
+    private void StopAllTimers()
+    {
+        _updateUiTimer?.Stop();
+        _chartUpdateTimer?.Stop();
+        _saveToDbTimer?.Stop();
+    }
     private void SetupChartUpdateTimer()
     {
         _chartUpdateTimer = Dispatcher.CreateTimer();
@@ -375,7 +425,6 @@ public partial class ActivityPage : ContentPage
 
     private async Task SaveActivityToDatabase()
     {
-        
         try
         {
             var activity = new Activity
@@ -388,9 +437,10 @@ public partial class ActivityPage : ContentPage
             };
 
             var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/user/steps", activity);
+
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Ошибка сохранения: " + response.StatusCode);
+                Console.WriteLine("Ошибка сохранения: " + await response.Content.ReadAsStringAsync());
             }
         }
         catch (Exception ex)

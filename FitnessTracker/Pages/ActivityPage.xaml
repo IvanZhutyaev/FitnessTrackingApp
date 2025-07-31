@@ -102,7 +102,14 @@
                     <Frame x:Name="ChartFrame" CornerRadius="10" BackgroundColor="#1A3A6F" HeightRequest="200">
                         <GraphicsView x:Name="ChartGraphicsView"
               HeightRequest="300"
-              WidthRequest="400" />
+              WidthRequest="400"
+              BackgroundColor="#1A3A6F"/>
+                        <!-- Удалите этот блок, если не нужны жесты -->
+                        <!--
+    <GraphicsView.GestureRecognizers>
+        <TapGestureRecognizer Tapped="OnChartTapped"/>
+    </GraphicsView.GestureRecognizers>
+-->
 
                     </Frame>
 
