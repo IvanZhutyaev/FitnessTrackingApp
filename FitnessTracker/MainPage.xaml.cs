@@ -6,6 +6,8 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using FitnessTrackingApp.Pages;
 using Microsoft.Maui.Controls;
+using System.Linq;
+
 namespace FitnessTrackingApp
 {
     public partial class MainPage : ContentPage
@@ -166,7 +168,8 @@ namespace FitnessTrackingApp
                         var user = await userResponse.Content.ReadFromJsonAsync<User>();
                         UserSession.UserId = user.Id;
                     }
-
+                    
+                    await UpdateStaticUserData(UserSession.UserId);
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
@@ -246,8 +249,35 @@ namespace FitnessTrackingApp
             LoginButton.Padding = new Thickness(10, 5);
             LoginButton.WidthRequest = 120;
         }
+        //Респонз для получения шагов. Пока только шагов
 
+        private async Task UpdateStaticUserData(int username)
+        {
+            try
+            {
 
+                var userResponse = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{username}"); 
+                if (userResponse.IsSuccessStatusCode)                                            
+                {                                                                                
+                    var user = await userResponse.Content.ReadFromJsonAsync<List<Activity>>(); 
+                    
+                    if(user.Any()){
+
+                        UserStaticData.AvgDistance = user.Average(d => d.Distance);
+                        UserStaticData.AvgCalories = user.Average(c => c.Calories);
+                        UserStaticData.AvgSteps = user.Sum(s => s.Steps);
+
+                        await DisplayAlert("Успешно", "Данные о шагах получены!" , "ОК");
+                    }else
+                    {
+                        await DisplayAlert("Ошибка", "Данные о шагах отсутсвуют" , "ОК");
+                    }
+                }                                                                                
+                                                                                  
+            }catch(Exception ex){
+                await DisplayAlert("Ошибка", "При получении данных пользоваетля произошла ошибка", "ОК");
+            }
+        }
 
         // Новые обработчики для навигации по разделам
         private async void OnProfileTapped(object sender, EventArgs e)
@@ -358,11 +388,22 @@ namespace FitnessTrackingApp
 
     }
 
-    public class UserStats
+    public class Activity
     {
-        public double AvgSteps { get; set; }
-        public double AvgDistance { get; set; }
-        public double AvgCalories { get; set; }
+        public int UserId {get;set;}
+        public int Steps {get; set;}
+        public DateTime Date {get; set;}
+        public double Distance {get;set;}
+        public double Calories {get;set;}
+        //Че нють еще
+    }
+
+    public static class UserStaticData
+    {
+        public static int Steps { get; set; }
+        public static double AvgSteps { get; set; }
+        public static double AvgDistance { get; set; }
+        public static double AvgCalories { get; set; }
     }
 
 

@@ -339,6 +339,7 @@ public partial class ActivityPage : ContentPage
         StepsLabel.Text = _currentSteps.ToString();
         DistanceLabel.Text = $"{_currentDistance} км";
         CaloriesLabel.Text = _currentCalories.ToString();
+        
     }
 
     private void LoadData()
@@ -469,13 +470,17 @@ public partial class ActivityPage : ContentPage
     private async void LoadDayData()
     {
         _isDayView = true;
+        _chartDrawable.IsDayView = true;
         await UpdateChartData();
+        ChartGraphicsView.Invalidate();
     }
 
     private async void LoadWeekData()
     {
         _isDayView = false;
+        _chartDrawable.IsDayView = false;
         await UpdateChartData();
+        ChartGraphicsView.Invalidate();
     }
 }
 

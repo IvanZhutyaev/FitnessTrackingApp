@@ -31,12 +31,12 @@ namespace FitnessTrackingApp.Services
             }
             catch
             { 
-                #if DEBUG
+                //#if DEBUG
                     // Для отладки, если устройство не поддерживает акселерометр
-                    _debugTimer = new System.Timers.Timer(1000);
-                    _debugTimer.Elapsed += (s, e) => _steps++;
-                    _debugTimer.Start();
-                #endif
+                   // _debugTimer = new System.Timers.Timer(1000);
+                    //_debugTimer.Elapsed += (s, e) => _steps++;
+                    //_debugTimer.Start();
+                //#endif
             }
         }
 

@@ -1,8 +1,5 @@
 ﻿using CommunityToolkit.Maui;
 using FitnessTrackingApp.Pages;
-
-using FitnessTrackingApp.Services;
-using FitnessTrackingApp.Services;
 using FitnessTrackingApp.Services;
 using Microcharts.Maui;
 using Microsoft.Extensions.Logging;
