@@ -153,6 +153,28 @@ public partial class ActivityPage : ContentPage
             Console.WriteLine("ChartGraphicsView is null during initialization");
         }
     }
+    private void SetupMidnightResetTimer()
+    {
+        var now = DateTime.Now;
+        var midnight = now.Date.AddDays(1);
+        var timeUntilMidnight = midnight - now;
+
+        var midnightTimer = new System.Timers.Timer(timeUntilMidnight.TotalMilliseconds);
+        midnightTimer.Elapsed += async (s, e) =>
+        {
+            midnightTimer.Stop();
+
+            await SaveActivityToDatabase(); // сохраняем
+            _currentSteps = 0;              // сброс
+            CalculateDerivedMetrics();
+            UpdateUi();
+            ChartGraphicsView.Invalidate();
+
+            SetupMidnightResetTimer(); // запускаем заново
+        };
+        midnightTimer.AutoReset = false;
+        midnightTimer.Start();
+    }
 
     protected override void OnHandlerChanged()
     {
@@ -166,8 +188,13 @@ public partial class ActivityPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
         _stepService.Start();
+        await LoadSavedSteps();
         await UpdateChartData();
+        LoadWeeklyProgress();
+        SetupMidnightResetTimer();
+
         ChartGraphicsView.Invalidate(); // <-- ВАЖНО
     }
 
@@ -177,6 +204,7 @@ public partial class ActivityPage : ContentPage
         _stepService.Stop();
         _updateUiTimer?.Stop();
         _saveToDbTimer?.Stop();
+        _ = SaveActivityToDatabase();
     }
 
     private void SetupChartUpdateTimer()
@@ -190,6 +218,38 @@ public partial class ActivityPage : ContentPage
         };
         _chartUpdateTimer.Start();
     }
+    private async Task LoadSavedSteps()
+    {
+        try
+        {
+            var today = DateTime.Today;
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{UserSession.UserId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var stats = await response.Content.ReadFromJsonAsync<List<ActivityStat>>();
+                if (stats != null && stats.Any())
+                {
+                    var todaySteps = stats
+                        .Where(a => a.Date.Date == today)
+                        .Sum(a => a.Steps);
+
+                    _currentSteps = todaySteps;
+                    CalculateDerivedMetrics();
+                    UpdateUi();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Ошибка запроса шагов из БД: " + response.StatusCode);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка загрузки шагов из БД: {ex.Message}");
+        }
+    }
+
 
     private void SetupTimers()
     {
@@ -244,15 +304,23 @@ public partial class ActivityPage : ContentPage
             if (response.IsSuccessStatusCode)
             {
                 var stats = await response.Content.ReadFromJsonAsync<List<ActivityStat>>();
-                if (stats != null && stats.Any())
+                if (stats != null)
                 {
                     var today = DateTime.Today;
 
+                    // Для дневного графика - группируем по часам
                     _chartDrawable.DayActivities = stats
                         .Where(s => s.Date.Date == today)
-                        .Select(s => new Activity { Date = s.Date, Steps = s.Steps })
+                        .GroupBy(s => s.Date.Hour)
+                        .Select(g => new Activity
+                        {
+                            Date = today.AddHours(g.Key),
+                            Steps = g.Sum(x => x.Steps)
+                        })
+                        .OrderBy(a => a.Date)
                         .ToList();
 
+                    // Для недельного графика - группируем по дням
                     _chartDrawable.WeekActivities = stats
                         .Where(s => s.Date >= today.AddDays(-7))
                         .GroupBy(s => s.Date.Date)
@@ -264,17 +332,8 @@ public partial class ActivityPage : ContentPage
                         .OrderBy(a => a.Date)
                         .ToList();
 
-                    _chartDrawable.IsDayView = _isDayView;
                     ChartGraphicsView.Invalidate();
                 }
-                else
-                {
-                    Console.WriteLine("Нет данных для отображения графика");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Ошибка при получении статистики: " + response.StatusCode);
             }
         }
         catch (Exception ex)
@@ -294,9 +353,17 @@ public partial class ActivityPage : ContentPage
                 if (stats != null && stats.Any())
                 {
                     var totalSteps = stats.Sum(s => s.Steps);
-                    var progress = (double)totalSteps / WeeklyGoal;
+                    var progress = Math.Min(1.0, (double)totalSteps / WeeklyGoal);
+
                     WeeklyProgressBar.Progress = progress;
-                    WeeklyProgressLabel.Text = $"{Math.Round(progress * 100)}% от цели";
+                    WeeklyProgressPercentLabel.Text = $"{Math.Round(progress * 100)}%";
+                    WeeklyProgressLabel.Text = $"{totalSteps:N0} шагов из {WeeklyGoal:N0}";
+                }
+                else
+                {
+                    WeeklyProgressBar.Progress = 0;
+                    WeeklyProgressPercentLabel.Text = "0%";
+                    WeeklyProgressLabel.Text = $"0 шагов из {WeeklyGoal:N0}";
                 }
             }
         }
@@ -308,21 +375,22 @@ public partial class ActivityPage : ContentPage
 
     private async Task SaveActivityToDatabase()
     {
+        
         try
         {
-            var activity = new Models.Activity
+            var activity = new Activity
             {
+                UserId = UserSession.UserId,
+                Date = DateTime.UtcNow,
                 Steps = _currentSteps,
                 Distance = _currentDistance,
-                Calories = _currentCalories,
-                UserId = UserSession.UserId,
-                Date = DateTime.UtcNow
+                Calories = _currentCalories
             };
 
             var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/user/steps", activity);
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Ошибка сохранения активности");
+                Console.WriteLine("Ошибка сохранения: " + response.StatusCode);
             }
         }
         catch (Exception ex)

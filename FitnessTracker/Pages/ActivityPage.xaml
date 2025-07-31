@@ -60,8 +60,23 @@
                     <!-- Прогресс за неделю -->
                     <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="3" Spacing="10" Margin="0,20">
                         <Label Text="Прогресс за неделю" TextColor="#A0E7FF"/>
-                        <ProgressBar x:Name="WeeklyProgressBar" Progress="0" BackgroundColor="#1A3A6F" ProgressColor="#00E676" HeightRequest="8"/>
-                        <Label x:Name="WeeklyProgressLabel" Text="0% от цели" TextColor="#5D8CC0" HorizontalOptions="End"/>
+                        <Grid>
+                            <ProgressBar x:Name="WeeklyProgressBar" 
+                    Progress="0" 
+                    BackgroundColor="#1A3A6F" 
+                    ProgressColor="#00E676" 
+                    HeightRequest="8"/>
+                            <Label x:Name="WeeklyProgressPercentLabel" 
+               Text="0%" 
+               TextColor="White" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Center"
+               FontSize="10"/>
+                        </Grid>
+                        <Label x:Name="WeeklyProgressLabel" 
+           Text="0 шагов из 70,000" 
+           TextColor="#5D8CC0" 
+           HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Grid>
             </Frame>

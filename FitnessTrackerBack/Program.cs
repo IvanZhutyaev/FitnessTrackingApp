@@ -65,7 +65,7 @@ app.MapGet("/activities/stats/{userId}", async (int userId, AppDbContext db) =>
         .ToListAsync();
 
     return Results.Ok(stats);
-});ы
+});
 
 // Авторизация пользователя
 app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
