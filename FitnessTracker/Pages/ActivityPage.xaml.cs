@@ -120,7 +120,7 @@ public partial class ActivityPage : ContentPage
     public ActivityPage(IStepsService stepService)
     {
         InitializeComponent();
-
+        _stepService = stepService;
         _stepService = stepService ?? throw new ArgumentNullException(nameof(stepService));
         _chartDrawable = new ActivityChartDrawable();
 
