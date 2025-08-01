@@ -14,10 +14,38 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    // —войства дл€ прив€зки данных
-    public double WaterIntake => _currentDay?.WaterIntake ?? 0;
-    public double WaterGoal => _currentDay?.WaterGoal ?? 2.0;
+    public double WaterIntake
+    {
+        get => _currentDay?.WaterIntake ?? 0;
+        set
+        {
+            if (_currentDay != null)
+            {
+                _currentDay.WaterIntake = value;
+                OnPropertyChanged(nameof(WaterIntake));
+                OnPropertyChanged(nameof(WaterProgressValue));
+                OnPropertyChanged(nameof(WaterDisplayText));
+            }
+        }
+    }
+
+    public double WaterGoal
+    {
+        get => _currentDay?.WaterGoal ?? 2.0;
+        set
+        {
+            if (_currentDay != null)
+            {
+                _currentDay.WaterGoal = value;
+                OnPropertyChanged(nameof(WaterGoal));
+                OnPropertyChanged(nameof(WaterProgressValue));
+                OnPropertyChanged(nameof(WaterDisplayText));
+            }
+        }
+    }
+
     public double WaterProgressValue => WaterIntake / WaterGoal;
+    public string WaterDisplayText => $"{WaterIntake:F1}/{WaterGoal:F1} л";
 
     public int TotalCalories => _currentDay?.TotalCalories ?? 0;
     public double TotalProtein => _currentDay?.TotalProtein ?? 0;
@@ -63,36 +91,27 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var data = JsonSerializer.Deserialize<NutritionResponse>(content, options)
+                         ?? new NutritionResponse();
 
-                // Ѕезопасна€ десериализаци€ с проверкой наличи€ свойств
-                using (JsonDocument doc = JsonDocument.Parse(content))
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    var root = doc.RootElement;
-
-                    // »нициализаци€ нового дн€, если данные не получены
-                    _currentDay = new NutritionDay
+                    _currentDay = data.NutritionDay ?? new NutritionDay
                     {
                         UserId = _userId,
                         Date = DateTime.UtcNow.Date,
                         WaterGoal = 2.0
                     };
 
-                    if (root.TryGetProperty("NutritionDay", out var nutritionDayElement))
-                    {
-                        _currentDay = nutritionDayElement.Deserialize<NutritionDay>() ?? _currentDay;
-                    }
-
                     Meals.Clear();
-                    if (root.TryGetProperty("Meals", out var mealsElement))
+                    foreach (var meal in data.Meals ?? new List<Meal>())
                     {
-                        foreach (var meal in mealsElement.Deserialize<List<Meal>>() ?? new List<Meal>())
-                        {
-                            Meals.Add(meal);
-                        }
+                        Meals.Add(meal);
                     }
 
-                    Device.BeginInvokeOnMainThread(UpdateUI);
-                }
+                    UpdateUI();
+                });
             }
         }
         catch (Exception ex)
@@ -103,13 +122,14 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
 
     private void UpdateUI()
     {
-        OnPropertyChanged(nameof(WaterIntake));
-        OnPropertyChanged(nameof(WaterGoal));
-        OnPropertyChanged(nameof(WaterProgressValue));
         OnPropertyChanged(nameof(TotalCalories));
         OnPropertyChanged(nameof(TotalProtein));
         OnPropertyChanged(nameof(TotalFat));
         OnPropertyChanged(nameof(TotalCarbs));
+        OnPropertyChanged(nameof(WaterIntake));
+        OnPropertyChanged(nameof(WaterGoal));
+        OnPropertyChanged(nameof(WaterProgressValue));
+        OnPropertyChanged(nameof(WaterDisplayText));
 
         MealsCollectionView.ItemsSource = null;
         MealsCollectionView.ItemsSource = Meals;
@@ -196,10 +216,9 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
             if (!string.IsNullOrWhiteSpace(amount) && double.TryParse(amount, out var waterAmount))
             {
                 // Ћокальное обновление
-                _currentDay.WaterIntake += waterAmount;
-                UpdateUI();
+                WaterIntake += waterAmount;
 
-                await SaveWaterIntakeAsync(_currentDay.WaterIntake);
+                await SaveWaterIntakeAsync(WaterIntake);
             }
         }
         catch (Exception ex)

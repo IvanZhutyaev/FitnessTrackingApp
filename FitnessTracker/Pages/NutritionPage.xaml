@@ -127,7 +127,7 @@
                             <VerticalStackLayout Spacing="5">
                                 <Label Text="Выпито сегодня" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                                 <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                                    <Label Text="{Binding WaterIntake, StringFormat='{0:F1}/{1:F1} л', Source={x:Reference WaterGoal}}" 
+                                    <Label Text="{Binding WaterDisplayText}" 
                                            FontSize="22" TextColor="White" HorizontalOptions="Center"/>
                                 </Frame>
                             </VerticalStackLayout>

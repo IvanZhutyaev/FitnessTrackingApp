@@ -340,12 +340,17 @@ app.MapGet("/nutrition/{userId}", async (int userId, AppDbContext db) =>
 
     if (nutritionDay == null)
     {
-        // Создаем новый день, если не найден
+        // Создаем новый день с обнуленными значениями
         nutritionDay = new NutritionDay
         {
             UserId = userId,
             Date = today,
-            WaterGoal = 2.0
+            WaterGoal = 2.0,
+            TotalCalories = 0,
+            TotalProtein = 0,
+            TotalFat = 0,
+            TotalCarbs = 0,
+            WaterIntake = 0
         };
         db.NutritionDays.Add(nutritionDay);
         await db.SaveChangesAsync();
@@ -415,6 +420,43 @@ app.MapPost("/water", async (WaterUpdateRequest request, AppDbContext db) =>
     await db.SaveChangesAsync();
     return Results.Ok(nutritionDay);
 });
+app.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStarted.Register(() =>
+{
+    var timer = new System.Timers.Timer();
+    timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds; // Проверяем каждую минуту
+    timer.Elapsed += async (sender, e) =>
+    {
+        if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                await ResetDailyNutritionData(db);
+            }
+        }
+    };
+    timer.Start();
+});
+
+// Метод для сброса данных
+async Task ResetDailyNutritionData(AppDbContext db)
+{
+    var yesterday = DateTime.UtcNow.Date.AddDays(-1);
+    var daysToReset = await db.NutritionDays
+        .Where(n => n.Date == yesterday)
+        .ToListAsync();
+
+    foreach (var day in daysToReset)
+    {
+        day.TotalCalories = 0;
+        day.TotalProtein = 0;
+        day.TotalFat = 0;
+        day.TotalCarbs = 0;
+        day.WaterIntake = 0;
+    }
+
+    await db.SaveChangesAsync();
+}
 
 // Запуск приложения
 app.Run();
