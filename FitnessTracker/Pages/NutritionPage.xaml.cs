@@ -1,19 +1,33 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using FitnessTrackingApp.Models;
 
 namespace FitnessTrackingApp.Pages;
 
-public partial class NutritionPage : ContentPage
+public partial class NutritionPage : ContentPage, INotifyPropertyChanged
 {
-    private int _userId = UserSession.UserId; // Замените на реальный ID пользователя
-    private NutritionDay _currentDay;
+    private int _userId = UserSession.UserId;
+    private NutritionDay _currentDay = new();
     public ObservableCollection<Meal> Meals { get; } = new();
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    // Свойства для привязки данных
+    public double WaterIntake => _currentDay?.WaterIntake ?? 0;
+    public double WaterGoal => _currentDay?.WaterGoal ?? 2.0;
+    public double WaterProgressValue => WaterIntake / WaterGoal;
+
+    public int TotalCalories => _currentDay?.TotalCalories ?? 0;
+    public double TotalProtein => _currentDay?.TotalProtein ?? 0;
+    public double TotalFat => _currentDay?.TotalFat ?? 0;
+    public double TotalCarbs => _currentDay?.TotalCarbs ?? 0;
 
     public NutritionPage()
     {
         InitializeComponent();
+
         if (UserSession.UserId == 0)
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -23,6 +37,7 @@ public partial class NutritionPage : ContentPage
             });
             return;
         }
+
         BindingContext = this;
         LoadNutritionData();
     }
@@ -31,6 +46,11 @@ public partial class NutritionPage : ContentPage
     {
         base.OnAppearing();
         LoadNutritionData();
+    }
+
+    protected void OnPropertyChanged(string name)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
     private async void LoadNutritionData()
@@ -43,26 +63,36 @@ public partial class NutritionPage : ContentPage
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var data = JsonSerializer.Deserialize<NutritionResponse>(content);
 
-                // Обновляем данные в основном потоке
-                Device.BeginInvokeOnMainThread(() =>
+                // Безопасная десериализация с проверкой наличия свойств
+                using (JsonDocument doc = JsonDocument.Parse(content))
                 {
-                    _currentDay = data?.NutritionDay ?? new NutritionDay
+                    var root = doc.RootElement;
+
+                    // Инициализация нового дня, если данные не получены
+                    _currentDay = new NutritionDay
                     {
                         UserId = _userId,
                         Date = DateTime.UtcNow.Date,
                         WaterGoal = 2.0
                     };
 
-                    Meals.Clear();
-                    foreach (var meal in data?.Meals ?? new List<Meal>())
+                    if (root.TryGetProperty("NutritionDay", out var nutritionDayElement))
                     {
-                        Meals.Add(meal);
+                        _currentDay = nutritionDayElement.Deserialize<NutritionDay>() ?? _currentDay;
                     }
 
-                    UpdateUI();
-                });
+                    Meals.Clear();
+                    if (root.TryGetProperty("Meals", out var mealsElement))
+                    {
+                        foreach (var meal in mealsElement.Deserialize<List<Meal>>() ?? new List<Meal>())
+                        {
+                            Meals.Add(meal);
+                        }
+                    }
+
+                    Device.BeginInvokeOnMainThread(UpdateUI);
+                }
             }
         }
         catch (Exception ex)
@@ -73,17 +103,14 @@ public partial class NutritionPage : ContentPage
 
     private void UpdateUI()
     {
-        if (_currentDay == null) return;
+        OnPropertyChanged(nameof(WaterIntake));
+        OnPropertyChanged(nameof(WaterGoal));
+        OnPropertyChanged(nameof(WaterProgressValue));
+        OnPropertyChanged(nameof(TotalCalories));
+        OnPropertyChanged(nameof(TotalProtein));
+        OnPropertyChanged(nameof(TotalFat));
+        OnPropertyChanged(nameof(TotalCarbs));
 
-        // Обновляем все элементы интерфейса
-        CaloriesLabel.Text = $"{_currentDay.TotalCalories}/2400";
-        ProteinLabel.Text = $"{_currentDay.TotalProtein:F0}/150г";
-        FatLabel.Text = $"{_currentDay.TotalFat:F0}/80г";
-        CarbsLabel.Text = $"{_currentDay.TotalCarbs:F0}/300г";
-        WaterLabel.Text = $"{_currentDay.WaterIntake:F1}/{_currentDay.WaterGoal:F1} л";
-        WaterProgress.Progress = _currentDay.WaterIntake / _currentDay.WaterGoal;
-
-        // Принудительное обновление CollectionView
         MealsCollectionView.ItemsSource = null;
         MealsCollectionView.ItemsSource = Meals;
     }
@@ -126,6 +153,14 @@ public partial class NutritionPage : ContentPage
                 Date = DateTime.UtcNow
             };
 
+            // Локальное обновление
+            _currentDay.TotalCalories += meal.Calories;
+            _currentDay.TotalProtein += meal.Protein;
+            _currentDay.TotalFat += meal.Fat;
+            _currentDay.TotalCarbs += meal.Carbs;
+            Meals.Add(meal);
+            UpdateUI();
+
             await SaveMealAsync(meal);
         }
         catch (Exception ex)
@@ -141,13 +176,7 @@ public partial class NutritionPage : ContentPage
             var client = new HttpClient();
             var json = JsonSerializer.Serialize(meal);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("http://localhost:5024/meals", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                // После успешного сохранения сразу обновляем данные
-                LoadNutritionData();
-            }
+            await client.PostAsync("http://localhost:5024/meals", content);
         }
         catch (Exception ex)
         {
@@ -160,13 +189,17 @@ public partial class NutritionPage : ContentPage
         try
         {
             var amount = await DisplayPromptAsync("Добавить воду",
-                $"Сколько воды вы выпили? (Текущая цель: {_currentDay?.WaterGoal ?? 2.0} л)",
+                $"Сколько воды вы выпили? (Текущая цель: {WaterGoal:F1} л)",
                 keyboard: Keyboard.Numeric,
                 initialValue: "0.2");
 
             if (!string.IsNullOrWhiteSpace(amount) && double.TryParse(amount, out var waterAmount))
             {
-                await SaveWaterIntakeAsync(waterAmount);
+                // Локальное обновление
+                _currentDay.WaterIntake += waterAmount;
+                UpdateUI();
+
+                await SaveWaterIntakeAsync(_currentDay.WaterIntake);
             }
         }
         catch (Exception ex)
@@ -188,13 +221,7 @@ public partial class NutritionPage : ContentPage
             var client = new HttpClient();
             var json = JsonSerializer.Serialize(request);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("http://localhost:5024/water", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                // После успешного сохранения сразу обновляем данные
-                LoadNutritionData();
-            }
+            await client.PostAsync("http://localhost:5024/water", content);
         }
         catch (Exception ex)
         {

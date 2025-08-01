@@ -39,28 +39,32 @@
                             <VerticalStackLayout Grid.Column="0" Spacing="5">
                                 <Label Text="Калории" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                                 <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label x:Name="CaloriesLabel" Text="0/2400" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding TotalCalories, StringFormat='{0}/2400'}" 
+                                           TextColor="White" HorizontalOptions="Center"/>
                                 </Frame>
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="1" Spacing="5">
                                 <Label Text="Белки" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                                 <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label x:Name="ProteinLabel" Text="0/150г" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding TotalProtein, StringFormat='{0:F0}/150г'}" 
+                                           TextColor="White" HorizontalOptions="Center"/>
                                 </Frame>
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="2" Spacing="5">
                                 <Label Text="Жиры" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                                 <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label x:Name="FatLabel" Text="0/80г" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding TotalFat, StringFormat='{0:F0}/80г'}" 
+                                           TextColor="White" HorizontalOptions="Center"/>
                                 </Frame>
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="3" Spacing="5">
                                 <Label Text="Углеводы" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                                 <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                    <Label x:Name="CarbsLabel" Text="0/300г" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding TotalCarbs, StringFormat='{0:F0}/300г'}" 
+                                           TextColor="White" HorizontalOptions="Center"/>
                                 </Frame>
                             </VerticalStackLayout>
                         </Grid>
@@ -123,14 +127,16 @@
                             <VerticalStackLayout Spacing="5">
                                 <Label Text="Выпито сегодня" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                                 <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                                    <Label x:Name="WaterLabel" Text="0/2.0 л" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding WaterIntake, StringFormat='{0:F1}/{1:F1} л', Source={x:Reference WaterGoal}}" 
+                                           FontSize="22" TextColor="White" HorizontalOptions="Center"/>
                                 </Frame>
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="1" Spacing="5">
                                 <Label Text="Цель" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                                 <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                                    <Label Text="2.0 л" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding WaterGoal, StringFormat='{0:F1} л'}" 
+                                           FontSize="22" TextColor="White" HorizontalOptions="Center"/>
                                 </Frame>
                             </VerticalStackLayout>
                         </Grid>
@@ -143,8 +149,7 @@
                                 Margin="0,10"
                                 Clicked="OnAddWaterClicked"/>
 
-                        <ProgressBar x:Name="WaterProgress" 
-                                    Progress="0" 
+                        <ProgressBar Progress="{Binding WaterProgressValue}" 
                                     BackgroundColor="#1A3A6F" 
                                     ProgressColor="#00C9FF" 
                                     HeightRequest="10"/>
