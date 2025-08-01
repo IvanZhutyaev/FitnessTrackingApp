@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using System.Text.Json; 
+using System.Text.Json;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -10,7 +10,7 @@ builder.Services.AddSwaggerGen();
 
 // Настройка подключения к базе данных PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Host=localhost;Port=5432;Database=project;Username=postgres;Password=12345";
+    ?? "Host=localhost;Port=5432;Database=Username=postgres;Password=12345";
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -29,10 +29,10 @@ if (app.Environment.IsDevelopment())
 // Маршруты API
 
 // Получение активностей пользователя
-app.MapGet("/activities/{userId}", async (int userId, AppDbContext db) =>
+app.MapGet("/activities/{username}", async (string username, AppDbContext db) =>
 {
     var activities = await db.Activities
-        .Where(a => a.UserId == userId)
+        .Where(a => a.Username == username)
         .OrderByDescending(a => a.Date)
         .ToListAsync();
     return Results.Ok(activities);
@@ -47,13 +47,13 @@ app.MapPost("/exercises", async (Exercise exercise, AppDbContext db) =>
 });
 
 // Получение статистики за последнюю неделю
-app.MapGet("/activities/stats/{userId}", async (int userId, AppDbContext db) =>
+app.MapGet("/activities/stats/{username}", async (string username, AppDbContext db) =>
 {
     var today = DateTime.UtcNow.Date;
     var weekAgo = today.AddDays(-7);
 
     var stats = await db.Activities
-        .Where(a => a.UserId == userId && a.Date >= weekAgo)
+        .Where(a => a.Username == username && a.Date >= weekAgo)
         .OrderBy(a => a.Date)
         .Select(a => new
         {
@@ -315,7 +315,7 @@ app.MapPost("/user/steps", async (Activity activity, AppDbContext db) =>
 {
     var today = DateTime.UtcNow.Date;
     var existingActivity = await db.Activities
-        .FirstOrDefaultAsync(a => a.UserId == activity.UserId && a.Date.Date == today);
+        .FirstOrDefaultAsync(a => a.Username == activity.Username && a.Date.Date == today);
 
     if (existingActivity != null)
     {
@@ -482,7 +482,7 @@ public class User
     public string TargetPeriod { get; set; } = "3 месяца";
     public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
     public ICollection<Activity> Activities { get; set; } = new List<Activity>();
-    
+
 }
 
 public class UserProfileDto
@@ -527,8 +527,8 @@ public class WorkoutHistory
 public class Activity
 {
     public int Id { get; set; }
-    public int UserId { get; set; }
-    public User User { get; set; } = new User(); // Инициализировано
+    public string? Username { get; set; }
+    public User? User { get; set; } // Инициализировано
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public int Steps { get; set; }
     public double Distance { get; set; }
@@ -548,14 +548,14 @@ public class Exercise
 }
 public class ChangeInfoRequest
 {
-    
+
     public int UserId { get; set; }
     public string BirthDate { get; set; } = string.Empty;
     public double Weight { get; set; }
     public double Height { get; set; }
 
 }
-public class WorkoutDetailResponse 
+public class WorkoutDetailResponse
 {
     public int Id { get; set; }
     public string WorkoutName { get; set; } = string.Empty;
@@ -641,4 +641,4 @@ public class AppDbContext : DbContext
     public DbSet<NotificationSettings> NotificationSettings => Set<NotificationSettings>();
     public DbSet<Meal> Meals => Set<Meal>();
     public DbSet<NutritionDay> NutritionDays => Set<NutritionDay>();
-} 
+}

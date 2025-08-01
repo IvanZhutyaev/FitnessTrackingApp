@@ -124,7 +124,7 @@ public partial class ActivityPage : ContentPage
         _stepService = stepService ?? throw new ArgumentNullException(nameof(stepService));
         _chartDrawable = new ActivityChartDrawable();
 
-        if (UserSession.UserId == 0)
+        if (UserSession.UserId == 0 || UserSession.Username == "")
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
@@ -269,7 +269,7 @@ public partial class ActivityPage : ContentPage
         try
         {
             var today = DateTime.Today;
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{UserSession.UserId}");
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{UserSession.Username}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -344,7 +344,7 @@ public partial class ActivityPage : ContentPage
     {
         try
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{UserSession.UserId}");
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{UserSession.Username}");
             if (response.IsSuccessStatusCode)
             {
                 var stats = await response.Content.ReadFromJsonAsync<List<ActivityStat>>();
@@ -390,7 +390,7 @@ public partial class ActivityPage : ContentPage
     {
         try
         {
-            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{UserSession.UserId}");
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{UserSession.Username}");
             if (response.IsSuccessStatusCode)
             {
                 var stats = await response.Content.ReadFromJsonAsync<List<ActivityStat>>();
@@ -421,9 +421,9 @@ public partial class ActivityPage : ContentPage
     {
         try
         {
-            var activity = new Activity
+            var activity = new
             {
-                UserId = UserSession.UserId,
+                Username = UserSession.Username,
                 Date = DateTime.UtcNow,
                 Steps = UserStaticData.Steps,
                 Distance = _currentDistance,

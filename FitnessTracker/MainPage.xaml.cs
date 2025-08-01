@@ -169,7 +169,7 @@ namespace FitnessTrackingApp
                         UserSession.UserId = user.Id;
                     }
 
-                    await UpdateStaticUserData(UserSession.UserId);
+                    await UpdateStaticUserData(UserSession.Username);
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
@@ -252,7 +252,7 @@ namespace FitnessTrackingApp
         }
         //Респонз для получения шагов. Пока только шагов
 
-        private async Task UpdateStaticUserData(int username)
+        private async Task UpdateStaticUserData(string username)
         {
             try
             {
