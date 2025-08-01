@@ -5,143 +5,152 @@
              Title="Питание"
              BackgroundColor="#0C1B33">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
-            <!-- Заголовок -->
-            <Label Text="🍎 Питание"
-                   FontSize="24"
-                   TextColor="White"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"/>
+    <RefreshView x:Name="RefreshView"
+                 IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="20">
+                <!-- Заголовок -->
+                <Label Text="🍎 Питание"
+                       FontSize="24"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
 
-            <!-- КБЖУ -->
-            <Frame CornerRadius="15"
-                   BackgroundColor="#152642"
-                   BorderColor="#2A4D80"
-                   Padding="15">
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="Дневник питания"
-                           FontSize="18"
-                           TextColor="#00C9FF"
-                           FontAttributes="Bold"/>
+                <!-- КБЖУ -->
+                <Frame CornerRadius="15"
+                       BackgroundColor="#152642"
+                       BorderColor="#2A4D80"
+                       Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Дневник питания"
+                               FontSize="18"
+                               TextColor="#00C9FF"
+                               FontAttributes="Bold"/>
 
-                    <Grid ColumnSpacing="15" Margin="0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid ColumnSpacing="15" Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <VerticalStackLayout Grid.Column="0" Spacing="5">
-                            <Label Text="Калории" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label x:Name="CaloriesLabel" Text="0/2400" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Label Text="Белки" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label x:Name="ProteinLabel" Text="0/150г" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Grid.Column="2" Spacing="5">
-                            <Label Text="Жиры" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label x:Name="FatLabel" Text="0/80г" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Grid.Column="3" Spacing="5">
-                            <Label Text="Углеводы" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label x:Name="CarbsLabel" Text="0/300г" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
-                    </Grid>
-
-                    <!-- Приемы пищи -->
-                    <CollectionView x:Name="MealsCollectionView">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame CornerRadius="10"
-                                       BackgroundColor="#1A3A6F"
-                                       Padding="10"
-                                       Margin="0,5">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <VerticalStackLayout>
-                                            <Label Text="{Binding MealType}"
-                                                   FontSize="16"
-                                                   TextColor="#00C9FF"
-                                                   FontAttributes="Bold"/>
-                                            <Label Text="{Binding Name}"
-                                                   FontSize="14"
-                                                   TextColor="White"/>
-                                            <Label Text="{Binding Calories, StringFormat='{0} ккал (Б: {1:F0}г, Ж: {2:F0}г, У: {3:F0}г}'}"
-                                                   FontSize="12"
-                                                   TextColor="#A0E7FF"/>
-                                        </VerticalStackLayout>
-                                    </Grid>
+                            <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                <Label Text="Калории" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                    <Label x:Name="CaloriesLabel" Text="0/2400" TextColor="White" HorizontalOptions="Center"/>
                                 </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                            </VerticalStackLayout>
 
-                    <Button Text="+ Добавить прием пищи"
-                            BackgroundColor="#00C9FF"
-                            TextColor="#0C1B33"
-                            FontAttributes="Bold"
-                            CornerRadius="10"
-                            Margin="0,10"
-                            Clicked="OnAddMealClicked"/>
-                </VerticalStackLayout>
-            </Frame>
+                            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                <Label Text="Белки" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                    <Label x:Name="ProteinLabel" Text="0/150г" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
 
-            <!-- Водный баланс -->
-            <Frame CornerRadius="15"
-                   BackgroundColor="#152642"
-                   BorderColor="#2A4D80"
-                   Padding="15">
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="Водный баланс"
-                           FontSize="18"
-                           TextColor="#00C9FF"
-                           FontAttributes="Bold"/>
+                            <VerticalStackLayout Grid.Column="2" Spacing="5">
+                                <Label Text="Жиры" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                    <Label x:Name="FatLabel" Text="0/80г" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
 
-                    <Grid ColumnSpacing="20">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                            <VerticalStackLayout Grid.Column="3" Spacing="5">
+                                <Label Text="Углеводы" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                    <Label x:Name="CarbsLabel" Text="0/300г" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
+                        </Grid>
 
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="Выпито сегодня" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                                <Label x:Name="WaterLabel" Text="0/2.0 л" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
+                        <!-- Приемы пищи -->
+                        <CollectionView x:Name="MealsCollectionView"
+                                      ItemsSource="{Binding Meals}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame CornerRadius="10"
+                                           BackgroundColor="#1A3A6F"
+                                           Padding="10"
+                                           Margin="0,5">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <VerticalStackLayout>
+                                                <Label Text="{Binding MealType}"
+                                                       FontSize="16"
+                                                       TextColor="#00C9FF"
+                                                       FontAttributes="Bold"/>
+                                                <Label Text="{Binding Name}"
+                                                       FontSize="14"
+                                                       TextColor="White"/>
+                                                <Label Text="{Binding Calories, StringFormat='{0} ккал (Б: {1:F0}г, Ж: {2:F0}г, У: {3:F0}г)'}"
+                                                       FontSize="12"
+                                                       TextColor="#A0E7FF"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
-                        <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Label Text="Цель" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
-                                <Label Text="2.0 л" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
-                            </Frame>
-                        </VerticalStackLayout>
-                    </Grid>
+                        <Button Text="+ Добавить прием пищи"
+                                BackgroundColor="#00C9FF"
+                                TextColor="#0C1B33"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                Margin="0,10"
+                                Clicked="OnAddMealClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-                    <Button Text="+ Добавить воду"
-                            BackgroundColor="#00C9FF"
-                            TextColor="#0C1B33"
-                            FontAttributes="Bold"
-                            CornerRadius="10"
-                            Margin="0,10"
-                            Clicked="OnAddWaterClicked"/>
+                <!-- Водный баланс -->
+                <Frame CornerRadius="15"
+                       BackgroundColor="#152642"
+                       BorderColor="#2A4D80"
+                       Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Водный баланс"
+                               FontSize="18"
+                               TextColor="#00C9FF"
+                               FontAttributes="Bold"/>
 
-                    <ProgressBar x:Name="WaterProgress" Progress="0" BackgroundColor="#1A3A6F" ProgressColor="#00C9FF" HeightRequest="10"/>
-                </VerticalStackLayout>
-            </Frame>
-        </VerticalStackLayout>
-    </ScrollView>
+                        <Grid ColumnSpacing="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="Выпито сегодня" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                                    <Label x:Name="WaterLabel" Text="0/2.0 л" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                <Label Text="Цель" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                                <Frame CornerRadius="15" BackgroundColor="#1A3A6F" Padding="15">
+                                    <Label Text="2.0 л" FontSize="22" TextColor="White" HorizontalOptions="Center"/>
+                                </Frame>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Button Text="+ Добавить воду"
+                                BackgroundColor="#00C9FF"
+                                TextColor="#0C1B33"
+                                FontAttributes="Bold"
+                                CornerRadius="10"
+                                Margin="0,10"
+                                Clicked="OnAddWaterClicked"/>
+
+                        <ProgressBar x:Name="WaterProgress" 
+                                    Progress="0" 
+                                    BackgroundColor="#1A3A6F" 
+                                    ProgressColor="#00C9FF" 
+                                    HeightRequest="10"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
 </ContentPage>

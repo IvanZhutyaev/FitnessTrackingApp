@@ -581,6 +581,11 @@ public class NutritionDay
     public double WaterIntake { get; set; }
     public double WaterGoal { get; set; } = 2.0;
 }
+public class NutritionResponse
+{
+    public NutritionDay NutritionDay { get; set; }
+    public List<Meal> Meals { get; set; }
+}
 // Контекст базы данных
 public class AppDbContext : DbContext
 {
