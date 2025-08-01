@@ -86,6 +86,45 @@ namespace FitnessTrackerBack.Migrations
                     b.ToTable("Exercises");
                 });
 
+            modelBuilder.Entity("Meal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Calories")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Carbs")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("Fat")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("MealType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Protein")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Meals");
+                });
+
             modelBuilder.Entity("Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -154,6 +193,43 @@ namespace FitnessTrackerBack.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NotificationSettings");
+                });
+
+            modelBuilder.Entity("NutritionDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TotalCalories")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("TotalCarbs")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("TotalFat")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("TotalProtein")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("WaterGoal")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("WaterIntake")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NutritionDays");
                 });
 
             modelBuilder.Entity("User", b =>
