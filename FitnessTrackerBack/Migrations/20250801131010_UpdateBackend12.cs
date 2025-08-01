@@ -5,7 +5,7 @@
 namespace FitnessTrackerBack.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateWorkoutPageSecond1 : Migration
+    public partial class UpdateBackend12 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

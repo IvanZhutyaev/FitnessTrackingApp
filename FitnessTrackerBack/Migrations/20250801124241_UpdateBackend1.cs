@@ -5,7 +5,7 @@
 namespace FitnessTrackerBack.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDescriptionAndNotesToW213217213 : Migration
+    public partial class UpdateBackend1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

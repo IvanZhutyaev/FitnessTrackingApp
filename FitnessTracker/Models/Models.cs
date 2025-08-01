@@ -52,4 +52,42 @@ namespace FitnessTrackingApp.Models
     {
         public static int UserId { get; set; }
     }
+    public class Meal
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string MealType { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public int Calories { get; set; }
+        public double Protein { get; set; }
+        public double Fat { get; set; }
+        public double Carbs { get; set; }
+        public DateTime Date { get; set; } = DateTime.UtcNow;
+    }
+
+    public class NutritionDay
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public DateTime Date { get; set; } = DateTime.UtcNow.Date;
+        public int TotalCalories { get; set; }
+        public double TotalProtein { get; set; }
+        public double TotalFat { get; set; }
+        public double TotalCarbs { get; set; }
+        public double WaterIntake { get; set; }
+        public double WaterGoal { get; set; } = 2.0;
+    }
+
+    public class WaterUpdateRequest
+    {
+        public int UserId { get; set; }
+        public double Amount { get; set; }
+        public double? Goal { get; set; }
+    }
+
+    public class NutritionResponse
+    {
+        public NutritionDay NutritionDay { get; set; }
+        public List<Meal> Meals { get; set; }
+    }
 }

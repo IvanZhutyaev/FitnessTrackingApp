@@ -10,7 +10,7 @@ builder.Services.AddSwaggerGen();
 
 // Настройка подключения к базе данных PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=12345";
+    ?? "Host=localhost;Port=5432;Database=project;Username=postgres;Password=12345";
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -332,12 +332,142 @@ app.MapPost("/user/steps", async (Activity activity, AppDbContext db) =>
     await db.SaveChangesAsync();
     return Results.Ok(new { Success = true, Message = "Данные успешно сохранены" });
 });
+app.MapGet("/nutrition/{userId}", async (int userId, AppDbContext db) =>
+{
+    var today = DateTime.UtcNow.Date;
+    var nutritionDay = await db.NutritionDays
+        .FirstOrDefaultAsync(n => n.UserId == userId && n.Date == today);
+
+    if (nutritionDay == null)
+    {
+        // Создаем новый день с обнуленными значениями
+        nutritionDay = new NutritionDay
+        {
+            UserId = userId,
+            Date = today,
+            WaterGoal = 2.0,
+            TotalCalories = 0,
+            TotalProtein = 0,
+            TotalFat = 0,
+            TotalCarbs = 0,
+            WaterIntake = 0
+        };
+        db.NutritionDays.Add(nutritionDay);
+        await db.SaveChangesAsync();
+    }
+
+    var meals = await db.Meals
+        .Where(m => m.UserId == userId && m.Date.Date == today)
+        .OrderBy(m => m.Date)
+        .ToListAsync();
+
+    return Results.Ok(new { NutritionDay = nutritionDay, Meals = meals });
+});
+
+app.MapPost("/meals", async (Meal meal, AppDbContext db) =>
+{
+    meal.Date = DateTime.UtcNow;
+    db.Meals.Add(meal);
+
+    // Обновляем общие показатели за день
+    var today = DateTime.UtcNow.Date;
+    var nutritionDay = await db.NutritionDays
+        .FirstOrDefaultAsync(n => n.UserId == meal.UserId && n.Date == today);
+
+    if (nutritionDay == null)
+    {
+        nutritionDay = new NutritionDay
+        {
+            UserId = meal.UserId,
+            Date = today,
+            WaterGoal = 2.0
+        };
+        db.NutritionDays.Add(nutritionDay);
+    }
+
+    nutritionDay.TotalCalories += meal.Calories;
+    nutritionDay.TotalProtein += meal.Protein;
+    nutritionDay.TotalFat += meal.Fat;
+    nutritionDay.TotalCarbs += meal.Carbs;
+
+    await db.SaveChangesAsync();
+    return Results.Created($"/meals/{meal.Id}", meal);
+});
+
+app.MapPost("/water", async (WaterUpdateRequest request, AppDbContext db) =>
+{
+    var today = DateTime.UtcNow.Date;
+    var nutritionDay = await db.NutritionDays
+        .FirstOrDefaultAsync(n => n.UserId == request.UserId && n.Date == today);
+
+    if (nutritionDay == null)
+    {
+        nutritionDay = new NutritionDay
+        {
+            UserId = request.UserId,
+            Date = today,
+            WaterGoal = 2.0
+        };
+        db.NutritionDays.Add(nutritionDay);
+    }
+
+    nutritionDay.WaterIntake = request.Amount;
+    if (request.Goal.HasValue)
+    {
+        nutritionDay.WaterGoal = request.Goal.Value;
+    }
+
+    await db.SaveChangesAsync();
+    return Results.Ok(nutritionDay);
+});
+app.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStarted.Register(() =>
+{
+    var timer = new System.Timers.Timer();
+    timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds; // Проверяем каждую минуту
+    timer.Elapsed += async (sender, e) =>
+    {
+        if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                await ResetDailyNutritionData(db);
+            }
+        }
+    };
+    timer.Start();
+});
+
+// Метод для сброса данных
+async Task ResetDailyNutritionData(AppDbContext db)
+{
+    var yesterday = DateTime.UtcNow.Date.AddDays(-1);
+    var daysToReset = await db.NutritionDays
+        .Where(n => n.Date == yesterday)
+        .ToListAsync();
+
+    foreach (var day in daysToReset)
+    {
+        day.TotalCalories = 0;
+        day.TotalProtein = 0;
+        day.TotalFat = 0;
+        day.TotalCarbs = 0;
+        day.WaterIntake = 0;
+    }
+
+    await db.SaveChangesAsync();
+}
 
 // Запуск приложения
 app.Run();
 
 // Модели данных
-
+public class WaterUpdateRequest
+{
+    public int UserId { get; set; }
+    public double Amount { get; set; }
+    public double? Goal { get; set; }
+}
 // Пользователь
 public class User
 {
@@ -465,6 +595,38 @@ public class NotificationSettings
     public bool SoundEnabled { get; set; } = true;
     public bool VibrationEnabled { get; set; } = true;
     public TimeSpan NotificationTime { get; set; } = new TimeSpan(9, 0, 0); // Добавлено новое свойство
+
+
+}
+
+public class Meal
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public string MealType { get; set; } = string.Empty; // Завтрак, Обед и т.д.
+    public string Name { get; set; } = string.Empty;
+    public int Calories { get; set; }
+    public double Protein { get; set; }
+    public double Fat { get; set; }
+    public double Carbs { get; set; }
+    public DateTime Date { get; set; } = DateTime.UtcNow;
+}
+public class NutritionDay
+{
+    public int Id { get; set; }
+    public int UserId { get; set; }
+    public DateTime Date { get; set; } = DateTime.UtcNow.Date;
+    public int TotalCalories { get; set; }
+    public double TotalProtein { get; set; }
+    public double TotalFat { get; set; }
+    public double TotalCarbs { get; set; }
+    public double WaterIntake { get; set; }
+    public double WaterGoal { get; set; } = 2.0;
+}
+public class NutritionResponse
+{
+    public NutritionDay NutritionDay { get; set; }
+    public List<Meal> Meals { get; set; }
 }
 // Контекст базы данных
 public class AppDbContext : DbContext
@@ -477,4 +639,6 @@ public class AppDbContext : DbContext
     public DbSet<WorkoutHistory> WorkoutHistory => Set<WorkoutHistory>(); // Добавьте эту строку
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationSettings> NotificationSettings => Set<NotificationSettings>();
+    public DbSet<Meal> Meals => Set<Meal>();
+    public DbSet<NutritionDay> NutritionDays => Set<NutritionDay>();
 } 

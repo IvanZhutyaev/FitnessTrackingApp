@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessTrackerBack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250721193919_AddDescriptionAndNotesToW21321")]
-    partial class AddDescriptionAndNotesToW21321
+    [Migration("20250801124241_UpdateBackend1")]
+    partial class UpdateBackend1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,152 @@ namespace FitnessTrackerBack.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("Meal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Calories")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Carbs")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("Fat")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("MealType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Protein")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Meals");
+                });
+
+            modelBuilder.Entity("Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<TimeSpan>("Time")
+                        .HasColumnType("interval");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("NotificationSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("AchievementsEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("GeneralEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("MotivationalEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<TimeSpan>("NotificationTime")
+                        .HasColumnType("interval");
+
+                    b.Property<bool>("ProgressEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("SoundEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("VibrationEnabled")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotificationSettings");
+                });
+
+            modelBuilder.Entity("NutritionDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TotalCalories")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("TotalCarbs")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("TotalFat")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("TotalProtein")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("WaterGoal")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("WaterIntake")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NutritionDays");
                 });
 
             modelBuilder.Entity("User", b =>
