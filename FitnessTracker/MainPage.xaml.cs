@@ -37,7 +37,7 @@ namespace FitnessTrackingApp
             }
         }
 
-       
+
 
         private void CloseAuthPopup_Clicked(object sender, EventArgs e)
         {
@@ -168,7 +168,7 @@ namespace FitnessTrackingApp
                         var user = await userResponse.Content.ReadFromJsonAsync<User>();
                         UserSession.UserId = user.Id;
                     }
-                    
+
                     await UpdateStaticUserData(UserSession.UserId);
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
@@ -201,11 +201,12 @@ namespace FitnessTrackingApp
             // if (!string.IsNullOrWhiteSpace(WeightEntry.Text) && double.TryParse(WeightEntry.Text, out double w))
             //     weight = w;
 
-            var regData = new {
+            var regData = new
+            {
                 Username = username,
                 Password = password,
                 BirthDate = birthDate
-                
+
             };
 
             var response = await _httpClient.PostAsJsonAsync(
@@ -256,25 +257,30 @@ namespace FitnessTrackingApp
             try
             {
 
-                var userResponse = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{username}"); 
-                if (userResponse.IsSuccessStatusCode)                                            
-                {                                                                                
-                    var user = await userResponse.Content.ReadFromJsonAsync<List<Activity>>(); 
-                    
-                    if(user.Any()){
+                var userResponse = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{username}");
+                if (userResponse.IsSuccessStatusCode)
+                {
+                    var user = await userResponse.Content.ReadFromJsonAsync<List<Activity>>();
+
+                    if (user.Any())
+                    {
 
                         UserStaticData.AvgDistance = user.Average(d => d.Distance);
                         UserStaticData.AvgCalories = user.Average(c => c.Calories);
-                        UserStaticData.AvgSteps = user.Sum(s => s.Steps);
+                        UserStaticData.Steps = user.Sum(s => s.Steps);
+                        UserStaticData.AvgSteps = user.Average(s => s.Steps);
 
-                        await DisplayAlert("Успешно", "Данные о шагах получены!" , "ОК");
-                    }else
-                    {
-                        await DisplayAlert("Ошибка", "Данные о шагах отсутсвуют" , "ОК");
+                        await DisplayAlert("Успешно", "Данные о шагах получены!", "ОК");
                     }
-                }                                                                                
-                                                                                  
-            }catch(Exception ex){
+                    else
+                    {
+                        await DisplayAlert("Ошибка", "Данные о шагах отсутсвуют", "ОК");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
                 await DisplayAlert("Ошибка", "При получении данных пользоваетля произошла ошибка", "ОК");
             }
         }
@@ -303,7 +309,7 @@ namespace FitnessTrackingApp
             {
                 await DisplayAlert("Ошибка", "Сначала выполните вход в систему", "OK");
             }
-        
+
         }
 
         private async void OnActivityTapped(object sender, EventArgs e)
@@ -318,8 +324,8 @@ namespace FitnessTrackingApp
             {
                 await DisplayAlert("Ошибка", "Сначала выполните вход в систему", "OK");
             }
-            
-            
+
+
         }
 
         private async void OnNutritionTapped(object sender, EventArgs e)
@@ -390,11 +396,11 @@ namespace FitnessTrackingApp
 
     public class Activity
     {
-        public int UserId {get;set;}
-        public int Steps {get; set;}
-        public DateTime Date {get; set;}
-        public double Distance {get;set;}
-        public double Calories {get;set;}
+        public int UserId { get; set; }
+        public int Steps { get; set; }
+        public DateTime Date { get; set; }
+        public double Distance { get; set; }
+        public double Calories { get; set; }
         //Че нють еще
     }
 

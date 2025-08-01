@@ -17,7 +17,6 @@ public class ActivityChartDrawable : IDrawable
     public List<Activity> DayActivities { get; set; } = new();
     public List<Activity> WeekActivities { get; set; } = new();
     public bool IsDayView { get; set; } = true;
-
     public void Draw(ICanvas canvas, RectF dirtyRect)
     {
         var activities = IsDayView ? DayActivities : WeekActivities;
@@ -35,7 +34,7 @@ public class ActivityChartDrawable : IDrawable
         var valueRange = maxValue - minValue;
 
         // Оси
-       
+
         canvas.StrokeColor = axisColor;
         canvas.StrokeSize = 1;
         canvas.DrawLine(40, dirtyRect.Height - 30, dirtyRect.Width, dirtyRect.Height - 30); // X
@@ -110,8 +109,6 @@ public partial class ActivityPage : ContentPage
     private IDispatcherTimer _chartUpdateTimer;
     private IDispatcherTimer _updateUiTimer;
     private IDispatcherTimer _saveToDbTimer;
-
-    private int _currentSteps;
     private double _currentDistance;
     private int _currentCalories;
     private const double StepLength = 0.7;
@@ -142,7 +139,6 @@ public partial class ActivityPage : ContentPage
         SetupTimers();
         LoadActivityData();
         LoadWeeklyProgress();
-        LoadData();
     }
 
     private void InitializeChart()
@@ -172,7 +168,7 @@ public partial class ActivityPage : ContentPage
             midnightTimer.Stop();
 
             await SaveActivityToDatabase(); // сохраняем
-            _currentSteps = 0;              // сброс
+            UserStaticData.Steps = 0;
             CalculateDerivedMetrics();
             UpdateUi();
             ChartGraphicsView.Invalidate();
@@ -232,7 +228,7 @@ public partial class ActivityPage : ContentPage
 
         // Таймер для сохранения в БД (каждые 10 мин)
         _saveToDbTimer = Dispatcher.CreateTimer();
-        _saveToDbTimer.Interval = TimeSpan.FromMinutes(10);
+        _saveToDbTimer.Interval = TimeSpan.FromMinutes(1);
         _saveToDbTimer.Tick += async (s, e) => await SaveActivityToDatabase();
         _saveToDbTimer.Start();
     }
@@ -250,7 +246,7 @@ public partial class ActivityPage : ContentPage
         StopAllTimers();
     }
 
-    
+
     private void StopAllTimers()
     {
         _updateUiTimer?.Stop();
@@ -284,7 +280,7 @@ public partial class ActivityPage : ContentPage
                         .Where(a => a.Date.Date == today)
                         .Sum(a => a.Steps);
 
-                    _currentSteps = todaySteps;
+                    UserStaticData.Steps = todaySteps;
                     CalculateDerivedMetrics();
                     UpdateUi();
                 }
@@ -316,36 +312,33 @@ public partial class ActivityPage : ContentPage
 
     private void LoadActivityData()
     {
-        _currentSteps = _stepService.GetSteps();
+        UserStaticData.Steps = _stepService.GetSteps();
         CalculateDerivedMetrics();
         UpdateUi();
     }
 
     private void UpdateActivityData()
     {
-        _currentSteps = _stepService.GetSteps();
+        UserStaticData.Steps = _stepService.GetSteps();
+
         CalculateDerivedMetrics();
         UpdateUi();
     }
 
     private void CalculateDerivedMetrics()
     {
-        _currentDistance = Math.Round((_currentSteps * StepLength) / 1000, 1);
-        _currentCalories = (int)(_currentSteps * CaloriesPerStep);
+        _currentDistance = Math.Round((UserStaticData.Steps * StepLength) / 1000, 1);
+        _currentCalories = (int)(UserStaticData.Steps * CaloriesPerStep);
     }
 
     private void UpdateUi()
     {
-        StepsLabel.Text = _currentSteps.ToString();
+        StepsLabel.Text = UserStaticData.Steps.ToString();
         DistanceLabel.Text = $"{_currentDistance} км";
         CaloriesLabel.Text = _currentCalories.ToString();
-        
+
     }
 
-    private void LoadData()
-    {
-        StepsLabel.Text = _stepService.GetSteps().ToString();
-    }
 
     private async Task UpdateChartData()
     {
@@ -432,7 +425,7 @@ public partial class ActivityPage : ContentPage
             {
                 UserId = UserSession.UserId,
                 Date = DateTime.UtcNow,
-                Steps = _currentSteps,
+                Steps = UserStaticData.Steps,
                 Distance = _currentDistance,
                 Calories = _currentCalories
             };

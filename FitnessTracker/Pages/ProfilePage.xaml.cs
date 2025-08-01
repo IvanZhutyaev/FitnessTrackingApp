@@ -127,6 +127,10 @@ namespace FitnessTrackingApp.Pages
                 // Очищаем данные сессии
                 UserSession.UserId = 0;
                 UserSession.Username = null;
+                UserStaticData.Steps = 0;
+                UserStaticData.AvgCalories = 0;
+                UserStaticData.AvgSteps = 0;
+                UserStaticData.AvgDistance = 0;
 
                 // Создаем новый экземпляр AppShell и устанавливаем его как MainPage
                 var newShell = new AppShell();
@@ -163,36 +167,36 @@ namespace FitnessTrackingApp.Pages
 
                 if (response.IsSuccessStatusCode)
                 {
-                var profileData = await response.Content.ReadFromJsonAsync<UserProfileDto>();
+                    var profileData = await response.Content.ReadFromJsonAsync<UserProfileDto>();
 
-                // Основные данные
-                usernameEntry.Text = profileData.Username;
-                heightEntry.Text = profileData.Height.ToString();
-                weightEntry.Text = profileData.Weight.ToString();
-                
-                // Calculate age from BirthDate string (format: дд.мм.гггг)
-                if (!string.IsNullOrEmpty(profileData.BirthDate))
-                {
-                    var parts = profileData.BirthDate.Split('.');
-                    if (parts.Length == 3 && int.TryParse(parts[2], out int year) && int.TryParse(parts[1], out int month) && int.TryParse(parts[0], out int day))
+                    // Основные данные
+                    usernameEntry.Text = profileData.Username;
+                    heightEntry.Text = profileData.Height.ToString();
+                    weightEntry.Text = profileData.Weight.ToString();
+
+                    // Calculate age from BirthDate string (format: дд.мм.гггг)
+                    if (!string.IsNullOrEmpty(profileData.BirthDate))
                     {
-                        var birthDate = new DateTime(year, month, day);
-                        var today = DateTime.Today;
-                        int age = today.Year - birthDate.Year;
-                        if (birthDate > today.AddYears(-age)) age--;
-                        birthDateEntry.Text = age.ToString();
+                        var parts = profileData.BirthDate.Split('.');
+                        if (parts.Length == 3 && int.TryParse(parts[2], out int year) && int.TryParse(parts[1], out int month) && int.TryParse(parts[0], out int day))
+                        {
+                            var birthDate = new DateTime(year, month, day);
+                            var today = DateTime.Today;
+                            int age = today.Year - birthDate.Year;
+                            if (birthDate > today.AddYears(-age)) age--;
+                            birthDateEntry.Text = age.ToString();
+                        }
+                        else
+                        {
+                            birthDateEntry.Text = "";
+                        }
                     }
                     else
                     {
                         birthDateEntry.Text = "";
                     }
-                }
-                else
-                {
-                    birthDateEntry.Text = "";
-                }
 
-                    
+
                     // Устанавливаем цель
                     if (!string.IsNullOrEmpty(profileData.Goal))
                     {
@@ -201,15 +205,15 @@ namespace FitnessTrackingApp.Pages
                         goalPicker.SelectedIndex = goalIndex >= 0 ? goalIndex : 0;
                     }
 
-                // Параметры целей
-                targetWeightEntry.Text = profileData.TargetWeight.ToString();
+                    // Параметры целей
+                    targetWeightEntry.Text = profileData.TargetWeight.ToString();
 
-                if (!string.IsNullOrEmpty(profileData.TargetPeriod))
-                {
-                    var periodOptions = new List<string> { "1 месяц", "3 месяца", "6 месяцев", "1 год" };
-                    var periodIndex = periodOptions.IndexOf(profileData.TargetPeriod);
-                    targetPeriodPicker.SelectedIndex = periodIndex >= 0 ? periodIndex : 1;
-                }
+                    if (!string.IsNullOrEmpty(profileData.TargetPeriod))
+                    {
+                        var periodOptions = new List<string> { "1 месяц", "3 месяца", "6 месяцев", "1 год" };
+                        var periodIndex = periodOptions.IndexOf(profileData.TargetPeriod);
+                        targetPeriodPicker.SelectedIndex = periodIndex >= 0 ? periodIndex : 1;
+                    }
                 }
                 else
                 {
@@ -226,11 +230,11 @@ namespace FitnessTrackingApp.Pages
         {
             try
             {
-                
+
 
                 var profileData = new UserProfileDto
                 {
-                    
+
                     Height = double.Parse(heightEntry.Text),
                     Weight = double.Parse(weightEntry.Text),
                     Goal = goalLabel.Text,
@@ -264,7 +268,7 @@ namespace FitnessTrackingApp.Pages
     public class UserProfileDto
     {
         //public string Username { get; set; } = string.Empty;
-       public string Username { get; set; } = UserSession.Username ?? string.Empty;
+        public string Username { get; set; } = UserSession.Username ?? string.Empty;
         public double Weight { get; set; }
         public double Height { get; set; }
         public string Goal { get; set; } = "Похудение";
