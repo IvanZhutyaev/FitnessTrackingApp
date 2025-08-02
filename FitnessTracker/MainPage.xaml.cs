@@ -20,6 +20,7 @@ namespace FitnessTrackingApp
         public MainPage()
         {
             InitializeComponent();
+            UpdateUIifUserExists();
         }
 
         private void LoginButton_Clicked(object sender, EventArgs e)
@@ -173,6 +174,8 @@ namespace FitnessTrackingApp
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
+                    await SecureStorage.SetAsync("username", username); //Сохранение в SecureStorage
+
                 }
                 else
                 {
@@ -250,6 +253,26 @@ namespace FitnessTrackingApp
             LoginButton.Padding = new Thickness(10, 5);
             LoginButton.WidthRequest = 120;
         }
+
+        private async Task UpdateUIifUserExists()
+        {
+            var storedUsername = await SecureStorage.GetAsync("username");
+            if (!string.IsNullOrEmpty(storedUsername) && UserSession.Username == string.Empty)
+            {
+
+                DisplayAlert("Успех", "Данные пользователя имеются в SecureStorage", "Заебись");
+                _currentUsername = await SecureStorage.GetAsync("username");
+                UpdateUIAfterLogin();
+            }
+            else
+            {
+
+                DisplayAlert("Ошибка", "Данные не удалось получить", "Заебись");
+
+            }
+        }
+
+
         //Респонз для получения шагов. Пока только шагов
 
         private async Task UpdateStaticUserData(string username)
