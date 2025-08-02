@@ -21,13 +21,11 @@ namespace FitnessTrackingApp.Pages
         private int _userId;
         private List<Notification> _notifications = new();
 
-        // ID для системных уведомлений
         private const int MotivationalNotificationId = 1000;
         private const int AchievementNotificationId = 1001;
         private const int ProgressNotificationId = 1002;
         private const int TestNotificationId = 999;
 
-        // Флаг для блокировки многократных нажатий
         private bool _isTestNotificationInProgress = false;
 
         public NotificationsPage(int userId)

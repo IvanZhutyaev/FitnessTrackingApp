@@ -33,18 +33,14 @@ public class ActivityChartDrawable : IDrawable
         var minValue = 0;
         var valueRange = maxValue - minValue;
 
-        // Оси
-
         canvas.StrokeColor = axisColor;
         canvas.StrokeSize = 1;
-        canvas.DrawLine(40, dirtyRect.Height - 30, dirtyRect.Width, dirtyRect.Height - 30); // X
-        canvas.DrawLine(40, 0, 40, dirtyRect.Height - 30); // Y
+        canvas.DrawLine(40, dirtyRect.Height - 30, dirtyRect.Width, dirtyRect.Height - 30);
+        canvas.DrawLine(40, 0, 40, dirtyRect.Height - 30);
 
-        // Подписи осей
         canvas.FontColor = textColor;
         canvas.FontSize = 10;
 
-        // Точки графика
         var points = new List<PointF>();
         for (int i = 0; i < activities.Count; i++)
         {
@@ -53,7 +49,6 @@ public class ActivityChartDrawable : IDrawable
             points.Add(new PointF(x, y));
         }
 
-        // Заливка под графиком
         if (points.Count > 1)
         {
             var path = new PathF();
@@ -67,7 +62,6 @@ public class ActivityChartDrawable : IDrawable
             canvas.FillPath(path);
         }
 
-        // Линия графика
         if (points.Count > 1)
         {
             canvas.StrokeColor = lineColor;
@@ -79,14 +73,12 @@ public class ActivityChartDrawable : IDrawable
             canvas.DrawPath(path);
         }
 
-        // Точки
         foreach (var point in points)
         {
             canvas.FillColor = pointColor;
             canvas.FillCircle(point, 4);
         }
 
-        // Подписи X
         for (int i = 0; i < activities.Count; i++)
         {
             var label = IsDayView
@@ -167,13 +159,13 @@ public partial class ActivityPage : ContentPage
         {
             midnightTimer.Stop();
 
-            await SaveActivityToDatabase(); // сохраняем
+            await SaveActivityToDatabase();
             UserStaticData.Steps = 0;
             CalculateDerivedMetrics();
             UpdateUi();
             ChartGraphicsView.Invalidate();
 
-            SetupMidnightResetTimer(); // запускаем заново
+            SetupMidnightResetTimer();
         };
         midnightTimer.AutoReset = false;
         midnightTimer.Start();
@@ -214,19 +206,16 @@ public partial class ActivityPage : ContentPage
     }
     private void StartAllTimers()
     {
-        // Таймер для обновления UI (каждые 5 сек)
         _updateUiTimer = Dispatcher.CreateTimer();
         _updateUiTimer.Interval = TimeSpan.FromSeconds(5);
         _updateUiTimer.Tick += (s, e) => UpdateActivityData();
         _updateUiTimer.Start();
 
-        // Таймер для обновления графиков и прогресса (каждые 30 сек)
         _chartUpdateTimer = Dispatcher.CreateTimer();
         _chartUpdateTimer.Interval = TimeSpan.FromSeconds(ChartUpdateIntervalSeconds);
         _chartUpdateTimer.Tick += async (s, e) => await UpdateAllData();
         _chartUpdateTimer.Start();
 
-        // Таймер для сохранения в БД (каждые 10 мин)
         _saveToDbTimer = Dispatcher.CreateTimer();
         _saveToDbTimer.Interval = TimeSpan.FromMinutes(1);
         _saveToDbTimer.Tick += async (s, e) => await SaveActivityToDatabase();
@@ -237,11 +226,10 @@ public partial class ActivityPage : ContentPage
         base.OnDisappearing();
         _stepService.Stop();
 
-        // Принудительное сохранение при выходе
         Task.Run(async () =>
         {
             await SaveActivityToDatabase();
-        }).Wait(); // Ждем завершения
+        }).Wait();
 
         StopAllTimers();
     }
@@ -352,7 +340,6 @@ public partial class ActivityPage : ContentPage
                 {
                     var today = DateTime.Today;
 
-                    // Для дневного графика - группируем по часам
                     _chartDrawable.DayActivities = stats
                         .Where(s => s.Date.Date == today)
                         .GroupBy(s => s.Date.Hour)
@@ -364,7 +351,6 @@ public partial class ActivityPage : ContentPage
                         .OrderBy(a => a.Date)
                         .ToList();
 
-                    // Для недельного графика - группируем по дням
                     _chartDrawable.WeekActivities = stats
                         .Where(s => s.Date >= today.AddDays(-7))
                         .GroupBy(s => s.Date.Date)
