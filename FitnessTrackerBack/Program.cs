@@ -22,7 +22,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapGet("/activities/{username}", async (string username, AppDbContext db) =>
-app.MapGet("/activities/{username}", async (string username, AppDbContext db) =>
 {
     var activities = await db.Activities
         .Where(a => a.Username == username)
@@ -428,7 +427,6 @@ async Task ResetDailyNutritionData(AppDbContext db)
 
 app.Run();
 
-public class WaterUpdateRequest
 public class WaterUpdateRequest
 {
     public int UserId { get; set; }
