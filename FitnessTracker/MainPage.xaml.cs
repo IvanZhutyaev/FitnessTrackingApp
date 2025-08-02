@@ -170,7 +170,17 @@ namespace FitnessTrackingApp
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
-                    await SecureStorage.SetAsync("username", username); //Сохранение в SecureStorage
+                    try
+                    {
+
+                        await SecureStorage.SetAsync("username", username); //Сохранение в SecureStorage
+                        var testSave = await SecureStorage.GetAsync("username");
+                        await DisplayAlert("Данные", $"Данные {testSave} сохранены", "ОК");
+                    }
+                    catch (Exception ex)
+                    {
+                        await DisplayAlert("Error", ex.Message, "OK");
+                    }
 
                 }
                 else
@@ -255,7 +265,16 @@ namespace FitnessTrackingApp
                 UpdateUIAfterLogin();
             }
             else
-            {
+                        <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+            <plist version="1.0">
+            <dict>
+                <key>keychain-access-groups</key>
+                <array>
+                    <string>$(AppIdentifierPrefix)$(CFBundleIdentifier)</string>
+                </array>
+            </dict>
+            </plist>{
 
                 DisplayAlert("Ошибка", "Данные не удалось получить", "Заебись");
 
