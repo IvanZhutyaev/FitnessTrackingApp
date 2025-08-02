@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using Microsoft.Maui.Media; // Добавляем для работы с MediaPicker
-using Microsoft.Maui.Storage; // Для работы с файловой системой
+using Microsoft.Maui.Media;
+using Microsoft.Maui.Storage;
 
 
 namespace FitnessTrackingApp.Pages
@@ -30,13 +30,13 @@ namespace FitnessTrackingApp.Pages
             LoadUserDataAsync();
         }
 
-        private string _photoPath; // Путь к текущему фото
+        private string _photoPath;
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
             await LoadUserDataAsync();
-            await LoadUserPhotoAsync(); // Загружаем фото при открытии страницы
+            await LoadUserPhotoAsync();
         }
 
         private async Task LoadUserPhotoAsync()
@@ -45,7 +45,6 @@ namespace FitnessTrackingApp.Pages
             {
                 if (UserSession.UserId == 0) return;
 
-                // Проверяем, существует ли фото
                 var fileName = $"{UserSession.UserId}.jpg";
                 var localFilePath = Path.Combine(FileSystem.AppDataDirectory, "Media", fileName);
 
@@ -56,7 +55,7 @@ namespace FitnessTrackingApp.Pages
                 }
                 else
                 {
-                    avatarImage.Source = "user_avatar.png"; // Фото по умолчанию
+                    avatarImage.Source = "user_avatar.png";
                 }
             }
             catch (Exception ex)
@@ -69,7 +68,6 @@ namespace FitnessTrackingApp.Pages
         {
             try
             {
-                // Запрашиваем разрешения
                 var status = await Permissions.RequestAsync<Permissions.Photos>();
                 if (status != PermissionStatus.Granted)
                 {
@@ -77,25 +75,21 @@ namespace FitnessTrackingApp.Pages
                     return;
                 }
 
-                // Выбираем фото из галереи
                 var result = await MediaPicker.PickPhotoAsync();
                 if (result != null)
                 {
-                    // Создаем папку Media, если ее нет
                     var mediaFolder = Path.Combine(FileSystem.AppDataDirectory, "Media");
                     if (!Directory.Exists(mediaFolder))
                     {
                         Directory.CreateDirectory(mediaFolder);
                     }
 
-                    // Удаляем старое фото, если оно есть
                     var oldFilePath = Path.Combine(mediaFolder, $"{UserSession.UserId}.jpg");
                     if (File.Exists(oldFilePath))
                     {
                         File.Delete(oldFilePath);
                     }
 
-                    // Сохраняем новое фото
                     var newFilePath = Path.Combine(mediaFolder, $"{UserSession.UserId}.jpg");
                     using (var stream = await result.OpenReadAsync())
                     using (var newStream = File.OpenWrite(newFilePath))
@@ -103,7 +97,6 @@ namespace FitnessTrackingApp.Pages
                         await stream.CopyToAsync(newStream);
                     }
 
-                    // Обновляем отображение
                     _photoPath = newFilePath;
                     avatarImage.Source = ImageSource.FromFile(newFilePath);
 
@@ -124,7 +117,6 @@ namespace FitnessTrackingApp.Pages
 
             if (answer)
             {
-                // Очищаем данные сессии
                 UserSession.UserId = 0;
                 UserSession.Username = null;
                 UserStaticData.Steps = 0;
@@ -132,11 +124,9 @@ namespace FitnessTrackingApp.Pages
                 UserStaticData.AvgSteps = 0;
                 UserStaticData.AvgDistance = 0;
 
-                // Создаем новый экземпляр AppShell и устанавливаем его как MainPage
                 var newShell = new AppShell();
                 Application.Current.MainPage = newShell;
 
-                // Находим MainPage в новом Shell и обновляем UI
                 if (newShell.CurrentPage is MainPage mainPage)
                 {
                     mainPage.UpdateUIAfterLogout();
@@ -146,7 +136,6 @@ namespace FitnessTrackingApp.Pages
 
         private void OnGoalPickerChanged(object sender, EventArgs e)
         {
-            // Обновляем Label в личных данных при изменении Picker'а
             if (goalPicker.SelectedIndex >= 0)
             {
                 goalLabel.Text = Goals[goalPicker.SelectedIndex];
@@ -169,12 +158,10 @@ namespace FitnessTrackingApp.Pages
                 {
                     var profileData = await response.Content.ReadFromJsonAsync<UserProfileDto>();
 
-                    // Основные данные
                     usernameEntry.Text = profileData.Username;
                     heightEntry.Text = profileData.Height.ToString();
                     weightEntry.Text = profileData.Weight.ToString();
 
-                    // Calculate age from BirthDate string (format: дд.мм.гггг)
                     if (!string.IsNullOrEmpty(profileData.BirthDate))
                     {
                         var parts = profileData.BirthDate.Split('.');
@@ -197,7 +184,6 @@ namespace FitnessTrackingApp.Pages
                     }
 
 
-                    // Устанавливаем цель
                     if (!string.IsNullOrEmpty(profileData.Goal))
                     {
                         goalLabel.Text = profileData.Goal;
@@ -205,7 +191,6 @@ namespace FitnessTrackingApp.Pages
                         goalPicker.SelectedIndex = goalIndex >= 0 ? goalIndex : 0;
                     }
 
-                    // Параметры целей
                     targetWeightEntry.Text = profileData.TargetWeight.ToString();
 
                     if (!string.IsNullOrEmpty(profileData.TargetPeriod))
@@ -267,12 +252,11 @@ namespace FitnessTrackingApp.Pages
 
     public class UserProfileDto
     {
-        //public string Username { get; set; } = string.Empty;
         public string Username { get; set; } = UserSession.Username ?? string.Empty;
         public double Weight { get; set; }
         public double Height { get; set; }
         public string Goal { get; set; } = "Похудение";
-        public string BirthDate { get; set; } = "01.01.2000"; // Предполагаемый формат дд.мм.гггг
+        public string BirthDate { get; set; } = "01.01.2000";
         public double TargetWeight { get; set; }
         public string TargetPeriod { get; set; } = "3 месяца";
     }

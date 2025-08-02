@@ -33,7 +33,6 @@ namespace FitnessTrackingApp
             }
             else
             {
-                // Вместо открытия модального окна - переход на страницу профиля
                 Navigation.PushAsync(new ProfilePage());
             }
         }
@@ -134,15 +133,12 @@ namespace FitnessTrackingApp
 
             if (answer)
             {
-                // Очищаем данные сессии
                 UserSession.UserId = 0;
                 UserSession.Username = null;
 
-                // Создаем новый экземпляр AppShell и устанавливаем его как MainPage
                 var newShell = new AppShell();
                 Application.Current.MainPage = newShell;
 
-                // Находим MainPage в новом Shell и обновляем UI
                 if (newShell.CurrentPage is MainPage mainPage)
                 {
                     mainPage.UpdateUIAfterLogout();
@@ -192,17 +188,11 @@ namespace FitnessTrackingApp
 
         private async Task RegisterUser(string username, string password)
         {
-            // Формируем дату рождения из пикеров
             string birthDay = (regBirthDayPicker.SelectedIndex + 1).ToString("D2");
             string[] months = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" };
             string birthMonth = (regBirthMonthPicker.SelectedIndex + 1).ToString("D2");
             string birthYear = (1950 + regBirthYearPicker.SelectedIndex).ToString();
             string birthDate = $"{birthDay}.{birthMonth}.{birthYear}";
-
-            // Пример дополнительных полей (если будут)
-            // double weight = 0;
-            // if (!string.IsNullOrWhiteSpace(WeightEntry.Text) && double.TryParse(WeightEntry.Text, out double w))
-            //     weight = w;
 
             var regData = new
             {
@@ -275,6 +265,7 @@ namespace FitnessTrackingApp
 
         //Респонз для получения шагов. Пока только шагов
 
+
         private async Task UpdateStaticUserData(string username)
         {
             try
@@ -308,7 +299,6 @@ namespace FitnessTrackingApp
             }
         }
 
-        // Новые обработчики для навигации по разделам
         private async void OnProfileTapped(object sender, EventArgs e)
         {
             if (UserSession.UserId > 0)
@@ -337,7 +327,6 @@ namespace FitnessTrackingApp
 
         private async void OnActivityTapped(object sender, EventArgs e)
         {
-            //await DisplayAlert("Активность", "Переход на страницу активности", "OK");
             if (UserSession.UserId > 0)
             {
                 var activityPage = Handler.MauiContext.Services.GetService<ActivityPage>();
@@ -353,7 +342,6 @@ namespace FitnessTrackingApp
 
         private async void OnNutritionTapped(object sender, EventArgs e)
         {
-            //await DisplayAlert("Питание", "Переход на страницу питания", "OK");
             if (UserSession.UserId > 0)
             {
                 await Navigation.PushAsync(new Pages.NutritionPage());
@@ -366,7 +354,6 @@ namespace FitnessTrackingApp
 
         private async void OnProgressTapped(object sender, EventArgs e)
         {
-            //await DisplayAlert("Прогресс", "Переход на страницу прогресса", "OK");
             if (UserSession.UserId > 0)
             {
                 await Navigation.PushAsync(new Pages.ProgressPage());
@@ -379,13 +366,11 @@ namespace FitnessTrackingApp
 
         private async void OnNotificationsTapped(object sender, EventArgs e)
         {
-            //await DisplayAlert("Уведомления", "Переход на страницу уведомлений", "OK");
             await Navigation.PushAsync(new Pages.NotificationsPage(UserSession.UserId));
         }
 
         private async void OnAdditionallyTapped(object sender, EventArgs e)
         {
-            //await DisplayAlert("Настройки", "Переход на страницу настроек", "OK");
             await Navigation.PushAsync(new Pages.AdditionallyPage());
         }
         private async void OpenChatButton_Clicked(object sender, EventArgs e)
@@ -403,7 +388,6 @@ namespace FitnessTrackingApp
         }
     }
 
-    // Глобальный статический класс для хранения данных пользователя
     public static class UserSession
     {
         public static int UserId { get; set; }
@@ -424,7 +408,6 @@ namespace FitnessTrackingApp
         public DateTime Date { get; set; }
         public double Distance { get; set; }
         public double Calories { get; set; }
-        //Че нють еще
     }
 
     public static class UserStaticData

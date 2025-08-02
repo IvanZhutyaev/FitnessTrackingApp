@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Настройка подключения к базе данных PostgreSQL
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Host=localhost;Port=5432;Database=Username=postgres;Password=12345";
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -16,19 +15,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-// Настройка Swagger для разработки
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Отключено для локального тестирования
-// app.UseHttpsRedirection();
-
-// Маршруты API
-
-// Получение активностей пользователя
+app.MapGet("/activities/{username}", async (string username, AppDbContext db) =>
 app.MapGet("/activities/{username}", async (string username, AppDbContext db) =>
 {
     var activities = await db.Activities
@@ -38,7 +31,6 @@ app.MapGet("/activities/{username}", async (string username, AppDbContext db) =>
     return Results.Ok(activities);
 });
 
-// Добавление новой активности
 app.MapPost("/exercises", async (Exercise exercise, AppDbContext db) =>
 {
     db.Exercises.Add(exercise);
@@ -46,7 +38,6 @@ app.MapPost("/exercises", async (Exercise exercise, AppDbContext db) =>
     return Results.Created($"/exercises/{exercise.Id}", exercise);
 });
 
-// Получение статистики за последнюю неделю
 app.MapGet("/activities/stats/{username}", async (string username, AppDbContext db) =>
 {
     var today = DateTime.UtcNow.Date;
@@ -67,7 +58,6 @@ app.MapGet("/activities/stats/{username}", async (string username, AppDbContext 
     return Results.Ok(stats);
 });
 
-// Авторизация пользователя
 app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
@@ -80,7 +70,6 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
     return Results.Ok(new { Success = true, Message = "Пользователь успешно вошел в систему" });
 });
 
-// Регистрация нового пользователя
 app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.BirthDate))
@@ -96,22 +85,18 @@ app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
     return Results.Ok(new { Success = true, Message = "Пользователь успешно зарегистрирован" });
 });
 
-// Получение статистики пользователя
 app.MapGet("/user/stats", async (string username, AppDbContext db) =>
 {
-    // Сначала находим пользователя
     var user = await db.Users
-        .Include(u => u.Activities)  // Подгружаем активности
+        .Include(u => u.Activities)
         .FirstOrDefaultAsync(u => u.Username == username);
 
     if (user == null)
         return Results.NotFound("Пользователь не найден");
 
-    // Если у пользователя нет активностей
     if (!user.Activities.Any())
         return Results.Ok(new { AvgSteps = 0, AvgDistance = 0.0, AvgCalories = 0 });
 
-    // Рассчитываем средние значения
     var stats = new
     {
         AvgSteps = user.Activities.Average(a => a.Steps),
@@ -152,7 +137,6 @@ app.MapGet("/users/profile/{username}", async (string username, AppDbContext db)
     return Results.Ok(profileData);
 });
 
-//Получение списка упражнений пользователя
 app.MapGet("/exercises/{userId}", async (int userId, AppDbContext db) =>
 {
     var exercises = await db.Exercises
@@ -164,13 +148,10 @@ app.MapGet("/exercises/{userId}", async (int userId, AppDbContext db) =>
 
 app.MapPost("/user/changeinfo", async (ChangeInfoRequest request, AppDbContext db) =>
 {
-    // Находим пользователя по Id
     var user = await db.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
     if (user == null)
         return Results.NotFound("Пользователь не найден");
 
-    // Обновляем данные
-    //user.Age = request.Age;
     user.Weight = request.Weight;
     user.Height = request.Height;
 
@@ -184,7 +165,6 @@ app.MapPost("/user/updateprofile", async (UserProfileDto request, AppDbContext d
     if (user == null)
         return Results.NotFound("Пользователь не найден");
 
-    // Гарантируем, что Goal не будет null
     user.Goal = string.IsNullOrEmpty(request.Goal) ? "Похудение" : request.Goal;
     user.BirthDate = request.BirthDate;
     user.Weight = request.Weight;
@@ -221,30 +201,23 @@ app.MapPost("/workouthistory", async (WorkoutHistory history, AppDbContext db) =
 
 app.MapGet("/workouthistory/{userId}", async (int userId, AppDbContext db) =>
 {
-    Console.WriteLine($"Запрос истории для пользователя: {userId}"); // Логирование
     var history = await db.WorkoutHistory
         .Where(h => h.UserId == userId)
         .OrderByDescending(h => h.Date)
         .ToListAsync();
-    Console.WriteLine($"Найдено записей: {history.Count}"); // Логирование
     return Results.Ok(history);
 });
 
 app.MapGet("/workouthistory/details/{id}", async (int id, AppDbContext db) =>
 {
-    Console.WriteLine($"Запрос деталей для ID: {id}"); // Логирование
-
     var workout = await db.WorkoutHistory.FirstOrDefaultAsync(w => w.Id == id);
     if (workout == null)
     {
-        Console.WriteLine($"Тренировка с ID {id} не найдена");
         return Results.NotFound();
     }
 
-    Console.WriteLine($"Найдена тренировка: {workout.WorkoutName}");
     return Results.Ok(workout);
 });
-// Уведомления
 app.MapGet("/notifications/{userId}", async (int userId, AppDbContext db) =>
 {
     var notifications = await db.Notifications
@@ -281,13 +254,11 @@ app.MapDelete("/notifications/{id}", async (int id, AppDbContext db) =>
     return Results.NoContent();
 });
 
-// Настройки уведомлений
 app.MapGet("/notifications/settings/{userId}", async (int userId, AppDbContext db) =>
 {
     var settings = await db.NotificationSettings.FirstOrDefaultAsync(n => n.UserId == userId);
     if (settings == null)
     {
-        // Создаем настройки по умолчанию
         settings = new NotificationSettings { UserId = userId };
         db.NotificationSettings.Add(settings);
         await db.SaveChangesAsync();
@@ -325,7 +296,7 @@ app.MapPost("/user/steps", async (Activity activity, AppDbContext db) =>
     }
     else
     {
-        activity.Date = today; // Фиксируем дату без времени
+        activity.Date = today;
         db.Activities.Add(activity);
     }
 
@@ -340,7 +311,6 @@ app.MapGet("/nutrition/{userId}", async (int userId, AppDbContext db) =>
 
     if (nutritionDay == null)
     {
-        // Создаем новый день с обнуленными значениями
         nutritionDay = new NutritionDay
         {
             UserId = userId,
@@ -369,7 +339,6 @@ app.MapPost("/meals", async (Meal meal, AppDbContext db) =>
     meal.Date = DateTime.UtcNow;
     db.Meals.Add(meal);
 
-    // Обновляем общие показатели за день
     var today = DateTime.UtcNow.Date;
     var nutritionDay = await db.NutritionDays
         .FirstOrDefaultAsync(n => n.UserId == meal.UserId && n.Date == today);
@@ -423,7 +392,7 @@ app.MapPost("/water", async (WaterUpdateRequest request, AppDbContext db) =>
 app.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStarted.Register(() =>
 {
     var timer = new System.Timers.Timer();
-    timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds; // Проверяем каждую минуту
+    timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds;
     timer.Elapsed += async (sender, e) =>
     {
         if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
@@ -438,7 +407,6 @@ app.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStarted.R
     timer.Start();
 });
 
-// Метод для сброса данных
 async Task ResetDailyNutritionData(AppDbContext db)
 {
     var yesterday = DateTime.UtcNow.Date.AddDays(-1);
@@ -458,17 +426,15 @@ async Task ResetDailyNutritionData(AppDbContext db)
     await db.SaveChangesAsync();
 }
 
-// Запуск приложения
 app.Run();
 
-// Модели данных
+public class WaterUpdateRequest
 public class WaterUpdateRequest
 {
     public int UserId { get; set; }
     public double Amount { get; set; }
     public double? Goal { get; set; }
 }
-// Пользователь
 public class User
 {
     public int Id { get; set; }
@@ -477,7 +443,7 @@ public class User
     public string BirthDate { get; set; } = string.Empty;
     public double Weight { get; set; }
     public double Height { get; set; }
-    public string Goal { get; set; } = "Похудение"; // Устанавливаем значение по умолчанию
+    public string Goal { get; set; } = "Похудение";
     public double TargetWeight { get; set; } = 70;
     public string TargetPeriod { get; set; } = "3 месяца";
     public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
@@ -496,14 +462,12 @@ public class UserProfileDto
     public double TargetWeight { get; set; }
     public string TargetPeriod { get; set; } = string.Empty;
 }
-// Запрос на авторизацию
 public class LoginRequest
 {
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
 }
 
-// Запрос на регистрацию
 public class RegisterRequest
 {
     public string Username { get; set; } = string.Empty;
@@ -516,19 +480,18 @@ public class WorkoutHistory
     public int Id { get; set; }
     public int UserId { get; set; }
     public string WorkoutName { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty; // Добавлено
+    public string Description { get; set; } = string.Empty;
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public int Duration { get; set; } // в минутах
     public int CaloriesBurned { get; set; }
-    public string Notes { get; set; } = string.Empty; // Добавлено
+    public string Notes { get; set; } = string.Empty;
 }
 
-// Активность пользователя
 public class Activity
 {
     public int Id { get; set; }
     public string? Username { get; set; }
-    public User? User { get; set; } // Инициализировано
+    public User? User { get; set; }
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public int Steps { get; set; }
     public double Distance { get; set; }
@@ -541,8 +504,8 @@ public class Exercise
     public int UserId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public int Duration { get; set; } // Продолжительность в секундах
-    public int CaloriesBurned { get; set; } // Сожженные калории
+    public int Duration { get; set; }
+    public int CaloriesBurned { get; set; }
     public DateTime Date { get; set; } = DateTime.UtcNow;
 
 }
@@ -594,7 +557,7 @@ public class NotificationSettings
     public bool GeneralEnabled { get; set; } = true;
     public bool SoundEnabled { get; set; } = true;
     public bool VibrationEnabled { get; set; } = true;
-    public TimeSpan NotificationTime { get; set; } = new TimeSpan(9, 0, 0); // Добавлено новое свойство
+    public TimeSpan NotificationTime { get; set; } = new TimeSpan(9, 0, 0);
 
 
 }
@@ -603,7 +566,7 @@ public class Meal
 {
     public int Id { get; set; }
     public int UserId { get; set; }
-    public string MealType { get; set; } = string.Empty; // Завтрак, Обед и т.д.
+    public string MealType { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public int Calories { get; set; }
     public double Protein { get; set; }
@@ -628,7 +591,6 @@ public class NutritionResponse
     public NutritionDay NutritionDay { get; set; }
     public List<Meal> Meals { get; set; }
 }
-// Контекст базы данных
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -636,7 +598,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Activity> Activities => Set<Activity>();
     public DbSet<Exercise> Exercises => Set<Exercise>();
-    public DbSet<WorkoutHistory> WorkoutHistory => Set<WorkoutHistory>(); // Добавьте эту строку
+    public DbSet<WorkoutHistory> WorkoutHistory => Set<WorkoutHistory>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationSettings> NotificationSettings => Set<NotificationSettings>();
     public DbSet<Meal> Meals => Set<Meal>();
