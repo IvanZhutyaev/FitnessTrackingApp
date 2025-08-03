@@ -132,23 +132,30 @@
                         </Grid.ColumnDefinitions>
 
                         <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
-                            <Label Text="Средние шаги" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Label x:Name = "AvgStepsLabel" Text="Средние шаги" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                             <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label Text="8,200" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
+                                <Label Text="0" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
                             </Frame>
                         </VerticalStackLayout>
+
+			<VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
+                            <Label x:Name = "AvgDistanceLabel" Text="Средняя дистанция" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                <Label Text="0" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
+                            </Frame>
+			</VerticalStackLayout>
 
                         <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
                             <Label Text="Рекорд шагов" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                             <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label Text="12,450" TextColor="#FFEB3B" FontAttributes="Bold" HorizontalOptions="Center" FontSize="18"/>
+                                <Label Text="0" TextColor="#FFEB3B" FontAttributes="Bold" HorizontalOptions="Center" FontSize="18"/>
                             </Frame>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5">
                             <Label Text="Всего тренировок" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                             <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label Text="24" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
+                                <Label Text="0" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
                             </Frame>
                         </VerticalStackLayout>
 
