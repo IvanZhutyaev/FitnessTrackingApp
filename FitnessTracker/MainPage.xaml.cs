@@ -136,6 +136,17 @@ namespace FitnessTrackingApp
                 UserSession.UserId = 0;
                 UserSession.Username = null;
 
+
+                try
+                {
+                    await SecureStorage.SetAsync("userid", "");
+                    await SecureStorage.SetAsync("username", "");
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error", ex.Message, "OK");
+                }
+
                 var newShell = new AppShell();
                 Application.Current.MainPage = newShell;
 
@@ -164,16 +175,27 @@ namespace FitnessTrackingApp
                     {
                         var user = await userResponse.Content.ReadFromJsonAsync<User>();
                         UserSession.UserId = user.Id;
+                        try
+                        {
+                            await SecureStorage.SetAsync("userid", user.Id.ToString()); //Сохранение userId после успешного входа 
+
+                        }
+                        catch (Exception ex)
+                        {
+                            await DisplayAlert("Error", ex.Message, "OK");
+                        }
+
+
                     }
 
-                    await UpdateStaticUserData(UserSession.Username);
+                    //await UpdateStaticUserData();
                     UpdateUIAfterLogin();
                     await DisplayAlert("Успех", result.Message ?? "Вход выполнен успешно!", "OK");
                     AuthPopup.IsVisible = false;
                     try
                     {
 
-                        await SecureStorage.SetAsync("username", username); //Сохранение в SecureStorage
+                        await SecureStorage.SetAsync("username", username); //Сохранение username в SecureStorage после успешного входа в аккаунт
                         var testSave = await SecureStorage.GetAsync("username");
                         await DisplayAlert("Данные", $"Данные {testSave} сохранены", "ОК");
                     }
@@ -256,12 +278,17 @@ namespace FitnessTrackingApp
 
         private async Task UpdateUIifUserExists()
         {
-            var storedUsername = await SecureStorage.GetAsync("username");
+            var storedUsername = await SecureStorage.GetAsync("username"); //Получение username для проверки его в дальшнейшем и входа в аккаунт
             if (!string.IsNullOrEmpty(storedUsername) && UserSession.Username == string.Empty)
             {
 
                 DisplayAlert("Успех", "Данные пользователя имеются в SecureStorage", "OK");
-                _currentUsername = await SecureStorage.GetAsync("username");
+                _currentUsername = storedUsername;
+                UserSession.Username = storedUsername;
+
+
+
+
                 UpdateUIAfterLogin();
             }
             else
