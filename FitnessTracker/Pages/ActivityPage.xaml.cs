@@ -116,16 +116,6 @@ public partial class ActivityPage : ContentPage
         _stepService = stepService ?? throw new ArgumentNullException(nameof(stepService));
         _chartDrawable = new ActivityChartDrawable();
 
-        if (UserSession.UserId == 0 || UserSession.Username == "")
-        {
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                await DisplayAlert("Ошибка", "Сначала войдите в аккаунт", "OK");
-                await Navigation.PopAsync();
-            });
-            return;
-        }
-
         InitializeChart();
         SetupChartUpdateTimer();
         SetupTimers();
