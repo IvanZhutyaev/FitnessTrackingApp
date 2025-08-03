@@ -260,14 +260,14 @@ namespace FitnessTrackingApp
             if (!string.IsNullOrEmpty(storedUsername) && UserSession.Username == string.Empty)
             {
 
-                DisplayAlert("Успех", "Данные пользователя имеются в SecureStorage", "Заебись");
+                DisplayAlert("Успех", "Данные пользователя имеются в SecureStorage", "OK");
                 _currentUsername = await SecureStorage.GetAsync("username");
                 UpdateUIAfterLogin();
             }
             else
             {
 
-                DisplayAlert("Ошибка", "Данные не удалось получить", "Заебись");
+                DisplayAlert("Ошибка", "Данные не удалось получить", "OK");
 
             }
         }

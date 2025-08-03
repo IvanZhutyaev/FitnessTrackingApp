@@ -100,13 +100,15 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-ios'">
-    	<!--><RuntimeIdentifier>ios-arm64</RuntimeIdentifier> --> <!-- Для реального устройства -->
-    	<RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
-    	<CodesignProvision>Automatic</CodesignProvision>
-    	<DevelopmentTeam>7LQD9SFQCM</DevelopmentTeam>
-    	<ProvisioningType>Automatic</ProvisioningType>
-	</PropertyGroup>	
 
+<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-ios'">
+  <RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
+  <CodesignProvision>-</CodesignProvision>
+  <CodesignKey>-</CodesignKey>
+  <CodesignEntitlements>-</CodesignEntitlements>
+  <ProvisioningType>Manual</ProvisioningType>
+  <MtouchExtraArgs>--simulator --noprovisioning</MtouchExtraArgs>
+  <CreatePackage>false</CreatePackage>
+</PropertyGroup>
 
 </Project>
