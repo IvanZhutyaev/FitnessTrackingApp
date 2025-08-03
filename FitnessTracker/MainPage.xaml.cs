@@ -267,30 +267,48 @@ namespace FitnessTrackingApp
 
         private async Task UpdateUIifUserExists()
         {
-            var storedUsername = await SecureStorage.GetAsync("username"); //Получение username для проверки его в дальшнейшем и входа в аккаунт
-            var storedUserID = await SecureStorage.GetAsync("userid");
-
-            if (!string.IsNullOrEmpty(storedUsername) && (!string.IsNullOrEmpty(storedUserID)) && UserSession.Username == string.Empty)
+            try
             {
+                var storedUsername = await SecureStorage.GetAsync("username"); //Получение username для проверки его в дальшнейшем и входа в аккаунт
+                var storedUserID = await SecureStorage.GetAsync("userid");
 
-                DisplayAlert("Успех", "Данные пользователя имеются в SecureStorage", "OK");
-                if (int.TryParse(storedUserID, out int storedUserIDint))
+                if (!string.IsNullOrEmpty(storedUsername) && (!string.IsNullOrEmpty(storedUserID)) && UserSession.Username == string.Empty)
                 {
-                    _currentUsername = storedUsername;
-                    UserSession.Username = storedUsername;
-                    UserSession.UserId = storedUserIDint;
 
-                    UpdateUIAfterLogin();
+                    if (!int.TryParse(storedUserID, out int storedUserIDint))
+                    {
+                        await DisplayAlert("Error", "Error with reading storeUserID", "OK");
+
+                        return;
+                        _currentUsername = storedUsername;
+                        UserSession.Username = storedUsername;
+                        UserSession.UserId = storedUserIDint;
+
+                        UpdateUIAfterLogin();
+                    }
+
+                    await MainThread.InvokeOnMainThreadAsync(async () =>
+                            {
+
+
+                                _currentUsername = storedUsername;
+                                UserSession.Username = storedUsername;
+                                UserSession.UserId = storedUserIDint;
+                                UpdateUIAfterLogin();
+
+                            });
+
+
                 }
-
-
             }
-            else
+            catch (Exception ex)
             {
-
-                DisplayAlert("Ошибка", "Данные не удалось получить", "OK");
-
+                DisplayAlert("Error", ex.Message, "OK");
             }
+
+
+
+
         }
 
 
