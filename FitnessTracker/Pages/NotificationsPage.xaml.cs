@@ -17,7 +17,7 @@ namespace FitnessTrackingApp.Pages
     public partial class NotificationsPage : ContentPage
     {
         private readonly HttpClient _httpClient = new();
-        private const string ApiBaseUrl = "http://192.168.0.127:5024";
+        private const string ApiBaseUrl = "http://localhost:5024";
         private int _userId;
         private List<Notification> _notifications = new();
 
@@ -70,10 +70,14 @@ namespace FitnessTrackingApp.Pages
                     _notifications = await response.Content.ReadFromJsonAsync<List<Notification>>() ?? new();
                     UpdateNotificationsUI();
                 }
+                else
+                {
+                    await DisplayAlert("Ошибка", $"Ошибка загрузки уведомлений: {response.StatusCode}", "OK");
+                }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Ошибка", ex.Message, "OK");
+                await DisplayAlert("Ошибка", $"Ошибка подключения: {ex.Message}", "OK");
             }
         }
 
@@ -390,17 +394,35 @@ namespace FitnessTrackingApp.Pages
                         Title = result,
                         Description = GetDescription(result),
                         Time = time,
-                        IsActive = true
+                        IsActive = true,
+                        Type = result switch
+                        {
+                            "Прием пищи" => NotificationType.Meal,
+                            "Тренировка" => NotificationType.Workout,
+                            "Вода" => NotificationType.Water,
+                            _ => NotificationType.Custom
+                        }
                     };
 
-                    var response = await _httpClient.PostAsJsonAsync("/notifications", newNotification);
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        var createdNotification = await response.Content.ReadFromJsonAsync<Notification>();
-                        _notifications.Add(createdNotification);
-                        UpdateNotificationsUI();
-                        ScheduleNotification(createdNotification);
-                        await Toast.Make("Напоминание добавлено", ToastDuration.Short).Show();
+                        var response = await _httpClient.PostAsJsonAsync("/notifications", newNotification);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var createdNotification = await response.Content.ReadFromJsonAsync<Notification>();
+                            _notifications.Add(createdNotification);
+                            UpdateNotificationsUI();
+                            ScheduleNotification(createdNotification);
+                            await Toast.Make("Напоминание добавлено", ToastDuration.Short).Show();
+                        }
+                        else
+                        {
+                            await DisplayAlert("Ошибка", "Не удалось создать уведомление", "OK");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        await DisplayAlert("Ошибка", ex.Message, "OK");
                     }
                 }
             }
@@ -541,9 +563,18 @@ namespace FitnessTrackingApp.Pages
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public TimeSpan Time { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
+        public NotificationType Type { get; set; } = NotificationType.Custom;
+    }
+
+    public enum NotificationType
+    {
+        Meal,
+        Workout,
+        Water,
+        Custom
     }
 }
