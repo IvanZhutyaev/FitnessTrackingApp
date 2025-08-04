@@ -406,7 +406,7 @@ public partial class ActivityPage : ContentPage
             {
                 Username = UserSession.Username,
                 Date = DateTime.UtcNow,
-                Steps = UserStaticData.Steps,
+                Steps = stepsOnTick,
                 Distance = _currentDistance,
                 Calories = _currentCalories
             };
