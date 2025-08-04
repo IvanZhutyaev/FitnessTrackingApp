@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using Plugin.LocalNotification;
@@ -38,9 +39,20 @@ namespace FitnessTrackingApp.Pages
             LoadNotificationSettings();
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            // Запрос разрешений для iOS
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                var granted = await LocalNotificationCenter.Current.RequestNotificationPermission();
+                if (!granted)
+                {
+                    await DisplayAlert("Внимание", "Разрешения на уведомления не предоставлены. Пожалуйста, включите их в настройках.", "OK");
+                }
+            }
+
             LoadData();
         }
 
@@ -70,10 +82,14 @@ namespace FitnessTrackingApp.Pages
                     _notifications = await response.Content.ReadFromJsonAsync<List<Notification>>() ?? new();
                     UpdateNotificationsUI();
                 }
+                else
+                {
+                    await DisplayAlert("Ошибка", $"Ошибка загрузки уведомлений: {response.StatusCode}", "OK");
+                }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Ошибка", ex.Message, "OK");
+                await DisplayAlert("Ошибка", $"Ошибка подключения: {ex.Message}", "OK");
             }
         }
 
@@ -182,13 +198,8 @@ namespace FitnessTrackingApp.Pages
 
         private async Task ChangeNotificationTime(Notification notification, Label timeLabel)
         {
-            var result = await DisplayPromptAsync(
-                "Изменить время",
-                "Введите новое время в формате HH:mm",
-                "Сохранить",
-                "Отмена",
-                initialValue: notification.Time.ToString(@"hh\:mm"),
-                keyboard: Keyboard.Numeric);
+            var result = await DisplayPromptAsync("Изменить время", "Введите новое время в формате HH:mm", "Сохранить", "Отмена",
+                                                  initialValue: notification.Time.ToString(@"hh\:mm"), keyboard: Keyboard.Numeric);
 
             if (!string.IsNullOrWhiteSpace(result) && TimeSpan.TryParse(result, out var newTime))
             {
@@ -196,7 +207,6 @@ namespace FitnessTrackingApp.Pages
                 timeLabel.Text = newTime.ToString(@"hh\:mm");
 
                 var response = await _httpClient.PutAsJsonAsync($"/notifications/{notification.Id}", notification);
-
                 if (response.IsSuccessStatusCode)
                 {
                     if (notification.IsActive)
@@ -214,11 +224,7 @@ namespace FitnessTrackingApp.Pages
             var button = (ImageButton)sender;
             var notification = (Notification)button.BindingContext;
 
-            bool confirm = await DisplayAlert(
-                "Удаление",
-                $"Удалить напоминание '{notification.Title}'?",
-                "Удалить",
-                "Отмена");
+            bool confirm = await DisplayAlert("Удаление", $"Удалить напоминание '{notification.Title}'?", "Удалить", "Отмена");
 
             if (confirm)
             {
@@ -241,7 +247,6 @@ namespace FitnessTrackingApp.Pages
             notification.IsActive = e.Value;
 
             var response = await _httpClient.PutAsJsonAsync($"/notifications/{notification.Id}", notification);
-
             if (response.IsSuccessStatusCode)
             {
                 if (e.Value)
@@ -259,13 +264,9 @@ namespace FitnessTrackingApp.Pages
         {
             CancelNotification(notification.Id);
 
-            var now = DateTime.Now;
             var notifyTime = DateTime.Today.Add(notification.Time);
-
-            if (notifyTime < now)
-            {
+            if (notifyTime < DateTime.Now)
                 notifyTime = notifyTime.AddDays(1);
-            }
 
             var request = new NotificationRequest
             {
@@ -276,27 +277,33 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotifyTime = notifyTime,
                     RepeatType = NotificationRepeat.Daily
-                },
-                Android = new AndroidOptions
-                {
-                    ChannelId = "fitness_reminders",
-                    AutoCancel = true,
-                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
                 }
             };
+
+            // Настройки для Android
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                request.Android = new AndroidOptions
+                {
+                    ChannelId = "general_notifications",
+                    AutoCancel = true,
+                    VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
+                };
+            }
+            // Настройки для iOS
+            else if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                // Для iOS не требуется дополнительных настроек в текущей версии плагина
+            }
 
             LocalNotificationCenter.Current.Show(request);
         }
 
         private void ScheduleMotivationalNotification()
         {
-            var now = DateTime.Now;
             var notifyTime = DateTime.Today.AddHours(12);
-
-            if (notifyTime < now)
-            {
+            if (notifyTime < DateTime.Now)
                 notifyTime = notifyTime.AddDays(1);
-            }
 
             var request = new NotificationRequest
             {
@@ -307,27 +314,27 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotifyTime = notifyTime,
                     RepeatType = NotificationRepeat.Daily
-                },
-                Android = new AndroidOptions
-                {
-                    ChannelId = "motivational_messages",
-                    AutoCancel = true,
-                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
                 }
             };
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                request.Android = new AndroidOptions
+                {
+                    ChannelId = "general_notifications",
+                    AutoCancel = true,
+                    VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
+                };
+            }
 
             LocalNotificationCenter.Current.Show(request);
         }
 
         private void ScheduleAchievementNotification()
         {
-            var now = DateTime.Now;
             var notifyTime = DateTime.Today.AddHours(20);
-
-            if (notifyTime < now)
-            {
+            if (notifyTime < DateTime.Now)
                 notifyTime = notifyTime.AddDays(1);
-            }
 
             var request = new NotificationRequest
             {
@@ -338,27 +345,27 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotifyTime = notifyTime,
                     RepeatType = NotificationRepeat.Daily
-                },
-                Android = new AndroidOptions
-                {
-                    ChannelId = "achievement_notifications",
-                    AutoCancel = true,
-                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
                 }
             };
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                request.Android = new AndroidOptions
+                {
+                    ChannelId = "general_notifications",
+                    AutoCancel = true,
+                    VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
+                };
+            }
 
             LocalNotificationCenter.Current.Show(request);
         }
 
         private void ScheduleProgressNotification()
         {
-            var now = DateTime.Now;
             var notifyTime = DateTime.Today.AddHours(21);
-
-            if (notifyTime < now)
-            {
+            if (notifyTime < DateTime.Now)
                 notifyTime = notifyTime.AddDays(1);
-            }
 
             var request = new NotificationRequest
             {
@@ -369,14 +376,18 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotifyTime = notifyTime,
                     RepeatType = NotificationRepeat.Daily
-                },
-                Android = new AndroidOptions
-                {
-                    ChannelId = "progress_reports",
-                    AutoCancel = true,
-                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
                 }
             };
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                request.Android = new AndroidOptions
+                {
+                    ChannelId = "general_notifications",
+                    AutoCancel = true,
+                    VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
+                };
+            }
 
             LocalNotificationCenter.Current.Show(request);
         }
@@ -402,20 +413,12 @@ namespace FitnessTrackingApp.Pages
 
         private async void OnAddNotificationClicked(object sender, EventArgs e)
         {
-            var result = await DisplayActionSheet(
-                "Добавить напоминание",
-                "Отмена",
-                null,
+            var result = await DisplayActionSheet("Добавить напоминание", "Отмена", null,
                 "Прием пищи", "Тренировка", "Вода", "Другое");
 
             if (result != "Отмена")
             {
-                var timeResult = await DisplayPromptAsync(
-                    "Введите время",
-                    "Формат HH:mm",
-                    "OK",
-                    "Отмена",
-                    keyboard: Keyboard.Numeric);
+                var timeResult = await DisplayPromptAsync("Введите время", "Формат HH:mm", "OK", "Отмена", keyboard: Keyboard.Numeric);
 
                 if (!string.IsNullOrWhiteSpace(timeResult) && TimeSpan.TryParse(timeResult, out var time))
                 {
@@ -425,32 +428,47 @@ namespace FitnessTrackingApp.Pages
                         Title = result,
                         Description = GetDescription(result),
                         Time = time,
-                        IsActive = true
+                        IsActive = true,
+                        Type = result switch
+                        {
+                            "Прием пищи" => NotificationType.Meal,
+                            "Тренировка" => NotificationType.Workout,
+                            "Вода" => NotificationType.Water,
+                            _ => NotificationType.Custom
+                        }
                     };
 
-                    var response = await _httpClient.PostAsJsonAsync("/notifications", newNotification);
-                    if (response.IsSuccessStatusCode)
+                    try
                     {
-                        var createdNotification = await response.Content.ReadFromJsonAsync<Notification>();
-                        _notifications.Add(createdNotification);
-                        UpdateNotificationsUI();
-                        ScheduleNotification(createdNotification);
-                        await Toast.Make("Напоминание добавлено", ToastDuration.Short).Show();
+                        var response = await _httpClient.PostAsJsonAsync("/notifications", newNotification);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var createdNotification = await response.Content.ReadFromJsonAsync<Notification>();
+                            _notifications.Add(createdNotification);
+                            UpdateNotificationsUI();
+                            ScheduleNotification(createdNotification);
+                            await Toast.Make("Напоминание добавлено", ToastDuration.Short).Show();
+                        }
+                        else
+                        {
+                            await DisplayAlert("Ошибка", "Не удалось создать уведомление", "OK");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        await DisplayAlert("Ошибка", ex.Message, "OK");
                     }
                 }
             }
         }
 
-        private string GetDescription(string title)
+        private string GetDescription(string title) => title switch
         {
-            return title switch
-            {
-                "Прием пищи" => "Не забудьте поесть",
-                "Тренировка" => "Время тренировки",
-                "Вода" => "Выпейте стакан воды",
-                _ => "Персонализированное напоминание"
-            };
-        }
+            "Прием пищи" => "Не забудьте поесть",
+            "Тренировка" => "Время тренировки",
+            "Вода" => "Выпейте стакан воды",
+            _ => "Персонализированное напоминание"
+        };
 
         private void OnSettingToggled(object sender, ToggledEventArgs e)
         {
@@ -465,26 +483,17 @@ namespace FitnessTrackingApp.Pages
             switch (settingType)
             {
                 case "Motivational":
-                    if (isEnabled)
-                        ScheduleMotivationalNotification();
-                    else
-                        CancelNotification(MotivationalNotificationId);
+                    if (isEnabled) ScheduleMotivationalNotification();
+                    else CancelNotification(MotivationalNotificationId);
                     break;
-
                 case "Achievements":
-                    if (isEnabled)
-                        ScheduleAchievementNotification();
-                    else
-                        CancelNotification(AchievementNotificationId);
+                    if (isEnabled) ScheduleAchievementNotification();
+                    else CancelNotification(AchievementNotificationId);
                     break;
-
                 case "Progress":
-                    if (isEnabled)
-                        ScheduleProgressNotification();
-                    else
-                        CancelNotification(ProgressNotificationId);
+                    if (isEnabled) ScheduleProgressNotification();
+                    else CancelNotification(ProgressNotificationId);
                     break;
-
                 case "General":
                     if (!isEnabled)
                     {
@@ -493,15 +502,13 @@ namespace FitnessTrackingApp.Pages
                         ProgressSwitch.IsToggled = false;
                     }
                     break;
-
                 case "Sound":
                 case "Vibration":
                     UpdateAllActiveNotifications();
                     break;
             }
 
-            Toast.Make($"Настройка '{GetSettingName(settingType)}' {(isEnabled ? "включена" : "выключена")}",
-                      ToastDuration.Short).Show();
+            Toast.Make($"Настройка '{GetSettingName(settingType)}' {(isEnabled ? "включена" : "выключена")}", ToastDuration.Short).Show();
         }
 
         private void UpdateAllActiveNotifications()
@@ -531,29 +538,24 @@ namespace FitnessTrackingApp.Pages
             }
         }
 
-        private string GetSettingName(string settingType)
+        private string GetSettingName(string settingType) => settingType switch
         {
-            return settingType switch
-            {
-                "Motivational" => "Мотивационные уведомления",
-                "Achievements" => "Уведомления о достижениях",
-                "Progress" => "Напоминания о прогрессе",
-                "General" => "Общие уведомления",
-                "Sound" => "Звуковые оповещения",
-                "Vibration" => "Виброоповещения",
-                _ => "Неизвестная настройка"
-            };
-        }
+            "Motivational" => "Мотивационные уведомления",
+            "Achievements" => "Уведомления о достижениях",
+            "Progress" => "Напоминания о прогрессе",
+            "General" => "Общие уведомления",
+            "Sound" => "Звуковые оповещения",
+            "Vibration" => "Виброоповещения",
+            _ => "Неизвестная настройка"
+        };
 
         private async void OnViewMessagesClicked(object sender, EventArgs e)
         {
             await DisplayAlert("Примеры сообщений",
-                string.Join("\n\n", new[] {
-                    "💪 Вы уже на 75% пути к вашей цели!",
-                    "🏋️ Сегодня отличный день для силовой тренировки!",
-                    "🥗 Не забудьте про правильное питание после тренировки",
-                    "🌟 Вы делаете потрясающие успехи! Так держать!"
-                }),
+                "💪 Вы уже на 75% пути к вашей цели!\n\n" +
+                "🏋️ Сегодня отличный день для силовой тренировки!\n\n" +
+                "🥗 Не забудьте про правильное питание после тренировки\n\n" +
+                "🌟 Вы делаете потрясающие успехи! Так держать!",
                 "Закрыть");
         }
 
@@ -572,14 +574,18 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotificationId = TestNotificationId,
                     Title = "Тестовое уведомление",
-                    Description = "Проверка работы системы уведомлений",
-                    Android = new AndroidOptions
+                    Description = "Проверка работы системы уведомлений"
+                };
+
+                if (DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    request.Android = new AndroidOptions
                     {
                         ChannelId = "test_notifications",
                         AutoCancel = true,
-                        VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
-                    }
-                };
+                        VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
+                    };
+                }
 
                 LocalNotificationCenter.Current.Show(request);
                 await Toast.Make("Тестовое уведомление отправлено", ToastDuration.Short).Show();
@@ -595,9 +601,18 @@ namespace FitnessTrackingApp.Pages
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public TimeSpan Time { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
+        public NotificationType Type { get; set; } = NotificationType.Custom;
+    }
+
+    public enum NotificationType
+    {
+        Meal,
+        Workout,
+        Water,
+        Custom
     }
 }

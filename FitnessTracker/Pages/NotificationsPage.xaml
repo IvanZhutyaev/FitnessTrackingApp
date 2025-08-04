@@ -7,6 +7,7 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
+
             <!-- Заголовок -->
             <Label Text="🔔 Уведомления"
                    FontSize="24"
@@ -34,9 +35,7 @@
                             Clicked="OnAddNotificationClicked"/>
 
                     <!-- Список напоминаний -->
-                    <VerticalStackLayout x:Name="NotificationsContainer" Spacing="10">
-                        <!-- Элементы будут добавляться динамически -->
-                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="NotificationsContainer" Spacing="10" />
                 </VerticalStackLayout>
             </Frame>
 
@@ -67,19 +66,10 @@
                         </VerticalStackLayout>
 
                         <Switch Grid.Column="1" 
-                                IsToggled="True"
                                 x:Name="MotivationalSwitch"
                                 StyleId="Motivational"
                                 Toggled="OnSettingToggled"/>
                     </Grid>
-
-                    <Button Text="Просмотреть примеры сообщений"
-                            BackgroundColor="#2A4D80"
-                            TextColor="#A0E7FF"
-                            CornerRadius="10"
-                            Margin="0,10"
-                            x:Name="ViewMessagesButton"
-                            Clicked="OnViewMessagesClicked"/>
 
                     <Grid ColumnSpacing="15" Margin="0,10">
                         <Grid.ColumnDefinitions>
@@ -97,7 +87,6 @@
                         </VerticalStackLayout>
 
                         <Switch Grid.Column="1" 
-                                IsToggled="True"
                                 x:Name="AchievementsSwitch"
                                 StyleId="Achievements"
                                 Toggled="OnSettingToggled"/>
@@ -119,7 +108,6 @@
                         </VerticalStackLayout>
 
                         <Switch Grid.Column="1" 
-                                IsToggled="True"
                                 x:Name="ProgressSwitch"
                                 StyleId="Progress"
                                 Toggled="OnSettingToggled"/>
@@ -148,7 +136,6 @@
                                TextColor="White"
                                FontSize="16"/>
                         <Switch Grid.Column="1" 
-                                IsToggled="True"
                                 x:Name="GeneralSwitch"
                                 StyleId="General"
                                 Toggled="OnSettingToggled"/>
@@ -164,7 +151,6 @@
                                TextColor="White"
                                FontSize="16"/>
                         <Switch Grid.Column="1" 
-                                IsToggled="True"
                                 x:Name="SoundSwitch"
                                 StyleId="Sound"
                                 Toggled="OnSettingToggled"/>
@@ -180,21 +166,22 @@
                                TextColor="White"
                                FontSize="16"/>
                         <Switch Grid.Column="1" 
-                                IsToggled="True"
                                 x:Name="VibrationSwitch"
                                 StyleId="Vibration"
                                 Toggled="OnSettingToggled"/>
                     </Grid>
-
-                    <Button Text="Тест уведомления"
-                            BackgroundColor="#2A4D80"
-                            TextColor="#A0E7FF"
-                            CornerRadius="10"
-                            Margin="0,10"
-                            x:Name="TestNotificationButton"
-                            Clicked="OnTestNotificationClicked"/>
                 </VerticalStackLayout>
             </Frame>
+
+            <!-- Кнопка "Просмотр примеров сообщений" -->
+            <Button Text="Просмотреть примеры сообщений"
+                    BackgroundColor="#2A4D80"
+                    TextColor="#A0E7FF"
+                    CornerRadius="10"
+                    Margin="0,10"
+                    x:Name="ViewMessagesButton"
+                    Clicked="OnViewMessagesClicked"/>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
