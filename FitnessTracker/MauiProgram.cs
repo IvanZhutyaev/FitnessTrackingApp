@@ -36,7 +36,8 @@ namespace FitnessTrackingApp
                 ;
 
 #if ANDROID
-        builder.Services.AddSingleton<IStepsService, AndroidStepsService>();
+            
+            builder.Services.AddSingleton<IStepsService, AndroidStepsService>();
 #elif IOS
             builder.Services.AddSingleton<IStepsService, iOSStepsService>();
 #else

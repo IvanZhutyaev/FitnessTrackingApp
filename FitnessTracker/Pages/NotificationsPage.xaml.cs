@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using Plugin.LocalNotification;
@@ -38,9 +39,20 @@ namespace FitnessTrackingApp.Pages
             LoadNotificationSettings();
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            // Запрос разрешений для iOS
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                var granted = await LocalNotificationCenter.Current.RequestNotificationPermission();
+                if (!granted)
+                {
+                    await DisplayAlert("Внимание", "Разрешения на уведомления не предоставлены. Пожалуйста, включите их в настройках.", "OK");
+                }
+            }
+
             LoadData();
         }
 
@@ -265,14 +277,24 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotifyTime = notifyTime,
                     RepeatType = NotificationRepeat.Daily
-                },
-                Android = new AndroidOptions
+                }
+            };
+
+            // Настройки для Android
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                request.Android = new AndroidOptions
                 {
                     ChannelId = "general_notifications",
                     AutoCancel = true,
                     VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
-                }
-            };
+                };
+            }
+            // Настройки для iOS
+            else if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                // Для iOS не требуется дополнительных настроек в текущей версии плагина
+            }
 
             LocalNotificationCenter.Current.Show(request);
         }
@@ -292,14 +314,18 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotifyTime = notifyTime,
                     RepeatType = NotificationRepeat.Daily
-                },
-                Android = new AndroidOptions
+                }
+            };
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                request.Android = new AndroidOptions
                 {
                     ChannelId = "general_notifications",
                     AutoCancel = true,
                     VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
-                }
-            };
+                };
+            }
 
             LocalNotificationCenter.Current.Show(request);
         }
@@ -319,14 +345,18 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotifyTime = notifyTime,
                     RepeatType = NotificationRepeat.Daily
-                },
-                Android = new AndroidOptions
+                }
+            };
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                request.Android = new AndroidOptions
                 {
                     ChannelId = "general_notifications",
                     AutoCancel = true,
                     VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
-                }
-            };
+                };
+            }
 
             LocalNotificationCenter.Current.Show(request);
         }
@@ -346,14 +376,18 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotifyTime = notifyTime,
                     RepeatType = NotificationRepeat.Daily
-                },
-                Android = new AndroidOptions
+                }
+            };
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                request.Android = new AndroidOptions
                 {
                     ChannelId = "general_notifications",
                     AutoCancel = true,
                     VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
-                }
-            };
+                };
+            }
 
             LocalNotificationCenter.Current.Show(request);
         }
@@ -540,14 +574,18 @@ namespace FitnessTrackingApp.Pages
                 {
                     NotificationId = TestNotificationId,
                     Title = "Тестовое уведомление",
-                    Description = "Проверка работы системы уведомлений",
-                    Android = new AndroidOptions
+                    Description = "Проверка работы системы уведомлений"
+                };
+
+                if (DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    request.Android = new AndroidOptions
                     {
                         ChannelId = "test_notifications",
                         AutoCancel = true,
                         VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
-                    }
-                };
+                    };
+                }
 
                 LocalNotificationCenter.Current.Show(request);
                 await Toast.Make("Тестовое уведомление отправлено", ToastDuration.Short).Show();
