@@ -241,7 +241,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
             var json = JsonSerializer.Serialize(request);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             await client.PostAsync("http://localhost:5024/water", content);
-            await DisplayAlert("їїїїїїїїї", _userId.ToString(), "OK");
+            await DisplayAlert("Вы выпили суточную норму воды!", _userId.ToString(), "OK");
         }
         catch (Exception ex)
         {

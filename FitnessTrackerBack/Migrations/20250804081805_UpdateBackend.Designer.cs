@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessTrackerBack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250801215726_ini")]
-    partial class ini
+    [Migration("20250804081805_UpdateBackend")]
+    partial class UpdateBackend
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,8 +44,11 @@ namespace FitnessTrackerBack.Migrations
                     b.Property<int>("Steps")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -318,9 +321,7 @@ namespace FitnessTrackerBack.Migrations
                 {
                     b.HasOne("User", "User")
                         .WithMany("Activities")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

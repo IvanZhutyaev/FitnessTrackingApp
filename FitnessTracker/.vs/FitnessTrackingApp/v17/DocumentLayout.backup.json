@@ -3,15 +3,24 @@
   "WorkspaceRootPath": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\pages\\nutritionpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:pages\\nutritionpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\pages\\nutritionpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:pages\\nutritionpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\pages\\nutritionpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|solutionrelative:pages\\nutritionpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Ivan Zhutyaev\\AppData\\Local\\Temp\\.vsdbgsrc\\538a212805190a51ebc874e02df753ad961642bf58a06ed3e10e0652262a9fda\\ExceptionHelpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\appsettings.Development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{592476F9-ACC6-4D58-A89E-BD2BED32855D}|FitnessTrackingApp.csproj|c:\\my projects\\fitnesstrackingapp\\fitnesstracker\\pages\\activitypage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -33,7 +42,46 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
+              "Title": "ExceptionHelpers.cs",
+              "DocumentMoniker": "C:\\Users\\Ivan Zhutyaev\\AppData\\Local\\Temp\\.vsdbgsrc\\538a212805190a51ebc874e02df753ad961642bf58a06ed3e10e0652262a9fda\\ExceptionHelpers.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\Users\\Ivan Zhutyaev\\AppData\\Local\\Temp\\.vsdbgsrc\\538a212805190a51ebc874e02df753ad961642bf58a06ed3e10e0652262a9fda\\ExceptionHelpers.cs",
+              "ToolTip": "C:\\Users\\Ivan Zhutyaev\\AppData\\Local\\Temp\\.vsdbgsrc\\538a212805190a51ebc874e02df753ad961642bf58a06ed3e10e0652262a9fda\\ExceptionHelpers.cs [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
+              "RelativeToolTip": "..\\..\\..\\Users\\Ivan Zhutyaev\\AppData\\Local\\Temp\\.vsdbgsrc\\538a212805190a51ebc874e02df753ad961642bf58a06ed3e10e0652262a9fda\\ExceptionHelpers.cs [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
+              "ViewState": "AgIAAHgAAAAAAAAAAAASwIYAAAADAAAAAQAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-04T08:22:12.789Z",
+              "EditorCaption": " [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "..\\FitnessTrackerBack\\appsettings.Development.json",
+              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\appsettings.Development.json",
+              "RelativeToolTip": "..\\FitnessTrackerBack\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-04T08:12:33.666Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\appsettings.json",
+              "RelativeDocumentMoniker": "..\\FitnessTrackerBack\\appsettings.json",
+              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\appsettings.json",
+              "RelativeToolTip": "..\\FitnessTrackerBack\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-04T08:12:28.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "ActivityPage.xaml.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\ActivityPage.xaml.cs",
               "RelativeDocumentMoniker": "Pages\\ActivityPage.xaml.cs",
@@ -45,20 +93,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "NutritionPage.xaml.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\NutritionPage.xaml.cs",
               "RelativeDocumentMoniker": "Pages\\NutritionPage.xaml.cs",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\NutritionPage.xaml.cs",
               "RelativeToolTip": "Pages\\NutritionPage.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAewN8AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-01T11:53:54.52Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "Models.cs",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Models\\Models.cs",
               "RelativeDocumentMoniker": "Models\\Models.cs",
@@ -70,28 +118,28 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs",
+              "RelativeDocumentMoniker": "..\\FitnessTrackerBack\\Program.cs",
+              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs",
+              "RelativeToolTip": "..\\FitnessTrackerBack\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-30T12:37:06.782Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
               "Title": "NutritionPage.xaml",
               "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\NutritionPage.xaml",
               "RelativeDocumentMoniker": "Pages\\NutritionPage.xaml",
               "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTracker\\Pages\\NutritionPage.xaml",
               "RelativeToolTip": "Pages\\NutritionPage.xaml",
-              "ViewState": "AgIAAHUAAAAAAAAAAADwv6AAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAAHUAAAAAAAAAAADwv4sAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-08-01T11:53:52.913Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs",
-              "RelativeDocumentMoniker": "..\\FitnessTrackerBack\\Program.cs",
-              "ToolTip": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\Program.cs",
-              "RelativeToolTip": "..\\FitnessTrackerBack\\Program.cs",
-              "ViewState": "AgIAAD8BAAAAAAAAAAAYwFABAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T12:37:06.782Z",
               "EditorCaption": ""
             }
           ]
