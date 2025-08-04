@@ -131,38 +131,35 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
+                        <!-- Средние шаги -->
                         <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
-                            <Label x:Name = "AvgStepsLabel" Text="Средние шаги" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Label Text="Средние шаги" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                             <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label Text="0" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
+                                <Label x:Name="AvgStepsLabel" Text="0" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
                             </Frame>
                         </VerticalStackLayout>
 
-			<VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="5">
-                            <Label x:Name = "AvgDistanceLabel" Text="Средняя дистанция" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label Text="0" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
-                            </Frame>
-			</VerticalStackLayout>
-
+                        <!-- Средняя дистанция -->
                         <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5">
+                            <Label Text="Средняя дистанция" TextColor="#A0E7FF" HorizontalOptions="Center"/>
+                            <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
+                                <Label x:Name="AvgDistanceLabel" Text="0" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- Рекорд шагов -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5">
                             <Label Text="Рекорд шагов" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                             <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
                                 <Label Text="0" TextColor="#FFEB3B" FontAttributes="Bold" HorizontalOptions="Center" FontSize="18"/>
                             </Frame>
                         </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5">
+                        <!-- Всего тренировок -->
+                        <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="5">
                             <Label Text="Всего тренировок" TextColor="#A0E7FF" HorizontalOptions="Center"/>
                             <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
                                 <Label Text="0" TextColor="White" HorizontalOptions="Center" FontSize="18"/>
-                            </Frame>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="5">
-                            <Label Text="Сожжено калорий" TextColor="#A0E7FF" HorizontalOptions="Center"/>
-                            <Frame CornerRadius="10" BackgroundColor="#1A3A6F" Padding="10">
-                                <Label Text="18,560" TextColor="#00E676" FontAttributes="Bold" HorizontalOptions="Center" FontSize="18"/>
                             </Frame>
                         </VerticalStackLayout>
                     </Grid>
@@ -171,3 +168,173 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

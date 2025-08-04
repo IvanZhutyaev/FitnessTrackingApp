@@ -280,11 +280,7 @@ namespace FitnessTrackingApp
                         await DisplayAlert("Error", "Error with reading storeUserID", "OK");
 
                         return;
-                        _currentUsername = storedUsername;
-                        UserSession.Username = storedUsername;
-                        UserSession.UserId = storedUserIDint;
 
-                        UpdateUIAfterLogin();
                     }
 
                     await MainThread.InvokeOnMainThreadAsync(async () =>
@@ -294,6 +290,10 @@ namespace FitnessTrackingApp
                                 _currentUsername = storedUsername;
                                 UserSession.Username = storedUsername;
                                 UserSession.UserId = storedUserIDint;
+
+                                UpdateStaticUserData(storedUsername);
+
+
                                 UpdateUIAfterLogin();
 
                             });

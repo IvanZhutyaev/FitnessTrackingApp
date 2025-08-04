@@ -1,5 +1,4 @@
-namespace FitnessTrackingApp.Pages;
-using System.Timers;
+namespace FitnessTrackingApp.Pages; using System.Timers;
 
 public partial class ProgressPage : ContentPage
 {
@@ -36,35 +35,33 @@ public partial class ProgressPage : ContentPage
 
     private async void OnTimerTick(object sender, ElapsedEventArgs e)
     {
-
-
-
-
-
-
-
-
         try
         {
-
             if (!isPageActive)
             {
                 return;
             }
 
-            await LoadData();
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+
+
+                await LoadData();
+
+
+
+            });
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", ex.Message, "OK");
         }
-
     }
 
     private async Task LoadData()
     {
         AvgStepsLabel.Text = UserStaticData.AvgSteps.ToString();
-        AvgDistanceLabel.Text = UserStaticData.AvgDistance.ToString();
+        AvgDistanceLabel.Text = $"{UserStaticData.AvgDistance.ToString()} км";
         //return Task.CompleteTask;
     }
 
