@@ -33,8 +33,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Need camera access to take profile pictures</string>
 	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
+<array>
+    <string>remote-notification</string>
+</array>
+<key>NSUserNotificationUsageDescription</key>
+<string>Мы отправляем уведомления для напоминаний и мотивации</string>
+
 </dict>
 </plist>

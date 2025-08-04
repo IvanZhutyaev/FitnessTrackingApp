@@ -182,13 +182,8 @@ namespace FitnessTrackingApp.Pages
 
         private async Task ChangeNotificationTime(Notification notification, Label timeLabel)
         {
-            var result = await DisplayPromptAsync(
-                "Изменить время",
-                "Введите новое время в формате HH:mm",
-                "Сохранить",
-                "Отмена",
-                initialValue: notification.Time.ToString(@"hh\:mm"),
-                keyboard: Keyboard.Numeric);
+            var result = await DisplayPromptAsync("Изменить время", "Введите новое время в формате HH:mm", "Сохранить", "Отмена",
+                                                  initialValue: notification.Time.ToString(@"hh\:mm"), keyboard: Keyboard.Numeric);
 
             if (!string.IsNullOrWhiteSpace(result) && TimeSpan.TryParse(result, out var newTime))
             {
@@ -196,7 +191,6 @@ namespace FitnessTrackingApp.Pages
                 timeLabel.Text = newTime.ToString(@"hh\:mm");
 
                 var response = await _httpClient.PutAsJsonAsync($"/notifications/{notification.Id}", notification);
-
                 if (response.IsSuccessStatusCode)
                 {
                     if (notification.IsActive)
@@ -214,11 +208,7 @@ namespace FitnessTrackingApp.Pages
             var button = (ImageButton)sender;
             var notification = (Notification)button.BindingContext;
 
-            bool confirm = await DisplayAlert(
-                "Удаление",
-                $"Удалить напоминание '{notification.Title}'?",
-                "Удалить",
-                "Отмена");
+            bool confirm = await DisplayAlert("Удаление", $"Удалить напоминание '{notification.Title}'?", "Удалить", "Отмена");
 
             if (confirm)
             {
@@ -241,7 +231,6 @@ namespace FitnessTrackingApp.Pages
             notification.IsActive = e.Value;
 
             var response = await _httpClient.PutAsJsonAsync($"/notifications/{notification.Id}", notification);
-
             if (response.IsSuccessStatusCode)
             {
                 if (e.Value)
@@ -259,13 +248,9 @@ namespace FitnessTrackingApp.Pages
         {
             CancelNotification(notification.Id);
 
-            var now = DateTime.Now;
             var notifyTime = DateTime.Today.Add(notification.Time);
-
-            if (notifyTime < now)
-            {
+            if (notifyTime < DateTime.Now)
                 notifyTime = notifyTime.AddDays(1);
-            }
 
             var request = new NotificationRequest
             {
@@ -279,9 +264,9 @@ namespace FitnessTrackingApp.Pages
                 },
                 Android = new AndroidOptions
                 {
-                    ChannelId = "fitness_reminders",
+                    ChannelId = "general_notifications",
                     AutoCancel = true,
-                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                    VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
                 }
             };
 
@@ -290,13 +275,9 @@ namespace FitnessTrackingApp.Pages
 
         private void ScheduleMotivationalNotification()
         {
-            var now = DateTime.Now;
             var notifyTime = DateTime.Today.AddHours(12);
-
-            if (notifyTime < now)
-            {
+            if (notifyTime < DateTime.Now)
                 notifyTime = notifyTime.AddDays(1);
-            }
 
             var request = new NotificationRequest
             {
@@ -310,9 +291,9 @@ namespace FitnessTrackingApp.Pages
                 },
                 Android = new AndroidOptions
                 {
-                    ChannelId = "motivational_messages",
+                    ChannelId = "general_notifications",
                     AutoCancel = true,
-                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                    VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
                 }
             };
 
@@ -321,13 +302,9 @@ namespace FitnessTrackingApp.Pages
 
         private void ScheduleAchievementNotification()
         {
-            var now = DateTime.Now;
             var notifyTime = DateTime.Today.AddHours(20);
-
-            if (notifyTime < now)
-            {
+            if (notifyTime < DateTime.Now)
                 notifyTime = notifyTime.AddDays(1);
-            }
 
             var request = new NotificationRequest
             {
@@ -341,9 +318,9 @@ namespace FitnessTrackingApp.Pages
                 },
                 Android = new AndroidOptions
                 {
-                    ChannelId = "achievement_notifications",
+                    ChannelId = "general_notifications",
                     AutoCancel = true,
-                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                    VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
                 }
             };
 
@@ -352,13 +329,9 @@ namespace FitnessTrackingApp.Pages
 
         private void ScheduleProgressNotification()
         {
-            var now = DateTime.Now;
             var notifyTime = DateTime.Today.AddHours(21);
-
-            if (notifyTime < now)
-            {
+            if (notifyTime < DateTime.Now)
                 notifyTime = notifyTime.AddDays(1);
-            }
 
             var request = new NotificationRequest
             {
@@ -372,9 +345,9 @@ namespace FitnessTrackingApp.Pages
                 },
                 Android = new AndroidOptions
                 {
-                    ChannelId = "progress_reports",
+                    ChannelId = "general_notifications",
                     AutoCancel = true,
-                    VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                    VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
                 }
             };
 
@@ -402,20 +375,12 @@ namespace FitnessTrackingApp.Pages
 
         private async void OnAddNotificationClicked(object sender, EventArgs e)
         {
-            var result = await DisplayActionSheet(
-                "Добавить напоминание",
-                "Отмена",
-                null,
+            var result = await DisplayActionSheet("Добавить напоминание", "Отмена", null,
                 "Прием пищи", "Тренировка", "Вода", "Другое");
 
             if (result != "Отмена")
             {
-                var timeResult = await DisplayPromptAsync(
-                    "Введите время",
-                    "Формат HH:mm",
-                    "OK",
-                    "Отмена",
-                    keyboard: Keyboard.Numeric);
+                var timeResult = await DisplayPromptAsync("Введите время", "Формат HH:mm", "OK", "Отмена", keyboard: Keyboard.Numeric);
 
                 if (!string.IsNullOrWhiteSpace(timeResult) && TimeSpan.TryParse(timeResult, out var time))
                 {
@@ -441,16 +406,13 @@ namespace FitnessTrackingApp.Pages
             }
         }
 
-        private string GetDescription(string title)
+        private string GetDescription(string title) => title switch
         {
-            return title switch
-            {
-                "Прием пищи" => "Не забудьте поесть",
-                "Тренировка" => "Время тренировки",
-                "Вода" => "Выпейте стакан воды",
-                _ => "Персонализированное напоминание"
-            };
-        }
+            "Прием пищи" => "Не забудьте поесть",
+            "Тренировка" => "Время тренировки",
+            "Вода" => "Выпейте стакан воды",
+            _ => "Персонализированное напоминание"
+        };
 
         private void OnSettingToggled(object sender, ToggledEventArgs e)
         {
@@ -465,26 +427,17 @@ namespace FitnessTrackingApp.Pages
             switch (settingType)
             {
                 case "Motivational":
-                    if (isEnabled)
-                        ScheduleMotivationalNotification();
-                    else
-                        CancelNotification(MotivationalNotificationId);
+                    if (isEnabled) ScheduleMotivationalNotification();
+                    else CancelNotification(MotivationalNotificationId);
                     break;
-
                 case "Achievements":
-                    if (isEnabled)
-                        ScheduleAchievementNotification();
-                    else
-                        CancelNotification(AchievementNotificationId);
+                    if (isEnabled) ScheduleAchievementNotification();
+                    else CancelNotification(AchievementNotificationId);
                     break;
-
                 case "Progress":
-                    if (isEnabled)
-                        ScheduleProgressNotification();
-                    else
-                        CancelNotification(ProgressNotificationId);
+                    if (isEnabled) ScheduleProgressNotification();
+                    else CancelNotification(ProgressNotificationId);
                     break;
-
                 case "General":
                     if (!isEnabled)
                     {
@@ -493,15 +446,13 @@ namespace FitnessTrackingApp.Pages
                         ProgressSwitch.IsToggled = false;
                     }
                     break;
-
                 case "Sound":
                 case "Vibration":
                     UpdateAllActiveNotifications();
                     break;
             }
 
-            Toast.Make($"Настройка '{GetSettingName(settingType)}' {(isEnabled ? "включена" : "выключена")}",
-                      ToastDuration.Short).Show();
+            Toast.Make($"Настройка '{GetSettingName(settingType)}' {(isEnabled ? "включена" : "выключена")}", ToastDuration.Short).Show();
         }
 
         private void UpdateAllActiveNotifications()
@@ -531,29 +482,24 @@ namespace FitnessTrackingApp.Pages
             }
         }
 
-        private string GetSettingName(string settingType)
+        private string GetSettingName(string settingType) => settingType switch
         {
-            return settingType switch
-            {
-                "Motivational" => "Мотивационные уведомления",
-                "Achievements" => "Уведомления о достижениях",
-                "Progress" => "Напоминания о прогрессе",
-                "General" => "Общие уведомления",
-                "Sound" => "Звуковые оповещения",
-                "Vibration" => "Виброоповещения",
-                _ => "Неизвестная настройка"
-            };
-        }
+            "Motivational" => "Мотивационные уведомления",
+            "Achievements" => "Уведомления о достижениях",
+            "Progress" => "Напоминания о прогрессе",
+            "General" => "Общие уведомления",
+            "Sound" => "Звуковые оповещения",
+            "Vibration" => "Виброоповещения",
+            _ => "Неизвестная настройка"
+        };
 
         private async void OnViewMessagesClicked(object sender, EventArgs e)
         {
             await DisplayAlert("Примеры сообщений",
-                string.Join("\n\n", new[] {
-                    "💪 Вы уже на 75% пути к вашей цели!",
-                    "🏋️ Сегодня отличный день для силовой тренировки!",
-                    "🥗 Не забудьте про правильное питание после тренировки",
-                    "🌟 Вы делаете потрясающие успехи! Так держать!"
-                }),
+                "💪 Вы уже на 75% пути к вашей цели!\n\n" +
+                "🏋️ Сегодня отличный день для силовой тренировки!\n\n" +
+                "🥗 Не забудьте про правильное питание после тренировки\n\n" +
+                "🌟 Вы делаете потрясающие успехи! Так держать!",
                 "Закрыть");
         }
 
@@ -577,7 +523,7 @@ namespace FitnessTrackingApp.Pages
                     {
                         ChannelId = "test_notifications",
                         AutoCancel = true,
-                        VibrationPattern = VibrationSwitch.IsToggled ? [100, 200, 300] : null
+                        VibrationPattern = VibrationSwitch.IsToggled ? new long[] { 100, 200, 300 } : null
                     }
                 };
 
