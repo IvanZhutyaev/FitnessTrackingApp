@@ -291,7 +291,7 @@ namespace FitnessTrackingApp
                                 UserSession.Username = storedUsername;
                                 UserSession.UserId = storedUserIDint;
 
-                                UpdateStaticUserData(storedUsername);
+                                await UpdateStaticUserData(storedUsername);
 
 
                                 UpdateUIAfterLogin();

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessTrackerBack.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateBackend : Migration
+    public partial class modderiniDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -108,6 +108,9 @@ public partial class ActivityPage : ContentPage
     private const int WeeklyGoal = 70000;
     private bool _isInitialLoad = true;
     private const int ChartUpdateIntervalSeconds = 30;
+    private int summarySteps = UserStaticData.Steps;
+    private int stepsOnTick = 0;
+    private int _todaySteps = 0;
 
     public ActivityPage(IStepsService stepService)
     {
@@ -150,7 +153,7 @@ public partial class ActivityPage : ContentPage
             midnightTimer.Stop();
 
             await SaveActivityToDatabase();
-            UserStaticData.Steps = 0;
+            stepsOnTick = 0;
             CalculateDerivedMetrics();
             UpdateUi();
             ChartGraphicsView.Invalidate();
@@ -258,7 +261,7 @@ public partial class ActivityPage : ContentPage
                         .Where(a => a.Date.Date == today)
                         .Sum(a => a.Steps);
 
-                    UserStaticData.Steps = todaySteps;
+                    _todaySteps = todaySteps;
                     CalculateDerivedMetrics();
                     UpdateUi();
                 }
@@ -290,14 +293,14 @@ public partial class ActivityPage : ContentPage
 
     private void LoadActivityData()
     {
-        UserStaticData.Steps = _stepService.GetSteps();
+        stepsOnTick = _stepService.GetSteps();
         CalculateDerivedMetrics();
         UpdateUi();
     }
 
     private void UpdateActivityData()
     {
-        UserStaticData.Steps = _stepService.GetSteps();
+        stepsOnTick = _stepService.GetSteps();
 
         CalculateDerivedMetrics();
         UpdateUi();
@@ -311,7 +314,7 @@ public partial class ActivityPage : ContentPage
 
     private void UpdateUi()
     {
-        StepsLabel.Text = UserStaticData.Steps.ToString();
+        StepsLabel.Text = _todaySteps.ToString();
         DistanceLabel.Text = $"{_currentDistance} км";
         CaloriesLabel.Text = _currentCalories.ToString();
 
@@ -374,6 +377,8 @@ public partial class ActivityPage : ContentPage
                 {
                     var totalSteps = stats.Sum(s => s.Steps);
                     var progress = Math.Min(1.0, (double)totalSteps / WeeklyGoal);
+
+                    //UserStaticData.Steps = totalSteps; //Костально но пока можно
 
                     WeeklyProgressBar.Progress = progress;
                     WeeklyProgressPercentLabel.Text = $"{Math.Round(progress * 100)}%";

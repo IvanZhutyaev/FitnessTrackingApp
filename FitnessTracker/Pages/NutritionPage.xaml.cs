@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using FitnessTrackingApp.Models;
-
+using System.Net.Http.Json;
 namespace FitnessTrackingApp.Pages;
 
 public partial class NutritionPage : ContentPage, INotifyPropertyChanged
@@ -11,8 +11,9 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     private int _userId = UserSession.UserId;
     private NutritionDay _currentDay = new();
     public ObservableCollection<Meal> Meals { get; } = new();
-
+    private readonly string ApiBaseUrl = "http://localhost:5024";
     public event PropertyChangedEventHandler PropertyChanged;
+    private readonly HttpClient _httpClient = new HttpClient();
 
     public double WaterIntake
     {
@@ -236,12 +237,12 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
                 UserId = _userId,
                 Amount = amount
             };
+            var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/water", request);
 
-            var client = new HttpClient();
-            var json = JsonSerializer.Serialize(request);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            await client.PostAsync("http://localhost:5024/water", content);
-            await DisplayAlert("Вы выпили суточную норму воды!", _userId.ToString(), "OK");
+            if (response.IsSuccessStatusCode)
+            {
+                await DisplayAlert("Вы выпили суточную норму воды!", _userId.ToString(), "OK");
+            }
         }
         catch (Exception ex)
         {

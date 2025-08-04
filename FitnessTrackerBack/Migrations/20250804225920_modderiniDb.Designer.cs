@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessTrackerBack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250804081805_UpdateBackend")]
-    partial class UpdateBackend
+    [Migration("20250804225920_modderiniDb")]
+    partial class modderiniDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

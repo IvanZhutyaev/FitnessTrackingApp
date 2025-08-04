@@ -3249,32 +3249,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Ivan Zhutyaev\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/Users/temamodder/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\FitnessTrackerBack.csproj",
+      "projectUniqueName": "/Users/temamodder/Projects/FitnessTrackerApp/FitnessTrackerBack/FitnessTrackerBack.csproj",
       "projectName": "FitnessTrackerBack",
-      "projectPath": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\FitnessTrackerBack.csproj",
-      "packagesPath": "C:\\Users\\Ivan Zhutyaev\\.nuget\\packages\\",
-      "outputPath": "C:\\MY PROJECTS\\FitnessTrackingApp\\FitnessTrackerBack\\obj\\",
+      "projectPath": "/Users/temamodder/Projects/FitnessTrackerApp/FitnessTrackerBack/FitnessTrackerBack.csproj",
+      "packagesPath": "/Users/temamodder/.nuget/packages/",
+      "outputPath": "/Users/temamodder/Projects/FitnessTrackerApp/FitnessTrackerBack/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Ivan Zhutyaev\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/temamodder/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
+        "/usr/local/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3337,7 +3330,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
