@@ -1,26 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "/Users/temamodder/Projects/FitnessTrackerApp/FitnessTrackerBack/FitnessTrackerBack.csproj": {}
+    "/app/FitnessTrackerBack/FitnessTrackerBack.csproj": {}
   },
   "projects": {
-    "/Users/temamodder/Projects/FitnessTrackerApp/FitnessTrackerBack/FitnessTrackerBack.csproj": {
+    "/app/FitnessTrackerBack/FitnessTrackerBack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/temamodder/Projects/FitnessTrackerApp/FitnessTrackerBack/FitnessTrackerBack.csproj",
+        "projectUniqueName": "/app/FitnessTrackerBack/FitnessTrackerBack.csproj",
         "projectName": "FitnessTrackerBack",
-        "projectPath": "/Users/temamodder/Projects/FitnessTrackerApp/FitnessTrackerBack/FitnessTrackerBack.csproj",
-        "packagesPath": "/Users/temamodder/.nuget/packages/",
-        "outputPath": "/Users/temamodder/Projects/FitnessTrackerApp/FitnessTrackerBack/obj/",
+        "projectPath": "/app/FitnessTrackerBack/FitnessTrackerBack.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/app/FitnessTrackerBack/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/temamodder/.nuget/NuGet/NuGet.Config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -83,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

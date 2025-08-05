@@ -124,6 +124,7 @@ public partial class ActivityPage : ContentPage
         SetupTimers();
         LoadActivityData();
         LoadWeeklyProgress();
+        LoadInitialData();
     }
 
     private void InitializeChart()
