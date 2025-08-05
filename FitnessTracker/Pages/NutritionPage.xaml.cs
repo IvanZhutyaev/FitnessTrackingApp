@@ -88,7 +88,10 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
         {
             var client = new HttpClient();
             var response = await client.GetAsync($"http://localhost:5024/nutrition/{_userId}");
-
+            if (_currentDay?.Date == DateTime.UtcNow.Date && Meals.Any())
+            {
+                return; 
+            }
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -219,7 +222,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
                 // Локальное обновление
                 WaterIntake += waterAmount;
 
-                await SaveWaterIntakeAsync(WaterIntake);
+                await SaveWaterIntakeAsync(waterAmount);
             }
         }
         catch (Exception ex)
@@ -241,7 +244,10 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
 
             if (response.IsSuccessStatusCode)
             {
-                await DisplayAlert("Вы выпили суточную норму воды!", _userId.ToString(), "OK");
+                if (WaterIntake >= WaterGoal)
+                {
+                    await DisplayAlert("Поздравляем!", "Вы достигли суточной нормы воды!", "OK");
+                }
             }
         }
         catch (Exception ex)

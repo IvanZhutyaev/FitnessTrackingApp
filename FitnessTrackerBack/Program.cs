@@ -379,7 +379,7 @@ app.MapPost("/water", async (WaterUpdateRequest request, AppDbContext db) =>
         db.NutritionDays.Add(nutritionDay);
     }
 
-    nutritionDay.WaterIntake = request.Amount;
+    nutritionDay.WaterIntake += request.Amount;
     if (request.Goal.HasValue)
     {
         nutritionDay.WaterGoal = request.Goal.Value;
