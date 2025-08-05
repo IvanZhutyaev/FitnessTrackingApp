@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using FitnessTrackingApp.Models;
 using System.Net.Http.Json;
+
 namespace FitnessTrackingApp.Pages;
 
 public partial class NutritionPage : ContentPage, INotifyPropertyChanged
@@ -14,6 +15,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     private readonly string ApiBaseUrl = "http://localhost:5024";
     public event PropertyChangedEventHandler PropertyChanged;
     private readonly HttpClient _httpClient = new HttpClient();
+    private DateTime? _lastLoadedDate;
 
     public double WaterIntake
     {
@@ -45,7 +47,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
         }
     }
 
-    public double WaterProgressValue => WaterIntake / WaterGoal;
+    public double WaterProgressValue => WaterGoal > 0 ? WaterIntake / WaterGoal : 0;
     public string WaterDisplayText => $"{WaterIntake:F1}/{WaterGoal:F1} л";
 
     public int TotalCalories => _currentDay?.TotalCalories ?? 0;
@@ -74,7 +76,16 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        LoadNutritionData();
+        if (_lastLoadedDate == null || _lastLoadedDate.Value.Date < DateTime.UtcNow.Date)
+        {
+            LoadNutritionData();
+        }
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        SavePendingChanges();
     }
 
     protected void OnPropertyChanged(string name)
@@ -86,12 +97,8 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     {
         try
         {
-            var client = new HttpClient();
-            var response = await client.GetAsync($"http://localhost:5024/nutrition/{_userId}");
-            if (_currentDay?.Date == DateTime.UtcNow.Date && Meals.Any())
-            {
-                return; 
-            }
+            var response = await _httpClient.GetAsync($"{ApiBaseUrl}/nutrition/{_userId}");
+
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -115,6 +122,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
                     }
 
                     UpdateUI();
+                    _lastLoadedDate = DateTime.UtcNow;
                 });
             }
         }
@@ -177,15 +185,14 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
                 Date = DateTime.UtcNow
             };
 
-            // Локальное обновление
+            await SaveMealAsync(meal);
+
             _currentDay.TotalCalories += meal.Calories;
             _currentDay.TotalProtein += meal.Protein;
             _currentDay.TotalFat += meal.Fat;
             _currentDay.TotalCarbs += meal.Carbs;
             Meals.Add(meal);
             UpdateUI();
-
-            await SaveMealAsync(meal);
         }
         catch (Exception ex)
         {
@@ -197,14 +204,17 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     {
         try
         {
-            var client = new HttpClient();
-            var json = JsonSerializer.Serialize(meal);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            await client.PostAsync("http://localhost:5024/meals", content);
+            var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/meals", meal);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception(error);
+            }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", ex.Message, "OK");
+            throw new Exception($"Ошибка сохранения: {ex.Message}");
         }
     }
 
@@ -219,10 +229,13 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
 
             if (!string.IsNullOrWhiteSpace(amount) && double.TryParse(amount, out var waterAmount))
             {
-                // Локальное обновление
                 WaterIntake += waterAmount;
-
                 await SaveWaterIntakeAsync(waterAmount);
+
+                if (WaterIntake >= WaterGoal)
+                {
+                    await DisplayAlert("Поздравляем!", "Вы достигли суточной нормы воды!", "OK");
+                }
             }
         }
         catch (Exception ex)
@@ -242,17 +255,31 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
             };
             var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/water", request);
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                if (WaterIntake >= WaterGoal)
-                {
-                    await DisplayAlert("Поздравляем!", "Вы достигли суточной нормы воды!", "OK");
-                }
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception(error);
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", ex.Message, "OK");
+            throw new Exception($"Ошибка сохранения: {ex.Message}");
+        }
+    }
+
+    private async void SavePendingChanges()
+    {
+        try
+        {
+            // Сохраняем текущее состояние воды
+            if (_currentDay != null)
+            {
+                await SaveWaterIntakeAsync(WaterIntake);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при сохранении: {ex.Message}");
         }
     }
 }
