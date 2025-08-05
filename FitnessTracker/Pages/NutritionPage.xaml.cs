@@ -85,7 +85,6 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        SavePendingChanges();
     }
 
     protected void OnPropertyChanged(string name)
@@ -165,9 +164,10 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
             var carbs = await DisplayPromptAsync("Углеводы", "Введите количество углеводов (г):", keyboard: Keyboard.Numeric);
 
             if (!int.TryParse(calories, out var caloriesValue) ||
-                !double.TryParse(protein, out var proteinValue) ||
-                !double.TryParse(fat, out var fatValue) ||
-                !double.TryParse(carbs, out var carbsValue))
+                !double.TryParse(protein, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var proteinValue) ||
+                !double.TryParse(fat, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var fatValue) ||
+                !double.TryParse(carbs, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var carbsValue))
+
             {
                 await DisplayAlert("Ошибка", "Некорректные числовые значения", "OK");
                 return;
@@ -227,7 +227,8 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
                 keyboard: Keyboard.Numeric,
                 initialValue: "0.2");
 
-            if (!string.IsNullOrWhiteSpace(amount) && double.TryParse(amount, out var waterAmount))
+            if (!string.IsNullOrWhiteSpace(amount) &&
+                double.TryParse(amount, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var waterAmount))
             {
                 WaterIntake += waterAmount;
                 await SaveWaterIntakeAsync(waterAmount);
