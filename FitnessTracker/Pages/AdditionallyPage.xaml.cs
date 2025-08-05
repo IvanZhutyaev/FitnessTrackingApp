@@ -1,4 +1,4 @@
-namespace FitnessTrackingApp.Pages;
+п»їnamespace FitnessTrackingApp.Pages;
 
 public partial class AdditionallyPage : ContentPage
 {
@@ -18,12 +18,12 @@ public partial class AdditionallyPage : ContentPage
 
     private async void OnAboutAppTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("О приложении",
+        await DisplayAlert("Рћ РїСЂРёР»РѕР¶РµРЅРёРё",
             "FitnessTrackingApp v1.0\n\n" +
-            "Ваш надежный помощник в мире фитнеса\n\n" +
-            "Разработчики: Жутяев Иван, Ломовской Артём\n" +
-            "Контакты: https://github.com/IvanZhutyaev",
-            "Понятно");
+            "Р’Р°С€ РЅР°РґРµР¶РЅС‹Р№ РїРѕРјРѕС‰РЅРёРє РІ РјРёСЂРµ С„РёС‚РЅРµСЃР°\n\n" +
+            "Р Р°Р·СЂР°Р±РѕС‚С‡РёРєРё: Р–СѓС‚СЏРµРІ РРІР°РЅ, Р›РѕРјРѕРІСЃРєРѕР№ РђСЂС‚С‘Рј\n" +
+            "РљРѕРЅС‚Р°РєС‚С‹: https://github.com/IvanZhutyaev",
+            "РџРѕРЅСЏС‚РЅРѕ");
     }
 
     private async void OnSupportTapped(object sender, EventArgs e)
@@ -34,15 +34,15 @@ public partial class AdditionallyPage : ContentPage
         }
         catch
         {
-            await DisplayAlert("Ошибка", "Не удалось открыть Telegram", "OK");
+            await DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ Telegram", "OK");
         }
     }
 
     private async void OnBackupTapped(object sender, EventArgs e)
     {
-        await DisplayAlert("Резервное копирование",
-            "Эта функция появится в следующем обновлении",
-            "Жду с нетерпением");
+        await DisplayAlert("Р РµР·РµСЂРІРЅРѕРµ РєРѕРїРёСЂРѕРІР°РЅРёРµ",
+            "Р­С‚Р° С„СѓРЅРєС†РёСЏ РїРѕСЏРІРёС‚СЃСЏ РІ СЃР»РµРґСѓСЋС‰РµРј РѕР±РЅРѕРІР»РµРЅРёРё",
+            "Р–РґСѓ СЃ РЅРµС‚РµСЂРїРµРЅРёРµРј");
     }
 
     private async void OnCommunityTapped(object sender, EventArgs e)
@@ -53,7 +53,7 @@ public partial class AdditionallyPage : ContentPage
         }
         catch
         {
-            await DisplayAlert("Ошибка", "Не удалось открыть сообщество", "OK");
+            await DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ СЃРѕРѕР±С‰РµСЃС‚РІРѕ", "OK");
         }
     }
 }

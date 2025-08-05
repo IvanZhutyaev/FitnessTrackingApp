@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+п»їusing System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
@@ -48,7 +48,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     }
 
     public double WaterProgressValue => WaterGoal > 0 ? WaterIntake / WaterGoal : 0;
-    public string WaterDisplayText => $"{WaterIntake:F1}/{WaterGoal:F1} л";
+    public string WaterDisplayText => $"{WaterIntake:F1}/{WaterGoal:F1} Р»";
 
     public int TotalCalories => _currentDay?.TotalCalories ?? 0;
     public double TotalProtein => _currentDay?.TotalProtein ?? 0;
@@ -63,7 +63,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await DisplayAlert("Ошибка", "Сначала войдите в аккаунт", "OK");
+                await DisplayAlert("РћС€РёР±РєР°", "РЎРЅР°С‡Р°Р»Р° РІРѕР№РґРёС‚Рµ РІ Р°РєРєР°СѓРЅС‚", "OK");
                 await Navigation.PopAsync();
             });
             return;
@@ -127,7 +127,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", ex.Message, "OK");
+            await DisplayAlert("РћС€РёР±РєР°", ex.Message, "OK");
         }
     }
 
@@ -150,18 +150,18 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     {
         try
         {
-            var mealType = await DisplayActionSheet("Тип приема пищи", "Отмена", null,
-                "Завтрак", "Обед", "Ужин", "Перекус");
+            var mealType = await DisplayActionSheet("РўРёРї РїСЂРёРµРјР° РїРёС‰Рё", "РћС‚РјРµРЅР°", null,
+                "Р—Р°РІС‚СЂР°Рє", "РћР±РµРґ", "РЈР¶РёРЅ", "РџРµСЂРµРєСѓСЃ");
 
-            if (mealType == "Отмена") return;
+            if (mealType == "РћС‚РјРµРЅР°") return;
 
-            var name = await DisplayPromptAsync("Название блюда", "Введите название:");
+            var name = await DisplayPromptAsync("РќР°Р·РІР°РЅРёРµ Р±Р»СЋРґР°", "Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ:");
             if (string.IsNullOrWhiteSpace(name)) return;
 
-            var calories = await DisplayPromptAsync("Калории", "Введите количество калорий:", keyboard: Keyboard.Numeric);
-            var protein = await DisplayPromptAsync("Белки", "Введите количество белков (г):", keyboard: Keyboard.Numeric);
-            var fat = await DisplayPromptAsync("Жиры", "Введите количество жиров (г):", keyboard: Keyboard.Numeric);
-            var carbs = await DisplayPromptAsync("Углеводы", "Введите количество углеводов (г):", keyboard: Keyboard.Numeric);
+            var calories = await DisplayPromptAsync("РљР°Р»РѕСЂРёРё", "Р’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ РєР°Р»РѕСЂРёР№:", keyboard: Keyboard.Numeric);
+            var protein = await DisplayPromptAsync("Р‘РµР»РєРё", "Р’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р±РµР»РєРѕРІ (Рі):", keyboard: Keyboard.Numeric);
+            var fat = await DisplayPromptAsync("Р–РёСЂС‹", "Р’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ Р¶РёСЂРѕРІ (Рі):", keyboard: Keyboard.Numeric);
+            var carbs = await DisplayPromptAsync("РЈРіР»РµРІРѕРґС‹", "Р’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ СѓРіР»РµРІРѕРґРѕРІ (Рі):", keyboard: Keyboard.Numeric);
 
             if (!int.TryParse(calories, out var caloriesValue) ||
                 !double.TryParse(protein, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var proteinValue) ||
@@ -169,7 +169,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
                 !double.TryParse(carbs, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var carbsValue))
 
             {
-                await DisplayAlert("Ошибка", "Некорректные числовые значения", "OK");
+                await DisplayAlert("РћС€РёР±РєР°", "РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ С‡РёСЃР»РѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ", "OK");
                 return;
             }
 
@@ -196,7 +196,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", ex.Message, "OK");
+            await DisplayAlert("РћС€РёР±РєР°", ex.Message, "OK");
         }
     }
 
@@ -214,7 +214,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            throw new Exception($"Ошибка сохранения: {ex.Message}");
+            throw new Exception($"РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ: {ex.Message}");
         }
     }
 
@@ -222,8 +222,8 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     {
         try
         {
-            var amount = await DisplayPromptAsync("Добавить воду",
-                $"Сколько воды вы выпили? (Текущая цель: {WaterGoal:F1} л)",
+            var amount = await DisplayPromptAsync("Р”РѕР±Р°РІРёС‚СЊ РІРѕРґСѓ",
+                $"РЎРєРѕР»СЊРєРѕ РІРѕРґС‹ РІС‹ РІС‹РїРёР»Рё? (РўРµРєСѓС‰Р°СЏ С†РµР»СЊ: {WaterGoal:F1} Р»)",
                 keyboard: Keyboard.Numeric,
                 initialValue: "0.2");
 
@@ -235,13 +235,13 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
 
                 if (WaterIntake >= WaterGoal)
                 {
-                    await DisplayAlert("Поздравляем!", "Вы достигли суточной нормы воды!", "OK");
+                    await DisplayAlert("РџРѕР·РґСЂР°РІР»СЏРµРј!", "Р’С‹ РґРѕСЃС‚РёРіР»Рё СЃСѓС‚РѕС‡РЅРѕР№ РЅРѕСЂРјС‹ РІРѕРґС‹!", "OK");
                 }
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", ex.Message, "OK");
+            await DisplayAlert("РћС€РёР±РєР°", ex.Message, "OK");
         }
     }
 
@@ -264,7 +264,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            throw new Exception($"Ошибка сохранения: {ex.Message}");
+            throw new Exception($"РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ: {ex.Message}");
         }
     }
 
@@ -272,7 +272,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     {
         try
         {
-            // Сохраняем текущее состояние воды
+            // РЎРѕС…СЂР°РЅСЏРµРј С‚РµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РІРѕРґС‹
             if (_currentDay != null)
             {
                 await SaveWaterIntakeAsync(WaterIntake);
@@ -280,7 +280,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Ошибка при сохранении: {ex.Message}");
+            Console.WriteLine($"РћС€РёР±РєР° РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё: {ex.Message}");
         }
     }
 }

@@ -1,4 +1,4 @@
-using FitnessTrackingApp.Models;
+﻿using FitnessTrackingApp.Models;
 using FitnessTrackingApp.Services;
 using Microcharts.Maui;
 using Microsoft.Maui.Controls;
