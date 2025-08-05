@@ -1,4 +1,4 @@
-using FitnessTrackingApp.Models;
+﻿using FitnessTrackingApp.Models;
 using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-using FitnessTrackingApp.Models;
+﻿using FitnessTrackingApp.Models;
 using FitnessTrackingApp.Services;
 using Microcharts.Maui;
 using Microsoft.Maui.Controls;
@@ -108,14 +108,13 @@ public partial class ActivityPage : ContentPage
     private const int WeeklyGoal = 70000;
     private bool _isInitialLoad = true;
     private const int ChartUpdateIntervalSeconds = 30;
-    private int summarySteps = UserStaticData.Steps;
-    private int stepsOnTick = 0;
     private int _todaySteps = 0;
+    private int _initialSteps = 0; // Новое поле для отслеживания начальных шагов
+    private int _totalStepsSinceStart = 0; // Новое поле для шагов с момента старта
 
     public ActivityPage(IStepsService stepService)
     {
         InitializeComponent();
-        _stepService = stepService;
         _stepService = stepService ?? throw new ArgumentNullException(nameof(stepService));
         _chartDrawable = new ActivityChartDrawable();
 
@@ -124,7 +123,8 @@ public partial class ActivityPage : ContentPage
         SetupTimers();
         LoadActivityData();
         LoadWeeklyProgress();
-        LoadInitialData();
+        SetupMidnightResetTimer();
+        
     }
 
     private void InitializeChart()
@@ -142,6 +142,7 @@ public partial class ActivityPage : ContentPage
             ChartGraphicsView.Invalidate();
         }
     }
+
     private void SetupMidnightResetTimer()
     {
         var now = DateTime.Now;
@@ -153,12 +154,19 @@ public partial class ActivityPage : ContentPage
         {
             midnightTimer.Stop();
 
+            // Сохраняем текущие данные перед сбросом
             await SaveActivityToDatabase();
-            stepsOnTick = 0;
+
+            // Сбрасываем счетчики
+            _todaySteps = 0;
+            _totalStepsSinceStart = 0;
+            _initialSteps = _stepService.GetSteps();
+
             CalculateDerivedMetrics();
             UpdateUi();
             ChartGraphicsView.Invalidate();
 
+            // Перезапускаем таймер для следующего дня
             SetupMidnightResetTimer();
         };
         midnightTimer.AutoReset = false;
@@ -178,26 +186,32 @@ public partial class ActivityPage : ContentPage
     {
         base.OnAppearing();
 
+        // Инициализируем сервис шагов
+        _stepService.Start();
+        _initialSteps = _stepService.GetSteps();
+
         if (_isInitialLoad)
         {
             await LoadInitialData();
             _isInitialLoad = false;
         }
 
-        _stepService.Start();
         StartAllTimers();
     }
+
     private async Task LoadInitialData()
     {
         await LoadSavedSteps();
         await UpdateAllData();
     }
+
     private async Task UpdateAllData()
     {
         await UpdateChartData();
         LoadWeeklyProgress();
         ChartGraphicsView.Invalidate();
     }
+
     private void StartAllTimers()
     {
         _updateUiTimer = Dispatcher.CreateTimer();
@@ -215,19 +229,17 @@ public partial class ActivityPage : ContentPage
         _saveToDbTimer.Tick += async (s, e) => await SaveActivityToDatabase();
         _saveToDbTimer.Start();
     }
-    protected override void OnDisappearing()
+
+    protected override async void OnDisappearing()
     {
         base.OnDisappearing();
         _stepService.Stop();
 
-        Task.Run(async () =>
-        {
-            await SaveActivityToDatabase();
-        }).Wait();
+        // Сохраняем данные перед выходом
+        await SaveActivityToDatabase();
 
         StopAllTimers();
     }
-
 
     private void StopAllTimers()
     {
@@ -235,6 +247,7 @@ public partial class ActivityPage : ContentPage
         _chartUpdateTimer?.Stop();
         _saveToDbTimer?.Stop();
     }
+
     private void SetupChartUpdateTimer()
     {
         _chartUpdateTimer = Dispatcher.CreateTimer();
@@ -246,6 +259,7 @@ public partial class ActivityPage : ContentPage
         };
         _chartUpdateTimer.Start();
     }
+
     private async Task LoadSavedSteps()
     {
         try
@@ -278,7 +292,6 @@ public partial class ActivityPage : ContentPage
         }
     }
 
-
     private void SetupTimers()
     {
         _updateUiTimer = Dispatcher.CreateTimer();
@@ -294,23 +307,30 @@ public partial class ActivityPage : ContentPage
 
     private void LoadActivityData()
     {
-        stepsOnTick = _stepService.GetSteps();
+        _totalStepsSinceStart = _stepService.GetSteps() - _initialSteps;
+        _todaySteps += _totalStepsSinceStart;
         CalculateDerivedMetrics();
         UpdateUi();
     }
 
     private void UpdateActivityData()
     {
-        stepsOnTick = _stepService.GetSteps();
+        var currentSteps = _stepService.GetSteps();
+        var newSteps = currentSteps - _initialSteps - _totalStepsSinceStart;
 
-        CalculateDerivedMetrics();
-        UpdateUi();
+        if (newSteps > 0)
+        {
+            _totalStepsSinceStart += newSteps;
+            _todaySteps += newSteps;
+            CalculateDerivedMetrics();
+            UpdateUi();
+        }
     }
 
     private void CalculateDerivedMetrics()
     {
-        _currentDistance = Math.Round((UserStaticData.Steps * StepLength) / 1000, 1);
-        _currentCalories = (int)(UserStaticData.Steps * CaloriesPerStep);
+        _currentDistance = Math.Round((_todaySteps * StepLength) / 1000, 1);
+        _currentCalories = (int)(_todaySteps * CaloriesPerStep);
     }
 
     private void UpdateUi()
@@ -318,9 +338,7 @@ public partial class ActivityPage : ContentPage
         StepsLabel.Text = _todaySteps.ToString();
         DistanceLabel.Text = $"{_currentDistance} км";
         CaloriesLabel.Text = _currentCalories.ToString();
-
     }
-
 
     private async Task UpdateChartData()
     {
@@ -379,8 +397,6 @@ public partial class ActivityPage : ContentPage
                     var totalSteps = stats.Sum(s => s.Steps);
                     var progress = Math.Min(1.0, (double)totalSteps / WeeklyGoal);
 
-                    //UserStaticData.Steps = totalSteps; //Костально но пока можно
-
                     WeeklyProgressBar.Progress = progress;
                     WeeklyProgressPercentLabel.Text = $"{Math.Round(progress * 100)}%";
                     WeeklyProgressLabel.Text = $"{totalSteps:N0} шагов из {WeeklyGoal:N0}";
@@ -407,14 +423,18 @@ public partial class ActivityPage : ContentPage
             {
                 Username = UserSession.Username,
                 Date = DateTime.UtcNow,
-                Steps = stepsOnTick,
+                Steps = _todaySteps,
                 Distance = _currentDistance,
                 Calories = _currentCalories
             };
 
             var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/user/steps", activity);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Данные успешно сохранены");
+            }
+            else
             {
                 Console.WriteLine("Ошибка сохранения: " + await response.Content.ReadAsStringAsync());
             }

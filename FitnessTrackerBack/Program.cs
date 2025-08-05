@@ -374,12 +374,13 @@ app.MapPost("/water", async (WaterUpdateRequest request, AppDbContext db) =>
         {
             UserId = request.UserId,
             Date = today,
-            WaterGoal = 2.0
+            WaterGoal = request.Goal ?? 2.0
         };
         db.NutritionDays.Add(nutritionDay);
     }
 
-    nutritionDay.WaterIntake = request.Amount;
+    nutritionDay.WaterIntake += request.Amount;
+
     if (request.Goal.HasValue)
     {
         nutritionDay.WaterGoal = request.Goal.Value;
@@ -409,6 +410,7 @@ app.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStarted.R
 async Task ResetDailyNutritionData(AppDbContext db)
 {
     var yesterday = DateTime.UtcNow.Date.AddDays(-1);
+
     var daysToReset = await db.NutritionDays
         .Where(n => n.Date == yesterday)
         .ToListAsync();
@@ -422,8 +424,15 @@ async Task ResetDailyNutritionData(AppDbContext db)
         day.WaterIntake = 0;
     }
 
+    var oldMeals = await db.Meals
+        .Where(m => m.Date.Date <= yesterday)
+        .ToListAsync();
+
+    db.Meals.RemoveRange(oldMeals);
+
     await db.SaveChangesAsync();
 }
+
 
 app.Run();
 

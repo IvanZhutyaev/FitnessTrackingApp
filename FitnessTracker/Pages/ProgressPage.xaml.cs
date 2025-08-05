@@ -1,4 +1,4 @@
-namespace FitnessTrackingApp.Pages; using System.Timers;
+﻿namespace FitnessTrackingApp.Pages; using System.Timers;
 
 public partial class ProgressPage : ContentPage
 {
