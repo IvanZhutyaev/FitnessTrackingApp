@@ -27,7 +27,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=fitnesstracker;Username=postgres;Password=my_secure_password
     depends_on:
-      - db
+      - db:
+          condition: service_healthy
 
 volumes:
   postgres_data:
