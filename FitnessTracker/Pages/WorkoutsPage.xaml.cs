@@ -16,7 +16,7 @@ namespace FitnessTrackingApp.Pages
     public partial class WorkoutsPage : ContentPage, INotifyPropertyChanged
     {
         private readonly HttpClient _httpClient = new HttpClient();
-        private const string ApiBaseUrl = "http://localhost:5024";
+        private const string ApiBaseUrl = "http://127.0.0.1:5024";
         private string _searchText;
         private Exercise _currentExercise;
         private IDispatcherTimer _timer;
