@@ -288,6 +288,7 @@ namespace FitnessTrackingApp
 
 
                                 _currentUsername = storedUsername;
+
                                 UserSession.Username = storedUsername;
                                 UserSession.UserId = storedUserIDint;
 
@@ -344,7 +345,7 @@ namespace FitnessTrackingApp
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Ошибка", "При получении данных пользоваетля произошла ошибка", "ОК");
+                await DisplayAlert("Ошибка", $"При получении данных пользоваетля произошла ошибка: {ex}", "ОК");
             }
         }
 

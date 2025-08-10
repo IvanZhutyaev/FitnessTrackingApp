@@ -27,7 +27,7 @@ namespace FitnessTrackingApp.Pages
         {
             InitializeComponent();
             goalPicker.ItemsSource = Goals;
-            LoadUserDataAsync();
+            //LoadUserDataAsync();
         }
 
         private string _photoPath;
@@ -144,14 +144,16 @@ namespace FitnessTrackingApp.Pages
 
         private async Task LoadUserDataAsync()
         {
+
+
+            if (string.IsNullOrEmpty(UserSession.Username))
+            {
+                await DisplayAlert("Ошибка", "Пользователь не авторизован", "OK");
+                return;
+            }
+
             try
             {
-                if (string.IsNullOrEmpty(UserSession.Username))
-                {
-                    await DisplayAlert("Ошибка", "Пользователь не авторизован", "OK");
-                    return;
-                }
-
                 var response = await _httpClient.GetAsync($"{ApiBaseUrl}/users/profile/{UserSession.Username}");
 
                 if (response.IsSuccessStatusCode)
@@ -200,10 +202,10 @@ namespace FitnessTrackingApp.Pages
                         targetPeriodPicker.SelectedIndex = periodIndex >= 0 ? periodIndex : 1;
                     }
                 }
-                else
-                {
-                    await DisplayAlert("Ошибка", "Не удалось загрузить данные профиля", "OK");
-                }
+                //               else
+                //               {
+                //                   await DisplayAlert("Ошибка", $"Не удалось загрузить данные профиля", "OK");
+                //               }
             }
             catch (Exception ex)
             {
