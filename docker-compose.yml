@@ -2,33 +2,32 @@ services:
   db:
     image: postgres:latest
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: my_secure_password
-      POSTGRES_DB: fitnesstracker
+      postgres_user: postgres
+      postgres_password: my_secure_password
+      postgres_db: fitnesstracker
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-       test: ["CMD-SHELL", "pg_isready -U postgres"]
+       test: ["CMD-SHELL", "pg_isready -u postgres"]
        interval: 5s
        timeout: 5s
        retries: 5
 
   backend:
     build:
-      context: ./FitnessTrackerBack  # Изменили контекст!
+      context: ./fitnesstrackerback  
       dockerfile: Dockerfile
     volumes:
-      - ./FitnessTrackerBack:/app/FitnessTrackerBack
+      - ./fitnesstrackerback:/app/fitnesstrackerback
     ports:
       - "5024:5024"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=fitnesstracker;Username=postgres;Password=my_secure_password
+      - aspnetcore_environment=development
+      - connectionstrings__defaultconnection=host=db;port=5432;database=fitnesstracker;username=postgres;password=my_secure_password
     depends_on:
-      - db:
-          condition: service_healthy
+      - db
 
 volumes:
   postgres_data:
