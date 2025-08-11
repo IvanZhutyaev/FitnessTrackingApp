@@ -2,11 +2,11 @@ services:
   db:
     image: postgres:latest
     environment:
-      postgres_user: postgres
-      postgres_password: my_secure_password
-      postgres_db: fitnesstracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: my_secure_password
+      POSTGRES_DB: fitnesstracker
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -17,7 +17,7 @@ services:
 
   backend:
     build:
-      context: ./fitnesstrackerback  
+      context: ./FitnessTrackerBack  
       dockerfile: Dockerfile
     volumes:
       - ./fitnesstrackerback:/app/fitnesstrackerback

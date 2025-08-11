@@ -14,7 +14,7 @@ namespace FitnessTrackingApp
     {
         private bool _isLoginMode = true;
         private readonly HttpClient _httpClient = new HttpClient();
-        private const string ApiBaseUrl = "http://127.0.0.1:5024";
+        private const string ApiBaseUrl = "http://83.166.244.89:5024";
         private string _currentUsername = string.Empty;
 
         public MainPage()
