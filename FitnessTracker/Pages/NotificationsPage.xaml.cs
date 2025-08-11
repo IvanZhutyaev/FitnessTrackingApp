@@ -18,7 +18,7 @@ namespace FitnessTrackingApp.Pages
     public partial class NotificationsPage : ContentPage
     {
         private readonly HttpClient _httpClient = new();
-        private const string ApiBaseUrl = "http://127.0.0.1:5024";
+        private const string ApiBaseUrl = "http://83.166.244.89:5024";
         private int _userId;
         private List<Notification> _notifications = new();
 

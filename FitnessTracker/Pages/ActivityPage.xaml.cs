@@ -95,7 +95,7 @@ public partial class ActivityPage : ContentPage
 {
     private readonly IStepsService _stepService;
     private readonly HttpClient _httpClient = new();
-    private const string ApiBaseUrl = "http://127.0.0.1:5024";
+    private const string ApiBaseUrl = "http://83.166.244.89:5024";
     private bool _isDayView = true;
     private ActivityChartDrawable _chartDrawable = new();
     private IDispatcherTimer _chartUpdateTimer;

@@ -12,7 +12,7 @@ public partial class NutritionPage : ContentPage, INotifyPropertyChanged
     private int _userId = UserSession.UserId;
     private NutritionDay _currentDay = new();
     public ObservableCollection<Meal> Meals { get; } = new();
-    private readonly string ApiBaseUrl = "http://127.0.0.1:5024";
+    private readonly string ApiBaseUrl = "http://83.166.244.89:5024";
     public event PropertyChangedEventHandler PropertyChanged;
     private readonly HttpClient _httpClient = new HttpClient();
     private DateTime? _lastLoadedDate;
