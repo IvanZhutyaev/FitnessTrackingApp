@@ -1,3 +1,5 @@
+version: '3.8'  # Добавьте эту строку в начало
+
 services:
   db:
     image: postgres:latest
@@ -9,28 +11,73 @@ services:
       - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fitness-network
     healthcheck:
-       test: ["CMD-SHELL", "pg_isready -u postgres"]
-       interval: 5s
-       timeout: 5s
-       retries: 5
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fitnesstracker"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   backend:
     build:
-      context: ./FitnessTrackerBack  
+      context: ./FitnessTrackerBack
       dockerfile: Dockerfile
     volumes:
       - ./fitnesstrackerback:/app/fitnesstrackerback
     ports:
       - "5024:5024"
     environment:
-      - aspnetcore_environment=development
-      - connectionstrings__defaultconnection=host=db;port=5432;database=fitnesstracker;username=postgres;password=my_secure_password
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=fitnesstracker;Username=postgres;Password=my_secure_password
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    networks:
+      - fitness-network
 
 volumes:
   postgres_data:
+
+networks:
+  fitness-network:
+    driver: bridge
+    # Уберите name: fitness-network - Docker Compose добавит префикс автоматически
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
