@@ -123,7 +123,7 @@ namespace FitnessTrackingApp.Pages
                 UserStaticData.AvgSteps = 0;
                 UserStaticData.AvgDistance = 0;
 
-                SecureStorage.RemoveAll();
+                SecureStorage.RemoveAll(); // очистка secure storage
 
                 var newShell = new AppShell();
                 Application.Current.MainPage = newShell;

@@ -14,7 +14,7 @@ namespace FitnessTrackingApp.Pages
         {
             InitializeComponent();
 
-            string apiKey = ""; // API ключ от openrouter.ai
+            string apiKey = "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"; // API ключ от openrouter.ai
             _chatBot = new OpenRouterChatBot(apiKey);
 
             AddBotMessage("Привет! Я ваш виртуальный фитнес-тренер. Задавайте любые вопросы о тренировках, питании и здоровом образе жизни!");
@@ -170,7 +170,7 @@ namespace FitnessTrackingApp.Pages
                     },
                     new { role = "user", content = prompt }
                 },
-                max_tokens = 500,
+                max_tokens = 100,
                 temperature = 0.7
             };
 
