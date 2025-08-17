@@ -8,7 +8,6 @@ public partial class ProgressPage : ContentPage
     private int _userId = UserSession.UserId;
 
     private readonly HttpClient _httpClient = new HttpClient();
-    private const string ApiBaseUrl = "http://83.166.244.89:5024";
 
     public ProgressPage()
     {

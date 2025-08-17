@@ -14,7 +14,6 @@ namespace FitnessTrackingApp
     {
         private bool _isLoginMode = true;
         private readonly HttpClient _httpClient = new HttpClient();
-        private const string ApiBaseUrl = "http://83.166.244.89:5024";
         private string _currentUsername = string.Empty;
 
         public MainPage()
@@ -159,7 +158,7 @@ namespace FitnessTrackingApp
         private async Task LoginUser(string username, string password)
         {
             var response = await _httpClient.PostAsJsonAsync(
-                $"{ApiBaseUrl}/login",
+                $"{ApiUrl.ApiBaseUrl}/login",
                 new { Username = username, Password = password });
 
             if (response.IsSuccessStatusCode)
@@ -170,7 +169,7 @@ namespace FitnessTrackingApp
                     _currentUsername = username;
                     UserSession.Username = username;
 
-                    var userResponse = await _httpClient.GetAsync($"{ApiBaseUrl}/users/{username}");
+                    var userResponse = await _httpClient.GetAsync($"{ApiUrl.ApiBaseUrl}/users/{username}");
                     if (userResponse.IsSuccessStatusCode)
                     {
                         var user = await userResponse.Content.ReadFromJsonAsync<User>();
@@ -224,7 +223,7 @@ namespace FitnessTrackingApp
             };
 
             var response = await _httpClient.PostAsJsonAsync(
-                $"{ApiBaseUrl}/register",
+                $"{ApiUrl.ApiBaseUrl}/register",
                 regData);
 
             if (response.IsSuccessStatusCode)
@@ -321,7 +320,7 @@ namespace FitnessTrackingApp
             try
             {
 
-                var userResponse = await _httpClient.GetAsync($"{ApiBaseUrl}/activities/stats/{username}");
+                var userResponse = await _httpClient.GetAsync($"{ApiUrl.ApiBaseUrl}/activities/stats/{username}");
                 if (userResponse.IsSuccessStatusCode)
                 {
                     var user = await userResponse.Content.ReadFromJsonAsync<List<Activity>>();
@@ -477,5 +476,9 @@ namespace FitnessTrackingApp
         public int Age { get; set; }
         public double Weight { get; set; }
         public double Height { get; set; }
+    }
+    public static class ApiUrl
+    {
+        public const string ApiBaseUrl = "https://fittracking.ru";
     }
 }

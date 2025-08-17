@@ -13,7 +13,6 @@ namespace FitnessTrackingApp.Pages
     public partial class ProfilePage : ContentPage
     {
         private readonly HttpClient _httpClient = new HttpClient();
-        private const string ApiBaseUrl = "http://83.166.244.89:5024";
 
         public List<string> Goals { get; } = new List<string>
         {
@@ -124,6 +123,8 @@ namespace FitnessTrackingApp.Pages
                 UserStaticData.AvgSteps = 0;
                 UserStaticData.AvgDistance = 0;
 
+                SecureStorage.RemoveAll();
+
                 var newShell = new AppShell();
                 Application.Current.MainPage = newShell;
 
@@ -154,7 +155,7 @@ namespace FitnessTrackingApp.Pages
 
             try
             {
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/users/profile/{UserSession.Username}");
+                var response = await _httpClient.GetAsync($"{ApiUrl.ApiBaseUrl}/users/profile/{UserSession.Username}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -229,7 +230,7 @@ namespace FitnessTrackingApp.Pages
                     TargetPeriod = targetPeriodPicker.SelectedItem?.ToString() ?? "3 месяца"
                 };
 
-                var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/user/updateprofile", profileData);
+                var response = await _httpClient.PostAsJsonAsync($"{ApiUrl.ApiBaseUrl}/user/updateprofile", profileData);
 
                 if (response.IsSuccessStatusCode)
                 {

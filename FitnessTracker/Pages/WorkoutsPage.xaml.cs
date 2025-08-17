@@ -16,7 +16,6 @@ namespace FitnessTrackingApp.Pages
     public partial class WorkoutsPage : ContentPage, INotifyPropertyChanged
     {
         private readonly HttpClient _httpClient = new HttpClient();
-        private const string ApiBaseUrl = "http://83.166.244.89:5024";
         private string _searchText;
         private Exercise _currentExercise;
         private IDispatcherTimer _timer;
@@ -62,7 +61,7 @@ namespace FitnessTrackingApp.Pages
             try
             {
                 var userId = UserSession.UserId;
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/workouthistory/{userId}");
+                var response = await _httpClient.GetAsync($"{ApiUrl.ApiBaseUrl}/workouthistory/{userId}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -86,7 +85,7 @@ namespace FitnessTrackingApp.Pages
             try
             {
                 var userId = UserSession.UserId;
-                var response = await _httpClient.GetAsync($"{ApiBaseUrl}/exercises/{userId}");
+                var response = await _httpClient.GetAsync($"{ApiUrl.ApiBaseUrl}/exercises/{userId}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -176,11 +175,11 @@ namespace FitnessTrackingApp.Pages
                     Notes = "Завершено через таймер"
                 };
 
-                var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/workouthistory", historyItem);
+                var response = await _httpClient.PostAsJsonAsync($"{ApiUrl.ApiBaseUrl}/workouthistory", historyItem);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    await _httpClient.DeleteAsync($"{ApiBaseUrl}/exercises/{_currentExercise.Id}");
+                    await _httpClient.DeleteAsync($"{ApiUrl.ApiBaseUrl}/exercises/{_currentExercise.Id}");
                     await LoadExercisesAsync();
                     await LoadWorkoutHistory();
                     _currentExercise = null;
@@ -225,7 +224,7 @@ namespace FitnessTrackingApp.Pages
 
             try
             {
-                var response = await _httpClient.PostAsJsonAsync($"{ApiBaseUrl}/exercises", exercise);
+                var response = await _httpClient.PostAsJsonAsync($"{ApiUrl.ApiBaseUrl}/exercises", exercise);
                 if (response.IsSuccessStatusCode)
                 {
                     AddWorkoutPopup.IsVisible = false;

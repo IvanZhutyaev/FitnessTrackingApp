@@ -18,7 +18,6 @@ namespace FitnessTrackingApp.Pages
     public partial class NotificationsPage : ContentPage
     {
         private readonly HttpClient _httpClient = new();
-        private const string ApiBaseUrl = "http://83.166.244.89:5024";
         private int _userId;
         private List<Notification> _notifications = new();
 
@@ -33,7 +32,7 @@ namespace FitnessTrackingApp.Pages
         {
             InitializeComponent();
             _userId = userId;
-            _httpClient.BaseAddress = new Uri(ApiBaseUrl);
+            _httpClient.BaseAddress = new Uri(ApiUrl.ApiBaseUrl);
 
             LocalNotificationCenter.Current.NotificationActionTapped += OnNotificationTapped;
             LoadNotificationSettings();
