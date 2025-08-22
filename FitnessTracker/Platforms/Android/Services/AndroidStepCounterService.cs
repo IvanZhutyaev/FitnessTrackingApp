@@ -1,6 +1,4 @@
-﻿// Platforms/Android/Services/AndroidStepCounterService.cs
-using Android.Hardware;
-using Android.Runtime;
+﻿using Android.Hardware;
 using Android.Content;
 using FitnessTrackingApp.Services;
 
@@ -14,7 +12,7 @@ public class AndroidStepCounterService : Java.Lang.Object, ISensorEventListener,
 
     public AndroidStepCounterService()
     {
-        var context = Android.App.Application.Context;
+        var context = global::Android.App.Application.Context;
         _sensorManager = (SensorManager)context.GetSystemService(Context.SensorService)!;
         _stepCounterSensor = _sensorManager.GetDefaultSensor(SensorType.StepCounter);
     }

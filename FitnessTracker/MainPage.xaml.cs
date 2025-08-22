@@ -179,7 +179,6 @@ namespace FitnessTrackingApp
                             await SecureStorage.SetAsync("userid", user.Id.ToString()); //Сохранение userId после успешного входа 
                             await SecureStorage.SetAsync("username", username); //Сохранение username в SecureStorage после успешного входа в аккаунт                                      		    
                             var testSave = await SecureStorage.GetAsync("username");
-                            await DisplayAlert("Данные", $"Данные {testSave} сохранены", "ОК");
                             await UpdateStaticUserData(username);
                         }
                         catch (Exception ex)
@@ -333,11 +332,11 @@ namespace FitnessTrackingApp
                         UserStaticData.Steps = user.Sum(s => s.Steps);
                         UserStaticData.AvgSteps = user.Average(s => s.Steps);
 
-                        await DisplayAlert("Успешно", "Данные о шагах получены!", "ОК");
+                        await DisplayAlert("Шаги", "Данные о шагах получены!", "ОК");
                     }
                     else
                     {
-                        await DisplayAlert("Ошибка", "Данные о шагах отсутсвуют", "ОК");
+                        await DisplayAlert("Шаги", "Данные о шагах отсутсвуют", "ОК");
                     }
                 }
 

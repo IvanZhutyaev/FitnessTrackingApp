@@ -13,7 +13,7 @@ public class AndroidStepsService : Java.Lang.Object, IStepsService, ISensorEvent
 
     public void Start()
     {
-        _sensorManager = (SensorManager?)Android.App.Application.Context.GetSystemService(Context.SensorService)!;
+        _sensorManager = (SensorManager?)global::Android.App.Application.Context.GetSystemService(Context.SensorService)!;
         _stepSensor = _sensorManager?.GetDefaultSensor(SensorType.StepCounter);
 
         if (_stepSensor != null)
