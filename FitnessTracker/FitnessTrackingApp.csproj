@@ -67,6 +67,24 @@
 		<PackageReference Include="Syncfusion.Maui.Core" Version="24.1.41" />
 	</ItemGroup>
 
+	<!-- Align AndroidX collection KTX to avoid duplicate class with collection-jvm on .NET 8 Android -->
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+		<PackageReference Include="Xamarin.AndroidX.Activity" Version="1.9.3.1" />
+		<PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.9.3.1" />
+		<PackageReference Include="Xamarin.AndroidX.Collection" Version="1.4.5.1" />
+		<PackageReference Include="Xamarin.AndroidX.Collection.Ktx" Version="1.4.5.1" />
+		<PackageReference Include="Xamarin.AndroidX.Collection.Jvm" Version="1.4.5.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.Common" Version="2.8.7.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime" Version="2.8.7.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime.Ktx" Version="2.8.7.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData" Version="2.8.7.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData.Core" Version="2.8.7.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData.Core.Ktx" Version="2.8.7.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData.Ktx" Version="2.8.7.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel" Version="2.8.7.1" />
+		<PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel.Ktx" Version="2.8.7.1" />
+	</ItemGroup>
+
 	<ItemGroup>
 	  <Compile Update="Pages\AdditionallyPage.xaml.cs">
 	    <DependentUpon>AdditionallyPage.xaml</DependentUpon>
