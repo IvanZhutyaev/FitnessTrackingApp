@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 
-namespace FitnessTracker.Services.Interfaces
+namespace FitnessTrackerBack.Services.Interfaces
 {
     public interface IUserService
     {
