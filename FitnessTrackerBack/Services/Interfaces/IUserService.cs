@@ -6,18 +6,18 @@ namespace FitnessTrackerBack.Services.Interfaces
     public interface IUserService
     {
 
-        Task<string?> RegisterUserAsync(string username, string password, string birthDate);
+        Task<(bool, string)> RegisterUserAsync(RegisterRequest request);
 
 
-        Task<string?> LoginAsync(string username, string password);
+        Task<(bool, string)> LoginAsync(LoginRequest request);
 
 
-        Task<UserProfileDto?> GetProfileAsync(int userId);
+        Task<UserProfileDto?> GetProfileAsync(string username);
 
 
-        Task<bool> UpdateProfileAsync(int userId, ChangeInfoRequest update);
+        Task<(bool, string)> UpdateProfileAsync(UserProfileDto request);
 
 
-        Task<bool> DeleteUserAsync(int userId);
+        //       Task<bool> DeleteUserAsync(int userId);
     }
 }

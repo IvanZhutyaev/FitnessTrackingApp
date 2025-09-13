@@ -40,26 +40,58 @@ namespace FitnessTrackerBack.Services
 
         }
 
-        public async Task<bool?> DeleteUserAsync(int userid) => false; //soon
+        //   public async Task<bool?> DeleteUserAsync(int userid) => false; //soon
 
-        public async Task<bool?> RegisterUserAsync(RegisterRequest request)
+        public async Task<(bool Success, string Message)> RegisterUserAsync(RegisterRequest request)
         {
 
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.BirthDate))
-                return false;
+                return (false, "Enter all lines");
 
             var exists = await _db.Users.AnyAsync(user => user.Username == request.Username);
             if (exists)
-                return false;
+                return (false, "User already exists");
 
             var user = new User { Username = request.Username, Password = request.Password, BirthDate = request.BirthDate };
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
-            return true;
+            return (true, "User registered!");
 
 
         }
 
+        public async Task<(bool Success, string Message)> LoginAsync(LoginRequest request)
+        {
+
+            if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+                return (false, "Enter all lines");
+
+
+            var exists = await _db.Users.AnyAsync(user => user.Username == request.Username && user.Password == request.Password);
+            if (!exists)
+                return (false, "Incorrect username or password");
+
+            return (true, "User logged in!");
+
+        }
+        public async Task<(bool, string)> UpdateProfileAsync(UserProfileDto request)
+        {
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
+            if (user == null)
+                return (true, "User not found");
+
+            user.Goal = string.IsNullOrEmpty(request.Goal) ? "Похудение" : request.Goal;
+            user.BirthDate = request.BirthDate;
+            user.Weight = request.Weight;
+            user.Height = request.Height;
+            user.TargetWeight = request.TargetWeight;
+            user.TargetPeriod = request.TargetPeriod;
+
+            await _db.SaveChangesAsync();
+            return (true, "Profile updated!");
+
+        }
 
 
     }
