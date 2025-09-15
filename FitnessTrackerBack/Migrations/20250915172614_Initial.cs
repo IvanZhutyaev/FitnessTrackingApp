@@ -5,7 +5,7 @@
 namespace FitnessTrackerBack.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateBackendForSavedData : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

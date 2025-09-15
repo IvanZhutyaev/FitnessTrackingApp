@@ -2,6 +2,8 @@ using System;
 using FitnessTrackerBack.Services.Interfaces;
 using FitnessTrackerBack.Data;
 using FitnessTrackerBack.DTO;
+using Microsoft.EntityFrameworkCore;
+using FitnessTrackerBack.Models;
 
 namespace FitnessTrackerBack.Services
 {
@@ -42,7 +44,7 @@ namespace FitnessTrackerBack.Services
 
         //   public async Task<bool?> DeleteUserAsync(int userid) => false; //soon
 
-        public async Task<(bool Success, string Message)> RegisterAsync(RegisterRequest request)
+        public async Task<(bool Success, string Message)> RegisterAsync(DTO.RegisterRequest request)
         {
 
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.BirthDate))
@@ -60,7 +62,7 @@ namespace FitnessTrackerBack.Services
 
         }
 
-        public async Task<(bool Success, string Message)> LoginAsync(LoginRequest request)
+        public async Task<(bool Success, string Message)> LoginAsync(DTO.LoginRequest request)
         {
 
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
@@ -74,7 +76,7 @@ namespace FitnessTrackerBack.Services
             return (true, "User logged in!");
 
         }
-        public async Task<(bool, string)> UpdateProfileAsync(UserProfileDto request)
+        public async Task<(bool, string)> UpdateProfileAsync(DTO.UserProfileDto request)
         {
 
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == request.Username);

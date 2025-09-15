@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using FitnessTrackerBack.DTO;
 
 namespace FitnessTrackerBack.Services.Interfaces
 {

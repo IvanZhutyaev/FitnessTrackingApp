@@ -12,4 +12,12 @@ namespace FitnessTrackerBack.Models
         public bool IsActive { get; set; } = true;
         public NotificationType Type { get; set; }
     }
+
+    public enum NotificationType
+    {
+        Meal,
+        Workout,
+        Water,
+        Custom
+    }
 }
