@@ -42,7 +42,7 @@ namespace FitnessTrackerBack.Services
 
         //   public async Task<bool?> DeleteUserAsync(int userid) => false; //soon
 
-        public async Task<(bool Success, string Message)> RegisterUserAsync(RegisterRequest request)
+        public async Task<(bool Success, string Message)> RegisterAsync(RegisterRequest request)
         {
 
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.BirthDate))
@@ -55,7 +55,7 @@ namespace FitnessTrackerBack.Services
             var user = new User { Username = request.Username, Password = request.Password, BirthDate = request.BirthDate };
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
-            return (true, "User registered!");
+            return (Success: true, Message: "User registered!");
 
 
         }
