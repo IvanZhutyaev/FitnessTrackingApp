@@ -1,0 +1,37 @@
+<variant
+    name="release"
+    package="com.example.flutter_redesign"
+    minSdkVersion="24"
+    targetSdkVersion="35"
+    shrinking="true"
+    mergedManifest="C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\intermediates\merged_manifest\release\processReleaseMainManifest\AndroidManifest.xml"
+    proguardFiles="C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\intermediates\default_proguard_files\global\proguard-android-optimize.txt-8.9.1;C:\flutter\packages\flutter_tools\gradle\flutter_proguard_rules.pro;proguard-rules.pro"
+    partialResultsDir="C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\intermediates\lint_vital_partial_results\release\lintVitalAnalyzeRelease\out"
+    desugaredMethodsFiles="C:\Users\IvanZhutyaev\.gradle\caches\8.12\transforms\e9af94da5712a95af69deed814785f38\transformed\D8BackportedDesugaredMethods.txt">
+  <buildFeatures
+      namespacing="REQUIRED"/>
+  <sourceProviders>
+    <sourceProvider
+        manifests="src\main\AndroidManifest.xml"
+        javaDirectories="src\main\java;src\main\kotlin;src\release\java;src\release\kotlin"
+        resDirectories="src\main\res;src\release\res"
+        assetsDirectories="src\main\assets;src\release\assets"/>
+  </sourceProviders>
+  <testSourceProviders>
+  </testSourceProviders>
+  <testFixturesSourceProviders>
+  </testFixturesSourceProviders>
+  <manifestPlaceholders>
+    <placeholder
+        name="applicationName"
+        value="android.app.Application" />
+  </manifestPlaceholders>
+  <artifact
+      classOutputs="C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\intermediates\javac\release\compileReleaseJavaWithJavac\classes;C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\tmp\kotlin-classes\release;C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\kotlinToolingMetadata;C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\intermediates\compile_and_runtime_not_namespaced_r_class_jar\release\processReleaseResources\R.jar"
+      type="MAIN"
+      applicationId="com.example.flutter_redesign"
+      generatedSourceFolders="C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\generated\ap_generated_sources\release\out"
+      generatedResourceFolders="C:\MY_PROJECTS\FitnessTrackingApp\FitnessTracker\build\app\generated\res\resValues\release"
+      desugaredMethodsFiles="C:\Users\IvanZhutyaev\.gradle\caches\8.12\transforms\e9af94da5712a95af69deed814785f38\transformed\D8BackportedDesugaredMethods.txt">
+  </artifact>
+</variant>
