@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="libSkiaSharp.framework">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/bin/Debug/net8.0-maccatalyst/maccatalyst-x64/libSkiaSharp.framework.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
